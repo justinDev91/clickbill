@@ -13,6 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
+// TODO : Redirect to 'dashboard' page when already logged.
+
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
