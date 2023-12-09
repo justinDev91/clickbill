@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $displayName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -39,20 +41,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLogin = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $createdBy = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $createdBy = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $updatedBy = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $updatedBy = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isDeleted = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $companyId = null;
+
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Notification::class)]
+    private Collection $notifications;
+
+    public function __construct()
+    {
+        $this->notifications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,12 +176,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedBy(): ?string
+    public function getCreatedBy(): ?int
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(?string $createdBy): static
+    public function setCreatedBy(?int $createdBy): static
     {
         $this->createdBy = $createdBy;
 
@@ -186,12 +200,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpdatedBy(): ?string
+    public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
     }
 
-    public function setUpdatedBy(?string $updatedBy): static
+    public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
 
@@ -236,5 +250,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getCompanyId(): ?Company
+    {
+        return $this->companyId;
+    }
+
+    public function setCompanyId(?Company $companyId): static
+    {
+        $this->companyId = $companyId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUserId() === $this) {
+                $notification->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
