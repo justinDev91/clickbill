@@ -1,28 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register
-{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-	<h1>Créer un compte</h1>
 
-	{{ form_errors(registrationForm) }}
+<div class="flex items-center min-h-screen md:grid md:grid-cols-2">
+	
+	{{ include('_components/_not_logged_register_picture.html.twig') }}
+	
+	<div class="container w-full mx-auto text-gray-400">
 
-	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.firstName, {
-            label: 'Prénom'
-        }) }}
-	{{ form_row(registrationForm.lastName, {
-            label: 'Nom'
-        }) }}
-	{{ form_row(registrationForm.email) }}
-	{{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
-        }) }}
-	{{ form_row(registrationForm.agreeTerms, {
-    'label': "J'ai lu et accepte les CGU"
-	}) }}
+		{{ include('_components/_not_logged_logo_banner.html.twig') }}
 
-	<button type="submit" class="btn">Register</button>
-	{{ form_end(registrationForm) }}
+		<div class="flex w-3/4 mx-auto mb-4 justify-evenly md:w-3/5 lg:w-2/4">
+			<a href="{{ path('app_login') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">Se connecter</h1></a>
+			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-orange-300">S'enregistrer</h1></span>
+		</div>
+
+		{{ form_errors(registrationForm) }}
+		
+		{{ form_start(registrationForm, {'attr': {'class': 'w-3/4 mx-auto'}}) }}
+
+		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
+
+			{{ form_row(registrationForm.firstName, {
+				label: 'Prénom',
+				row_attr: {"class": "inline-grid"},
+				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
+			}) }}
+
+			{{ form_row(registrationForm.lastName, {
+				label: 'Nom',
+				row_attr: {"class": "inline-grid"},
+				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
+			}) }}
+
+			{{ form_row(registrationForm.email, {
+				row_attr: {"class": "inline-grid"},
+				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
+			}) }}
+
+			{{ form_row(registrationForm.plainPassword, {
+				label: 'Mot de passe',
+				row_attr: {"class": "inline-grid"},
+				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
+			}) }}
+
+			{{ form_row(registrationForm.agreeTerms, {
+				label: "J'ai lu et accepte les CGU",
+				row_attr: {"class" : "mb-4 flex flex-row-reverse mx-auto"},
+				attr: {"class": "mr-1.5"}
+			}) }}
+		
+		</div>
+		
+		<div class="col-span-2 text-center">
+			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-yellow">S'inscrire</button>
+		</div>
+		{{ form_end(registrationForm) }}
+		
+	</div>
+	
+</div>
 {% endblock %}
