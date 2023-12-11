@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Client!
+{% endblock %}
+
+{% block body %}
+
+	<div class="m-6">
+		<h1 class="text-4xl pb-4">Mes Clients</h1>
+		<div>
+			<div class="flex w-full">
+				{{ include('common/search_bar.html.twig') }}
+				<button type="button" class="focus:outline-none ml-2 w-30 flex-none text-black bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:focus:ring-yellow-900">Ajouter un client</button>
+			</div>
+			{{ include('client/_filters.html.twig') }}
+			{{ include('client/_table.html.twig') }}
+		</div>
+	</div>
+{% endblock %}

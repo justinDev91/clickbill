@@ -1,43 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Default{% endblock %}
+{% block title %}Default
+{% endblock %}
 
 {% block body %}
 
-<style>
-    .example-wrapper { width: auto; margin: 0 auto}
-    .example-wrapper code { padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			width: auto;
+			margin: 0 auto
+		}
+		.example-wrapper code {
+			padding: 2px 6px;
+		}
+	</style>
 
-<main class="flex flex-col md:flex-row h-screen">
-    {{ include('_components/_sideBar.html.twig') }}
+	<main class="flex flex-col md:flex-row h-screen">
+		{{ include('_components/_sideBar.html.twig') }}
 
-    <section class="overflow-y-auto overflow-x-hidden flex-grow px-5">
-        {# Your page content goes here #}
-        <h1 class="text-xl lg:text-3xl font-bold mt-4">Hello {{ controller_name }}! ✅ </h1>
-        <p class="mt-4">This friendly message is coming from :</p>
-        <ul class="w-full overflow-hidden break-words my-4">
-            <li>Your controller at <code><a href="{{ '/srv/app/src/Controller/DefaultController.php'|file_link(0) }}" class="text-blue-700 hover:underline">src/Controller/DefaultController.php</a></code></li>
-            <li>Your template at <code><a href="{{ '/srv/app/templates/default/index.html.twig'|file_link(0) }}" class="text-blue-700 hover:underline">templates/default/index.html.twig</a></code></li>
-        </ul>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-            <div class="bg-gray-300 w-full h-72"></div>
-        </div>
-    </section>
-</main>
+		<section
+			class="overflow-y-auto overflow-x-hidden flex-grow px-5">
+			{# Your page content goes here #}
+			<h1 class="text-xl lg:text-3xl font-bold mt-4">Hello
+				{{ controller_name }}! ✅
+			</h1>
+			<p class="mt-4">This friendly message is coming from :</p>
+			<ul class="w-full overflow-hidden break-words my-4">
+				<li>Your controller at
+					<code>
+						<a href="{{ '/srv/app/src/Controller/DefaultController.php'|file_link(0) }}" class="text-blue-700 hover:underline">src/Controller/DefaultController.php</a>
+					</code>
+				</li>
+				<li>Your template at
+					<code>
+						<a href="{{ '/srv/app/templates/default/index.html.twig'|file_link(0) }}" class="text-blue-700 hover:underline">templates/default/index.html.twig</a>
+					</code>
+				</li>
+			</ul>
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+				<div class="bg-gray-300 w-full h-72"></div>
+			</div>
+		</section>
+	</main>
 
 {% endblock %}
