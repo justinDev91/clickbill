@@ -48,12 +48,12 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $companyId = null;
 
-    #[ORM\ManyToMany(targetEntity: Bill::class, inversedBy: 'products')]
-    private Collection $bills;
+    #[ORM\OneToMany(mappedBy: 'productId', targetEntity: ProductBill::class)]
+    private Collection $productBills;
 
     public function __construct()
     {
-        $this->bills = new ArrayCollection();
+        $this->productBills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,25 +182,31 @@ class Product
     }
 
     /**
-     * @return Collection<int, Bill>
+     * @return Collection<int, ProductBill>
      */
-    public function getBills(): Collection
+    public function getProductBills(): Collection
     {
-        return $this->bills;
+        return $this->productBills;
     }
 
-    public function addBill(Bill $bill): static
+    public function addProductBill(ProductBill $productBill): static
     {
-        if (!$this->bills->contains($bill)) {
-            $this->bills->add($bill);
+        if (!$this->productBills->contains($productBill)) {
+            $this->productBills->add($productBill);
+            $productBill->setProductId($this);
         }
 
         return $this;
     }
 
-    public function removeBill(Bill $bill): static
+    public function removeProductBill(ProductBill $productBill): static
     {
-        $this->bills->removeElement($bill);
+        if ($this->productBills->removeElement($productBill)) {
+            // set the owning side to null (unless already changed)
+            if ($productBill->getProductId() === $this) {
+                $productBill->setProductId(null);
+            }
+        }
 
         return $this;
     }

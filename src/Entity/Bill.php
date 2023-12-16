@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-/*use App\Enum\BillType;*/
 use App\Repository\BillRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,15 +32,6 @@ class Bill
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    /*
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
-    */
-    /*
-    #[ORM\Column(name: 'status', type: 'string', nullable: false, enumType: BillType::class)]
-    // protected string $status = BillType::enCours;
-    private BillType $status = BillType::enCours;
-    */
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $status = self::EN_COURS;
 
@@ -60,9 +50,6 @@ class Bill
     #[ORM\Column]
     private ?bool $isDeleted = null;
 
-    #[ORM\Column]
-    private array $productsInfoAtCreation = [];
-
     #[ORM\ManyToOne(inversedBy: 'bills')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $companyId = null;
@@ -71,20 +58,20 @@ class Bill
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $clientId = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'bills')]
-    private Collection $products;
-
     #[ORM\OneToMany(mappedBy: 'billId', targetEntity: Payment::class)]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'billId', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\OneToMany(mappedBy: 'billId', targetEntity: ProductBill::class)]
+    private Collection $productBills;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
-        $this->products = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->productBills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,28 +140,6 @@ class Bill
         $this->status = $status;
     }
 
-    /*
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }*/
-
-    /*
-    public function getStatus(): ?BillType
-    {
-        return $this->status;
-    }
-
-    public function setStatus(BillType $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-    */
-
     public function getCreatedBy(): ?int
     {
         return $this->createdBy;
@@ -234,18 +199,6 @@ class Bill
 
         return $this;
     }
-    
-    public function getProductsInfoAtCreation(): array
-    {
-        return $this->productsInfoAtCreation;
-    }
-
-    public function setProductsInfoAtCreation(array $productsInfoAtCreation): static
-    {
-        $this->productsInfoAtCreation = $productsInfoAtCreation;
-
-        return $this;
-    }
 
     public function getCompanyId(): ?Company
     {
@@ -302,33 +255,6 @@ class Bill
     }
 
     /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->addBill($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removeBill($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Notification>
      */
     public function getNotifications(): Collection
@@ -352,6 +278,36 @@ class Bill
             // set the owning side to null (unless already changed)
             if ($notification->getBillId() === $this) {
                 $notification->setBillId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductBill>
+     */
+    public function getProductBills(): Collection
+    {
+        return $this->productBills;
+    }
+
+    public function addProductBill(ProductBill $productBill): static
+    {
+        if (!$this->productBills->contains($productBill)) {
+            $this->productBills->add($productBill);
+            $productBill->setBillId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductBill(ProductBill $productBill): static
+    {
+        if ($this->productBills->removeElement($productBill)) {
+            // set the owning side to null (unless already changed)
+            if ($productBill->getBillId() === $this) {
+                $productBill->setBillId(null);
             }
         }
 
