@@ -4,7 +4,8 @@
 
 @layer base {
 
-  :root { /* TODO : Add or changes colors as the project progresses */
+  :root {
+    /* TODO : Add or changes colors as the project progresses */
     --primary-color: #F6C31E;
     --black: #000000;
     --gray: #EFEAE4;
@@ -15,15 +16,15 @@
     height: 100vh;
     width: 100vw;
   }
-  
+
   body {
     background-color: var(--white);
-    height:100vh;
-    width:100vw;
+    height: 100vh;
+    width: 100vw;
   }
-  
+
   .required:after {
-    content:" *";
+    content: " *";
     color: var(--primary-color);
   }
 }
