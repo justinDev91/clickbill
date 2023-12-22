@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Client
+{% endblock %}
+
+{% block body %}
+
+	<main class="flex flex-col md:flex-row h-screen">
+		{{ include('_components/_sideBar.html.twig') }}
+		<section class="pt-8 pl-8 overflow-y-auto overflow-x-hidden flex-grow px-5">
+			{{ include('client/_form.html.twig', {'button_label': 'Update', 'title': "Modifier l'utilisateur"}) }}
+		</section>
+	</main>
+
+{% endblock %}

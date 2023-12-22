@@ -1,6 +1,6 @@
-<div class="relative overflow-x-auto mt-4">
+<div class="relative overflow-x-auto my-12 ">
 	<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-		<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+		<thead class="text-xs border-b border-t text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 			<tr>
 				<th scope="col" class="px-6 py-3">
 					Name
@@ -14,62 +14,57 @@
 				<th scope="col" class="px-6 py-3">
 					Adresse
 				</th>
+				<th scope="col" class="px-6 py-3">
+					updatedAt
+				</th>
 				<th scope="col" class="px-6 py-3"></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-				<th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
-					Apple MacBook Pro 17"
-				</th>
-				<td class="px-6 py-4">
-					Silver
-				</td>
-				<td class="px-6 py-4">
-					Laptop
-				</td>
-				<td class="px-6 py-4">
-					$2999
-				</td>
-				<td class="text-lg flex justify-end font-medium  dark:text-white mr-4">
-					...
-				</td>
-			</tr>
-			<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-				<th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
-					Microsoft Surface Pro
-				</th>
-				<td class="px-6 py-4">
-					White
-				</td>
-				<td class="px-6 py-4">
-					Laptop PC
-				</td>
-				<td class="px-6 py-4">
-					$1999
-				</td>
-				<td class="text-lg flex justify-end font-medium  dark:text-white mr-4">
-					...
-				</td>
-			</tr>
-			<tr class="bg-white dark:bg-gray-800">
-				<th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
-					Magic Mouse 2
-				</th>
-				<td class="px-6 py-4">
-					Black
-				</td>
-				<td class="px-6 py-4">
-					Accessories
-				</td>
-				<td class="px-6 py-4">
-					$99
-				</td>
-				<td class="text-lg flex justify-end font-medium  dark:text-white mr-4">
-					...
-				</td>
-			</tr>
-
+			{% for client in clients %}
+				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+					<th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
+						<a href="{{ path('app_client_show', {'id': client.id}) }}">{{ client.name }}</a>
+					</th>
+					<td class="px-6 py-4">
+						{{ client.email }}
+					</td>
+					<td class="px-6 py-4">
+						{{ client.phone }}
+					</td>
+					<td class="px-6 py-4">
+						{{ client.address }}{{client.id}}
+					</td>
+					<td class="px-6 py-4">
+						{{ client.updatedAt ? client.updatedAt|date('Y-m-d H:i:s') : '' }}
+					</td>
+					<td class="text-lg flex justify-end font-medium  dark:text-white mr-4">
+						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{client.id}}" data-dropdown-trigger="hover" class="" type="button">...
+						</button>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="11">Aucun client trouvé</td>
+				</tr>
+			{% endfor %}
 		</tbody>
 	</table>
 </div>
+
+<!-- Client Dropdown menu -->
+{% for client in clients %}
+	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+			<li>
+				<a href="{{ path('app_client_show', {'id': client.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+			</li>
+			<li>
+				<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
+			</li>
+			<li>
+				{{ include('client/_delete_form.html.twig', {'clientId': client.id}) }}
+			</li>
+		</ul>
+	</div>
+{% endfor %}

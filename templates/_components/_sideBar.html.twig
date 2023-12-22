@@ -1,183 +1,204 @@
 {% block body %}
 
-<!-- burger nav mobile -->
-<aside class="md:hidden flex-shrink-0 flex h-12 bg-yellow relative justify-center">
-   <p id="drawer-navigation-label" class="text-xl font-bold my-auto">ClickBill</p>
-   <button class="absolute right-0" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
-      <svg class="w-6 h-6 me-4 mt-3" xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
-   </button>
-</aside>
+	<!-- burger nav mobile -->
+	<aside class="md:hidden flex-shrink-0 flex h-12 bg-amberYellow relative justify-center">
+		<p id="drawer-navigation-label" class="text-xl font-bold my-auto">ClickBill</p>
+		<button class="absolute right-0" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+			<svg class="w-6 h-6 me-4 mt-3" xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewbox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+		</button>
+	</aside>
 
-<!-- sidebar nav desktop-->
-<aside class="hidden md:block flex-shrink-0 w-16 bg-yellow text-center relative">
-   <button class="m-2 mt-4" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
-      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg>
-   </button>
-   <ul class="my-3 space-y-3 text-center">
-      <li>
-         <a data-tooltip-target="tooltip-dashboard" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-               <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
-            </svg>
-         </a>
-         <div id="tooltip-dashboard" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Tableau de bord
-         </div>
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-clients" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-               <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm80 256h64c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm256-32H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
-            </svg>
-         </a>
-         <div id="tooltip-clients" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Mes clients
-         </div>
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-products" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-               <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
-            </svg>
-         </a>
-         <div id="tooltip-products" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Prestations & Produits
-         </div>
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-quote" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-               <path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V299.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.7l-15 60.1c-2.3 9.4-1.8 19 1.4 27.8H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM549.8 235.7l14.4 14.4c15.6 15.6 15.6 40.9 0 56.6l-29.4 29.4-71-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0zM311.9 417L441.1 287.8l71 71L382.9 487.9c-4.1 4.1-9.2 7-14.9 8.4l-60.1 15c-5.5 1.4-11.2-.2-15.2-4.2s-5.6-9.7-4.2-15.2l15-60.1c1.4-5.6 4.3-10.8 8.4-14.9z"/>
-            </svg>
-         </a>
-         <div id="tooltip-quote" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Devis
-         </div>
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-bill" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-               <path d="m130 0c-35.3 0-64 28.7-64 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64v-288h-128c-17.7 0-32-14.3-32-32v-128h-160zm192 0v128h128l-128-128zm-176 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96h192c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32h-192c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32zm0 32v64h192v-64h-192zm144 160h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
-            </svg>
-         </a>
-         <div id="tooltip-bill" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Factures
-         </div>
-      </li>
-   </ul>
+	<!-- sidebar nav desktop-->
+	<aside class="hidden md:block flex-shrink-0 w-16 bg-amberYellow text-center relative">
+		<button class="m-2 mt-4" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+			<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg>
+		</button>
+		<ul class="my-3 space-y-3 text-center">
+			<li>
+				<a data-tooltip-target="tooltip-dashboard" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg
+						class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewbox="0 0 576 512">
+						<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+						<path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+					</svg>
+				</a>
+				<div id="tooltip-dashboard" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Tableau de bord
+				</div>
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-clients" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg
+						class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewbox="0 0 576 512">
+						<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+						<path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm80 256h64c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm256-32H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+					</svg>
+				</a>
+				<div id="tooltip-clients" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Mes clients
+				</div>
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-products" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg
+						class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewbox="0 0 576 512">
+						<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+						<path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+					</svg>
+				</a>
+				<div id="tooltip-products" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Prestations & Produits
+				</div>
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-quote" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg
+						class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewbox="0 0 576 512">
+						<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+						<path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V299.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.7l-15 60.1c-2.3 9.4-1.8 19 1.4 27.8H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM549.8 235.7l14.4 14.4c15.6 15.6 15.6 40.9 0 56.6l-29.4 29.4-71-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0zM311.9 417L441.1 287.8l71 71L382.9 487.9c-4.1 4.1-9.2 7-14.9 8.4l-60.1 15c-5.5 1.4-11.2-.2-15.2-4.2s-5.6-9.7-4.2-15.2l15-60.1c1.4-5.6 4.3-10.8 8.4-14.9z"/>
+					</svg>
+				</a>
+				<div id="tooltip-quote" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Devis
+				</div>
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-bill" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg
+						class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="16" width="18" aria-hidden="true" viewbox="0 0 576 512">
+						<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+						<path d="m130 0c-35.3 0-64 28.7-64 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64v-288h-128c-17.7 0-32-14.3-32-32v-128h-160zm192 0v128h128l-128-128zm-176 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96h192c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32h-192c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32zm0 32v64h192v-64h-192zm144 160h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+					</svg>
+				</a>
+				<div id="tooltip-bill" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Factures
+				</div>
+			</li>
+		</ul>
 
-   <ul class="my-3 space-y-3 text-center absolute bottom-0 w-full">
-      <li>
-         <hr class="border-0 h-0.5 bg-black">
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-settings" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
-         </a>
-         <div id="tooltip-settings" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Paramètres
-         </div>
-      </li>
-      <li>
-         <a data-tooltip-target="tooltip-logout" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
-            <svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
-         </a>
-         <div id="tooltip-logout" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
-            Déconnexion
-         </div>
-      </li>
-   </ul>
-</aside> 
+		<ul class="my-3 space-y-3 text-center absolute bottom-0 w-full">
+			<li>
+				<hr class="border-0 h-0.5 bg-black">
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-settings" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
+				</a>
+				<div id="tooltip-settings" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Paramètres
+				</div>
+			</li>
+			<li>
+				<a data-tooltip-target="tooltip-logout" data-tooltip-placement="right" class="cursor-pointer w-11 h-11 m-auto flex items-center hover:bg-white active:bg-white rounded-xl">
+					<svg class="w-6 h-6 m-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
+				</a>
+				<div id="tooltip-logout" role="tooltip" class="whitespace-nowrap translate-x-5 absolute z-10 invisible inline-block mx-4 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg opacity-0 dark:bg-gray-700">
+					Déconnexion
+				</div>
+			</li>
+		</ul>
+	</aside>
 
-<!-- sidebar drawer -->
-<div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-full lg:w-80 h-screen overflow-y-auto transition-transform -translate-x-full bg-white" tabindex="-1" aria-labelledby="drawer-navigation-label">
-   <div class="bg-yellow p-3 inline-flex w-full h-12 lg:h-auto justify-end lg:justify-between">
-    <p id="drawer-navigation-label" class="hidden lg:block text-xl font-bold">ClickBill</p>
-    <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="bg-transparent text-sm inline-flex items-center" >
-      <svg class="w-6 h-6 block lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
-      <svg class="w-6 h-6 hidden lg:block" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg>        <span class="sr-only">Close menu</span>
-    </button>
-   </div>
-   
-   <div class="overflow-y-auto font-medium">
-      <div class="flex mx-4 my-6 items-center">
-         <img class="w-16 h-16 object-cover rounded-xl" src={{ asset('images/gogo_pictures_logo.png') }}/>
-         <div>
-            <p class="ms-5 whitespace-nowrap text-lg font-bold text-ellipsis">GOGO Pictures</p>
-            <div class="ms-5 inline-flex opacity-50 items-center">
-               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M256 256A128 128 0 1 0 256 0a128 128 0 1 0 0 256zm-45.7 48C111.8 304 32 383.8 32 482.3 32 498.7 45.3 512 61.7 512H450.3c16.4 0 29.7-13.3 29.7-29.7C480 383.8 400.2 304 301.7 304H210.3z"/></svg>
-               <p class="ml-2 mt-0.5 whitespace-nowrap text-sm">Lucie GODARD</p>
-            </div>
-         </div>        
-      </div>
-      <ul>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-yellow group">
-               <svg class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                  <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
-               </svg>
-               <p class="ms-4 whitespace-nowrap">Tableau de bord</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-yellow group">
-               <svg class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                  <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm80 256h64c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm256-32H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
-               </svg>
-               <p class="ms-4 whitespace-nowrap">Mes clients</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-yellow group">
-               <svg class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                  <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
-               </svg>
-               <p class="ms-4 whitespace-nowrap">Prestations & Produits</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-yellow group">
-               <svg class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                  <path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V299.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.7l-15 60.1c-2.3 9.4-1.8 19 1.4 27.8H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM549.8 235.7l14.4 14.4c15.6 15.6 15.6 40.9 0 56.6l-29.4 29.4-71-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0zM311.9 417L441.1 287.8l71 71L382.9 487.9c-4.1 4.1-9.2 7-14.9 8.4l-60.1 15c-5.5 1.4-11.2-.2-15.2-4.2s-5.6-9.7-4.2-15.2l15-60.1c1.4-5.6 4.3-10.8 8.4-14.9z"/>
-               </svg>
-               <p class="ms-4 whitespace-nowrap">Devis</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-yellow group">
-               <svg class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                  <path d="m130 0c-35.3 0-64 28.7-64 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64v-288h-128c-17.7 0-32-14.3-32-32v-128h-160zm192 0v128h128l-128-128zm-176 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96h192c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32h-192c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32zm0 32v64h192v-64h-192zm144 160h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
-               </svg>
-               <p class="ms-4 whitespace-nowrap">Factures</p>
-            </a>
-         </li>
-      </ul>
-      <ul class="my-4 absolute bottom-0 w-full">
-         <li>
-            <hr class="border-0 h-0.5 my-4 bg-gray-200">
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 px-3 py-4 rounded-xl hover:bg-gray-200 group">
-               <label class="mr-1 relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" value="" class="sr-only peer">
-                  <div class="w-8 h-4 bg-gray-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[5px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-yellow"></div>
-               </label>
-               <p class="ms-4 whitespace-nowrap">Thème sombre</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 group">
-               <svg class="mr-2 w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
-               <p class="ms-4 whitespace-nowrap">Paramètres</p>
-            </a>
-         </li>
-         <li>
-            <a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 group">
-               <svg class="mr-2 w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
-            <p class="ms-4 whitespace-nowrap">Déconnexion</p>
-         </a>
-         </li>
-   </div>
-</div>
+	<!-- sidebar drawer -->
+	<div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-full lg:w-80 h-screen overflow-y-auto transition-transform -translate-x-full bg-white" tabindex="-1" aria-labelledby="drawer-navigation-label">
+		<div class="bg-amberYellow p-3 inline-flex w-full h-12 lg:h-auto justify-end lg:justify-between">
+			<p id="drawer-navigation-label" class="hidden lg:block text-xl font-bold">ClickBill</p>
+			<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="bg-transparent text-sm inline-flex items-center">
+				<svg class="w-6 h-6 block lg:hidden" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewbox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+				<svg class="w-6 h-6 hidden lg:block" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg>
+				<span class="sr-only">Close menu</span>
+			</button>
+		</div>
 
-{% endblock %}
+		<div class="overflow-y-auto font-medium">
+			<div class="flex mx-4 my-6 items-center">
+				<img class="w-16 h-16 object-cover rounded-xl" src={{ asset('images/gogo_pictures_logo.png') }}/>
+				<div>
+					<p class="ms-5 whitespace-nowrap text-lg font-bold text-ellipsis">GOGO Pictures</p>
+					<div class="ms-5 inline-flex opacity-50 items-center">
+						<svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewbox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M256 256A128 128 0 1 0 256 0a128 128 0 1 0 0 256zm-45.7 48C111.8 304 32 383.8 32 482.3 32 498.7 45.3 512 61.7 512H450.3c16.4 0 29.7-13.3 29.7-29.7C480 383.8 400.2 304 301.7 304H210.3z"/></svg>
+						<p class="ml-2 mt-0.5 whitespace-nowrap text-sm">Lucie GODARD</p>
+					</div>
+				</div>
+			</div>
+			<ul>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group">
+						<svg
+							class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewbox="0 0 576 512">
+							<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+							<path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+						</svg>
+						<p class="ms-4 whitespace-nowrap">Tableau de bord</p>
+					</a>
+				</li>
+				<li>
+					<a href="{{ path('app_client_index') }}" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group">
+						<svg
+							class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewbox="0 0 576 512">
+							<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+							<path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm80 256h64c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm256-32H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+						</svg>
+						<p class="ms-4 whitespace-nowrap">Mes clients</p>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group">
+						<svg
+							class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewbox="0 0 576 512">
+							<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+							<path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+						</svg>
+						<p class="ms-4 whitespace-nowrap">Prestations & Produits</p>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group">
+						<svg
+							class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewbox="0 0 576 512">
+							<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+							<path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V299.6l-94.7 94.7c-8.2 8.2-14 18.5-16.8 29.7l-15 60.1c-2.3 9.4-1.8 19 1.4 27.8H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM549.8 235.7l14.4 14.4c15.6 15.6 15.6 40.9 0 56.6l-29.4 29.4-71-71 29.4-29.4c15.6-15.6 40.9-15.6 56.6 0zM311.9 417L441.1 287.8l71 71L382.9 487.9c-4.1 4.1-9.2 7-14.9 8.4l-60.1 15c-5.5 1.4-11.2-.2-15.2-4.2s-5.6-9.7-4.2-15.2l15-60.1c1.4-5.6 4.3-10.8 8.4-14.9z"/>
+						</svg>
+						<p class="ms-4 whitespace-nowrap">Devis</p>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group">
+						<svg
+							class="w-6 h-6 transition duration-75" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" width="18" viewbox="0 0 576 512">
+							<!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+							<path d="m130 0c-35.3 0-64 28.7-64 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64v-288h-128c-17.7 0-32-14.3-32-32v-128h-160zm192 0v128h128l-128-128zm-176 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96h192c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32h-192c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32zm0 32v64h192v-64h-192zm144 160h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+						</svg>
+						<p class="ms-4 whitespace-nowrap">Factures</p>
+					</a>
+				</li>
+			</ul>
+			<ul class="my-4 absolute bottom-0 w-full">
+				<li>
+					<hr class="border-0 h-0.5 my-4 bg-gray-200">
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 px-3 py-4 rounded-xl hover:bg-gray-200 group">
+						<label class="mr-1 relative inline-flex items-center cursor-pointer">
+							<input type="checkbox" value="" class="sr-only peer">
+							<div class="w-8 h-4 bg-gray-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[5px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-amberYellow"></div>
+						</label>
+						<p class="ms-4 whitespace-nowrap">Thème sombre</p>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 group">
+						<svg class="mr-2 w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
+						<p class="ms-4 whitespace-nowrap">Paramètres</p>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="flex items-center mx-4 p-4 rounded-xl hover:bg-gray-200 group">
+						<svg class="mr-2 w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewbox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
+						<p class="ms-4 whitespace-nowrap">Déconnexion</p>
+					</a>
+				</li>
+			</div>
+		</div>
+
+	{% endblock %}

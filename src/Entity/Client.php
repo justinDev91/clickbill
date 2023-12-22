@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
@@ -16,15 +17,49 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Name cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 500,
+        minMessage: "Name should be at least {{ limit }} characters long.",
+        maxMessage: "Name should not be longer than {{ limit }} characters."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotNull]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Phone cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 20,
+        minMessage: "Phone should be at least {{ limit }} characters long.",
+        maxMessage: "Phone should not be longer than {{ limit }} characters."
+    )]
+    #[Assert\Regex(
+        pattern: "/^\+?[0-9]+$/",
+        message: "Invalid characters in Phone. Only numeric characters are allowed."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Address cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 500,
+        minMessage: "Address should be at least {{ limit }} characters long.",
+        maxMessage: "Address should not be longer than {{ limit }} characters."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\-\' ]+$/",
+        message: "Invalid characters in address. Only alphanumeric characters are allowed."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
