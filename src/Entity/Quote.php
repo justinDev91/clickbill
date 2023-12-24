@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
+    private const EN_ATTENTE = "en attente";
     private const EN_COURS = 'en cours';
     private const ANNULE = 'annulé';
     private const VALIDE = 'validé';
@@ -24,13 +25,16 @@ class Quote
     private ?float $amount = null;
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $status = self::EN_COURS;
+    private ?string $status = self::EN_ATTENTE;
 
     #[ORM\Column]
     private ?float $downPayment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
+ 
+    #[ORM\Column(type: 'json')]
+    private array $productsInfo = [];
 
     #[ORM\Column]
     private ?int $createdBy = null;
@@ -45,25 +49,21 @@ class Quote
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
     #[ORM\ManyToOne(inversedBy: 'quotes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $companyId = null;
+    private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $clientId = null;
-
-    #[ORM\OneToMany(mappedBy: 'quoteId', targetEntity: Payment::class)]
-    private Collection $payments;
+    private ?Client $client = null;
 
     #[ORM\OneToMany(mappedBy: 'quoteId', targetEntity: Notification::class)]
     private Collection $notifications;
 
     public function __construct()
     {
-        $this->payments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
     }
 
@@ -91,7 +91,7 @@ class Quote
 
     public function setStatus($status)
     {
-        if (!in_array($status, array(self::EN_COURS, self::ANNULE, self::VALIDE))) {
+        if (!in_array($status, array(self::EN_ATTENTE, self::EN_COURS, self::ANNULE, self::VALIDE))) {
             throw new \InvalidArgumentException("Invalid status");
         }
         $this->status = $status;
@@ -181,56 +181,26 @@ class Quote
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->companyId;
+        return $this->company;
     }
 
-    public function setCompanyId(?Company $companyId): static
+    public function setCompany(?Company $company): static
     {
-        $this->companyId = $companyId;
+        $this->company = $company;
 
         return $this;
     }
 
-    public function getClientId(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->clientId;
+        return $this->client;
     }
 
-    public function setClientId(?Client $clientId): static
+    public function setClient(?Client $client): static
     {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setQuoteId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getQuoteId() === $this) {
-                $payment->setQuoteId(null);
-            }
-        }
+        $this->client = $client;
 
         return $this;
     }
@@ -247,7 +217,7 @@ class Quote
     {
         if (!$this->notifications->contains($notification)) {
             $this->notifications->add($notification);
-            $notification->setQuoteId($this);
+            $notification->setQuote($this);
         }
 
         return $this;
@@ -257,10 +227,22 @@ class Quote
     {
         if ($this->notifications->removeElement($notification)) {
             // set the owning side to null (unless already changed)
-            if ($notification->getQuoteId() === $this) {
-                $notification->setQuoteId(null);
+            if ($notification->getQuote() === $this) {
+                $notification->setQuote(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProductsInfo(): array
+    {
+        return $this->productsInfo;
+    }
+
+    public function setProductsInfo(array $productsInfo): static
+    {
+        $this->productsInfo = $productsInfo;
 
         return $this;
     }
