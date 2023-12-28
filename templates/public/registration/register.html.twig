@@ -23,24 +23,24 @@
 
 		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
 
-			{{ form_row(registrationForm.firstName, {
-				label: 'Prénom',
+			{{ form_row(registrationForm.email, {
+				label: 'Email de contact',
 				row_attr: {"class": "inline-grid"},
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
 			}) }}
 
-			{{ form_row(registrationForm.lastName, {
+			{# {{ form_row(registrationForm.user.lastName, {
 				label: 'Nom',
 				row_attr: {"class": "inline-grid"},
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
 			}) }}
 
-			{{ form_row(registrationForm.email, {
+			{{ form_row(registrationForm.user.email, {
 				row_attr: {"class": "inline-grid"},
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
-			}) }}
+			}) }} #}
 
-			{{ form_row(registrationForm.plainPassword, {
+			{# {{ form_row(registrationForm.plainPassword, {
 				label: 'Mot de passe',
 				row_attr: {"class": "inline-grid"},
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
@@ -50,16 +50,17 @@
 				label: "J'ai lu et accepte les CGU",
 				row_attr: {"class" : "mb-4 flex flex-row-reverse mx-auto"},
 				attr: {"class": "mr-1.5"}
-			}) }}
+			}) }} #}
 		
 		</div>
-		
+
 		<div class="col-span-2 text-center">
-			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-yellow">S'inscrire</button>
+			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-yellow">Nous contacter</button>
 		</div>
+
 		{{ form_end(registrationForm) }}
-		
 	</div>
+		
 	
 </div>
 {% endblock %}

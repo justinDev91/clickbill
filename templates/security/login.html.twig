@@ -14,21 +14,13 @@
 
 		<div class="flex w-3/4 mx-auto mb-4 justify-evenly md:w-3/5 lg:w-2/4">
 			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-orange-300">Se connecter</h1></span>
-			<a href="{{ path('app_register') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">S'enregistrer</h1></a>
+			<a href="{{ path('public_app_register') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">S'enregistrer</h1></a>
 		</div>
 
 		<form class="w-3/4 mx-auto" method="post">
 			{% if error %}
 				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
-
-			{# {% if app.user %}
-			<div class="mb-3">
-				Vous êtes connecté en tant que :
-				{{ app.user.userIdentifier }},
-				<a href="{{ path('app_logout') }}">Déconnexion</a>
-			</div>
-			{% endif %} #}
 
 			<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
 				<div class="inline-grid">

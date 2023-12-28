@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    {{ user.email }}
+    <a href="{{ path('app_logout') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">Se déconnecter</h1></a>
+{% endblock %}

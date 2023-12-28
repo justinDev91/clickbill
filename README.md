@@ -5,8 +5,8 @@ ClickBill est notre outil de gestion de devis et factures à destination des pho
 ## Membres du projet
 
 KATASI Justin (justinDev91)    
-JOUVET Erwann (PedroDSS)    
-DA SILVA Pedro (ErwannJouvet)    
+JOUVET Erwann (ErwannJouvet)    
+DA SILVA SOUSA Pedro (PedroDSS)    
 GODARD Lucie (lucie1704)   
 
 # Symfony Docker (PHP8 / Caddy / Postgresql)
