@@ -28,3 +28,12 @@
     color: var(--primary-color);
   }
 }
+
+@layer components {
+  .client-form-attr {
+    @apply w-full h-10 px-4 mt-1 border rounded focus:ring-yellow-400 dark:bg-gray-500 dark:placeholder-gray-400 dark:text-white;
+  }
+  .client-row-attr {
+    @apply inline-grid text-gray-700;
+  }
+}

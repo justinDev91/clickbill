@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Client!
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col md:flex-row h-screen">
+		{{ include('_components/_side_bar.html.twig') }}
+		<section class="pt-8 pl-8 overflow-y-auto overflow-x-hidden flex-grow px-5">
+			<h1 class="text-4xl pb-4 mb-10">Mes Clients</h1>
+			{{ include('_components/_search_bar.html.twig', {
+				'buttonPath': 'app_client_new',
+				'searchPath': 'app_search_index',
+				'label': 'Ajouter un client',
+				'placeholder': 'Rechercher un client...' })
+			}}
+			{{ include('client/_filters.html.twig') }}
+			{{ include('client/_table.html.twig', clients) }}
+		</section>
+	</main>
+{% endblock %}

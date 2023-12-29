@@ -1,0 +1,51 @@
+<div class="flex items-center">
+	<div class="container w-full mx-auto text-gray-400">
+		{{ form_start(form, {'attr': {'class': 'w-3/4 mx-auto'}}) }}
+		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
+			<h1 class="text-4xl pb-4 text-black">{{ title }}</h1>
+
+			{{ form_row(form.name, {
+                label: 'Nom',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{% if form_errors(form.name) %}
+				<div class="text-red-500">{{ form_errors(form.name) }}</div>
+			{% endif %}
+
+			{{ form_row(form.email, {
+                label: 'Email',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{% if form_errors(form.email) %}
+				<div class="text-red-500">{{ form_errors(form.email) }}</div>
+			{% endif %}
+
+			{{ form_row(form.phone, {
+                label: 'Phone',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{% if form_errors(form.phone) %}
+				<div class="text-red-500">{{ form_errors(form.phone) }}</div>
+			{% endif %}
+
+			{{ form_row(form.address, {
+                label: 'Adresse',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{% if form_errors(form.address) %}
+				<div class="text-red-500">{{ form_errors(form.address) }}</div>
+			{% endif %}
+
+			<a href="{{ path('app_client_index') }}" class="text-gray-700">Retourner à la liste</a>
+		</div>
+
+		<div class="col-span-2 text-center">
+			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">Ajouter</button>
+		</div>
+		{{ form_end(form) }}
+	</div>
+</div>
