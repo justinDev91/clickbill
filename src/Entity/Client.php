@@ -76,25 +76,21 @@ class Client
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Bill::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Bill::class)]
     private Collection $bills;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Quote::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Quote::class)]
     private Collection $quotes;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Payment::class)]
-    private Collection $payments;
-
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Notification::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Notification::class)]
     private Collection $notifications;
 
     public function __construct()
     {
         $this->bills = new ArrayCollection();
         $this->quotes = new ArrayCollection();
-        $this->payments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
     }
 
@@ -223,7 +219,7 @@ class Client
     {
         if (!$this->bills->contains($bill)) {
             $this->bills->add($bill);
-            $bill->setClientId($this);
+            $bill->setClient($this);
         }
 
         return $this;
@@ -233,8 +229,8 @@ class Client
     {
         if ($this->bills->removeElement($bill)) {
             // set the owning side to null (unless already changed)
-            if ($bill->getClientId() === $this) {
-                $bill->setClientId(null);
+            if ($bill->getClient() === $this) {
+                $bill->setClient(null);
             }
         }
 
@@ -253,7 +249,7 @@ class Client
     {
         if (!$this->quotes->contains($quote)) {
             $this->quotes->add($quote);
-            $quote->setClientId($this);
+            $quote->setClient($this);
         }
 
         return $this;
@@ -263,38 +259,8 @@ class Client
     {
         if ($this->quotes->removeElement($quote)) {
             // set the owning side to null (unless already changed)
-            if ($quote->getClientId() === $this) {
-                $quote->setClientId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setClientId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getClientId() === $this) {
-                $payment->setClientId(null);
+            if ($quote->getClient() === $this) {
+                $quote->setClient(null);
             }
         }
 
@@ -313,7 +279,7 @@ class Client
     {
         if (!$this->notifications->contains($notification)) {
             $this->notifications->add($notification);
-            $notification->setClientId($this);
+            $notification->setClient($this);
         }
 
         return $this;
@@ -323,8 +289,8 @@ class Client
     {
         if ($this->notifications->removeElement($notification)) {
             // set the owning side to null (unless already changed)
-            if ($notification->getClientId() === $this) {
-                $notification->setClientId(null);
+            if ($notification->getClient() === $this) {
+                $notification->setClient(null);
             }
         }
 

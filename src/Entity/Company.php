@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -16,7 +17,7 @@ class Company
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -27,6 +28,9 @@ class Company
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+    
+    #[ORM\Column(length: 255)]
+    private ?string $logo = null;
 
     #[ORM\Column]
     private ?int $createdBy = null;
@@ -43,23 +47,20 @@ class Company
     #[ORM\Column]
     private ?bool $isDeleted = false;
 
-    #[ORM\OneToMany(mappedBy: 'companyId', targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Product::class)]
     private Collection $products;
 
-    #[ORM\OneToMany(mappedBy: 'roleId', targetEntity: User::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
     private Collection $users;
 
-    #[ORM\OneToMany(mappedBy: 'companyId', targetEntity: Report::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Report::class)]
     private Collection $reports;
 
-    #[ORM\OneToMany(mappedBy: 'companyId', targetEntity: Bill::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Bill::class)]
     private Collection $bills;
 
-    #[ORM\OneToMany(mappedBy: 'companyId', targetEntity: Quote::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quote::class)]
     private Collection $quotes;
-
-    #[ORM\OneToMany(mappedBy: 'companyId', targetEntity: Payment::class)]
-    private Collection $payments;
 
     public function __construct()
     {
@@ -68,7 +69,6 @@ class Company
         $this->reports = new ArrayCollection();
         $this->bills = new ArrayCollection();
         $this->quotes = new ArrayCollection();
-        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,7 +196,7 @@ class Company
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setCompanyId($this);
+            $product->setCompany($this);
         }
 
         return $this;
@@ -206,8 +206,8 @@ class Company
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getCompanyId() === $this) {
-                $product->setCompanyId(null);
+            if ($product->getCompany() === $this) {
+                $product->setCompany(null);
             }
         }
 
@@ -226,7 +226,7 @@ class Company
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setCompanyId($this);
+            $user->setCompany($this);
         }
 
         return $this;
@@ -236,8 +236,8 @@ class Company
     {
         if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($user->getCompanyId() === $this) {
-                $user->setCompanyId(null);
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
             }
         }
 
@@ -256,7 +256,7 @@ class Company
     {
         if (!$this->reports->contains($report)) {
             $this->reports->add($report);
-            $report->setCompanyId($this);
+            $report->setCompany($this);
         }
 
         return $this;
@@ -266,8 +266,8 @@ class Company
     {
         if ($this->reports->removeElement($report)) {
             // set the owning side to null (unless already changed)
-            if ($report->getCompanyId() === $this) {
-                $report->setCompanyId(null);
+            if ($report->getCompany() === $this) {
+                $report->setCompany(null);
             }
         }
 
@@ -286,7 +286,7 @@ class Company
     {
         if (!$this->bills->contains($bill)) {
             $this->bills->add($bill);
-            $bill->setCompanyId($this);
+            $bill->setCompany($this);
         }
 
         return $this;
@@ -296,8 +296,8 @@ class Company
     {
         if ($this->bills->removeElement($bill)) {
             // set the owning side to null (unless already changed)
-            if ($bill->getCompanyId() === $this) {
-                $bill->setCompanyId(null);
+            if ($bill->getCompany() === $this) {
+                $bill->setCompany(null);
             }
         }
 
@@ -316,7 +316,7 @@ class Company
     {
         if (!$this->quotes->contains($quote)) {
             $this->quotes->add($quote);
-            $quote->setCompanyId($this);
+            $quote->setCompany($this);
         }
 
         return $this;
@@ -326,40 +326,22 @@ class Company
     {
         if ($this->quotes->removeElement($quote)) {
             // set the owning side to null (unless already changed)
-            if ($quote->getCompanyId() === $this) {
-                $quote->setCompanyId(null);
+            if ($quote->getCompany() === $this) {
+                $quote->setCompany(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
+    public function getLogo(): ?string
     {
-        return $this->payments;
+        return $this->logo;
     }
 
-    public function addPayment(Payment $payment): static
+    public function setLogo(string $logo): static
     {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setCompanyId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getCompanyId() === $this) {
-                $payment->setCompanyId(null);
-            }
-        }
+        $this->logo = $logo;
 
         return $this;
     }

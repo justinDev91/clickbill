@@ -33,11 +33,11 @@ class Report
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $companyId = null;
+    private ?Company $company = null;
 
     public function getId(): ?int
     {
@@ -128,14 +128,14 @@ class Report
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->companyId;
+        return $this->company;
     }
 
-    public function setCompanyId(?Company $companyId): static
+    public function setCompany(?Company $company): static
     {
-        $this->companyId = $companyId;
+        $this->company = $company;
 
         return $this;
     }

@@ -16,7 +16,7 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -24,6 +24,9 @@ class Product
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picture = null;
 
     #[ORM\Column]
     private ?int $createdBy = null;
@@ -38,23 +41,15 @@ class Product
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $categoryId = null;
+    private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $companyId = null;
-
-    #[ORM\OneToMany(mappedBy: 'productId', targetEntity: ProductBill::class)]
-    private Collection $productBills;
-
-    public function __construct()
-    {
-        $this->productBills = new ArrayCollection();
-    }
+    private ?Company $company = null;
 
     public function getId(): ?int
     {
@@ -157,56 +152,38 @@ class Product
         return $this;
     }
 
-    public function getCategoryId(): ?Category
+    public function getCategory(): ?Category
     {
-        return $this->categoryId;
+        return $this->category;
     }
 
-    public function setCategoryId(?Category $categoryId): static
+    public function setCategory(?Category $category): static
     {
-        $this->categoryId = $categoryId;
+        $this->category = $category;
 
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->companyId;
+        return $this->company;
     }
 
-    public function setCompanyId(?Company $companyId): static
+    public function setCompany(?Company $company): static
     {
-        $this->companyId = $companyId;
+        $this->company = $company;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, ProductBill>
-     */
-    public function getProductBills(): Collection
+    public function getPicture(): ?string
     {
-        return $this->productBills;
+        return $this->picture;
     }
 
-    public function addProductBill(ProductBill $productBill): static
+    public function setPicture(?string $picture): static
     {
-        if (!$this->productBills->contains($productBill)) {
-            $this->productBills->add($productBill);
-            $productBill->setProductId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductBill(ProductBill $productBill): static
-    {
-        if ($this->productBills->removeElement($productBill)) {
-            // set the owning side to null (unless already changed)
-            if ($productBill->getProductId() === $this) {
-                $productBill->setProductId(null);
-            }
-        }
+        $this->picture = $picture;
 
         return $this;
     }

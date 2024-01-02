@@ -34,6 +34,9 @@ class Bill
 
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $status = self::EN_COURS;
+    
+    #[ORM\Column]
+    private ?bool $isDownPayment = false;
 
     #[ORM\Column]
     private ?int $createdBy = null;
@@ -48,30 +51,22 @@ class Bill
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
     #[ORM\ManyToOne(inversedBy: 'bills')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $companyId = null;
+    private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'bills')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $clientId = null;
+    private ?Client $client = null;
 
-    #[ORM\OneToMany(mappedBy: 'billId', targetEntity: Payment::class)]
-    private Collection $payments;
-
-    #[ORM\OneToMany(mappedBy: 'billId', targetEntity: Notification::class)]
+    #[ORM\OneToMany(mappedBy: 'bill', targetEntity: Notification::class)]
     private Collection $notifications;
-
-    #[ORM\OneToMany(mappedBy: 'billId', targetEntity: ProductBill::class)]
-    private Collection $productBills;
 
     public function __construct()
     {
-        $this->payments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->productBills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,56 +195,26 @@ class Bill
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->companyId;
+        return $this->company;
     }
 
-    public function setCompanyId(?Company $companyId): static
+    public function setCompany(?Company $company): static
     {
-        $this->companyId = $companyId;
+        $this->company = $company;
 
         return $this;
     }
 
-    public function getClientId(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->clientId;
+        return $this->client;
     }
 
-    public function setClientId(?Client $clientId): static
+    public function setClient(?Client $client): static
     {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setBillId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getBillId() === $this) {
-                $payment->setBillId(null);
-            }
-        }
+        $this->client = $client;
 
         return $this;
     }
@@ -266,7 +231,7 @@ class Bill
     {
         if (!$this->notifications->contains($notification)) {
             $this->notifications->add($notification);
-            $notification->setBillId($this);
+            $notification->setBill($this);
         }
 
         return $this;
@@ -276,42 +241,23 @@ class Bill
     {
         if ($this->notifications->removeElement($notification)) {
             // set the owning side to null (unless already changed)
-            if ($notification->getBillId() === $this) {
-                $notification->setBillId(null);
+            if ($notification->getBill() === $this) {
+                $notification->setBill(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, ProductBill>
-     */
-    public function getProductBills(): Collection
+    public function isIsDownPayment(): ?bool
     {
-        return $this->productBills;
+        return $this->isDownPayment;
     }
 
-    public function addProductBill(ProductBill $productBill): static
+    public function setIsDownPayment(bool $isDownPayment): static
     {
-        if (!$this->productBills->contains($productBill)) {
-            $this->productBills->add($productBill);
-            $productBill->setBillId($this);
-        }
+        $this->isDownPayment = $isDownPayment;
 
         return $this;
     }
-
-    public function removeProductBill(ProductBill $productBill): static
-    {
-        if ($this->productBills->removeElement($productBill)) {
-            // set the owning side to null (unless already changed)
-            if ($productBill->getBillId() === $this) {
-                $productBill->setBillId(null);
-            }
-        }
-
-        return $this;
-    }
-
 }
