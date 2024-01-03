@@ -34,7 +34,7 @@ class Bill
 
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $status = self::EN_COURS;
-    
+
     #[ORM\Column]
     private ?bool $isDownPayment = false;
 
@@ -54,7 +54,7 @@ class Bill
     private ?bool $isDeleted = false;
 
     #[ORM\ManyToOne(inversedBy: 'bills')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'bills')]

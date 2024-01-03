@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Bill{% endblock %}
+
+{% block body %}
+    <h1>Edit Bill</h1>
+
+    {{ include('bill/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_bill_index') }}">back to list</a>
+
+    {{ include('bill/_delete_form.html.twig') }}
+{% endblock %}

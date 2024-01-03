@@ -28,7 +28,7 @@ class Company
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
-    
+
     #[ORM\Column(length: 255)]
     private ?string $logo = null;
 
@@ -77,6 +77,11 @@ class Company
     }
 
     public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function __toString()
     {
         return $this->name;
     }

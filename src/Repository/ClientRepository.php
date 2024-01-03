@@ -36,6 +36,23 @@ class ClientRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Filters clients by bill status
+     *
+     * @param string $status The status to filter by.
+     * @return array|null An array of clients matching the specified status.
+     */
+    public function filterClientsByStatus($status): ?array
+    {
+        return $this->createQueryBuilder('client')
+            ->join('client.bills', 'bill')
+            ->andWhere('bill.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return Client[] Returns an array of Client objects
     //     */

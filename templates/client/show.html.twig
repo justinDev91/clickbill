@@ -8,7 +8,10 @@
 		{{ include('_components/_side_bar.html.twig') }}
 		<section class="pt-8 pl-8 overflow-y-auto overflow-x-hidden flex-grow px-5">
 			<h1 class="py-8 text-5xl font-bold">{{ client.name }}</h1>
-			{{ include('_components/_search_bar.html.twig', { 'buttonPath': 'app_client_new', 'searchPath': 'app_client_index', 'label': 'Nouveau devis', 'placeholder': 'Rechercher une facture ou un devis...'}) }}
+			{# {{ include('search/index.html.twig',
+								{'buttonPath': 'app_client_new',
+								'label': 'Nouveau devis',
+								}) }} #}
 			{# TODO: Afficher la liste des devis et factures liés à l'utilisateur #}
 			<div>La liste des factures et devis liés à l'utilisateur</div>
 		</section>

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Form\ClientType;
+use App\Form\SearchFormType;
+use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,8 +22,28 @@ class ClientController extends AbstractController
     {
         $clients = $clientRepository->findAll();
 
+        //Status filter
+        $statusFilterForm = $this->createForm(StatusFilterType::class);
+        $statusFilterForm->handleRequest($request);
+
+        //Search Clients
+        $searchForm = $this->createForm(SearchFormType::class);
+        $searchForm->handleRequest($request);
+
+        if ($statusFilterForm->isSubmitted() && $statusFilterForm->isValid()) {
+            $status = $statusFilterForm->get('status')->getData();
+            $clients = $clientRepository->filterClientsByStatus($status);
+        }
+
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $searchTerm = $searchForm->get('search')->getData();
+            $clients = $clientRepository->searchClientByNameOrEmail($searchTerm);
+        }
+
         return $this->render('client/index.html.twig', [
             'clients' => $clients,
+            'statusFilterForm' => $statusFilterForm,
+            'searchForm' => $searchForm,
         ]);
     }
 

@@ -1,0 +1,21 @@
+<div class="flex w-full">
+
+	{{ form_start(searchForm, {'attr': {'class': 'flex-auto'}})}}
+	<div class="relative">
+		<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+			<svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 20 20">
+				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+			</svg>
+		</div>
+		{{ form_widget(searchForm.search) }}
+		{% if form_errors(searchForm.search) %}
+			<div class="text-red-500 text-xs mt-1">{{ form_errors(searchForm.search) }}</div>
+		{% endif %}
+	</div>
+	{{ form_end(searchForm) }}
+
+	<a href="{{ path(buttonPath)}}">
+		<button type="button" class="ml-2 w-30 flex-none text-black bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:focus:ring-yellow-900">{{label}}</button>
+	</a>
+
+</div>

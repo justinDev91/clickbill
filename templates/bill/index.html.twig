@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bill index{% endblock %}
+
+{% block body %}
+    <h1>Bill index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantity</th>
+                <th>TotalAmount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>IsDownPayment</th>
+                <th>CreatedBy</th>
+                <th>CreatedAt</th>
+                <th>UpdatedBy</th>
+                <th>UpdatedAt</th>
+                <th>IsDeleted</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bill in bills %}
+            <tr>
+                <td>{{ bill.id }}</td>
+                <td>{{ bill.quantity }}</td>
+                <td>{{ bill.totalAmount }}</td>
+                <td>{{ bill.date ? bill.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ bill.description }}</td>
+                <td>{{ bill.status }}</td>
+                <td>{{ bill.isDownPayment ? 'Yes' : 'No' }}</td>
+                <td>{{ bill.createdBy }}</td>
+                <td>{{ bill.createdAt ? bill.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ bill.updatedBy }}</td>
+                <td>{{ bill.updatedAt ? bill.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ bill.isDeleted ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_bill_show', {'id': bill.id}) }}">show</a>
+                    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bill_new') }}">Create new</a>
+{% endblock %}

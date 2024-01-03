@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bill{% endblock %}
+
+{% block body %}
+    <h1>Bill</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bill.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ bill.quantity }}</td>
+            </tr>
+            <tr>
+                <th>TotalAmount</th>
+                <td>{{ bill.totalAmount }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ bill.date ? bill.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ bill.description }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ bill.status }}</td>
+            </tr>
+            <tr>
+                <th>IsDownPayment</th>
+                <td>{{ bill.isDownPayment ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ bill.createdBy }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ bill.createdAt ? bill.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedBy</th>
+                <td>{{ bill.updatedBy }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ bill.updatedAt ? bill.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsDeleted</th>
+                <td>{{ bill.isDeleted ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bill_index') }}">back to list</a>
+
+    <a href="{{ path('app_bill_edit', {'id': bill.id}) }}">edit</a>
+
+    {{ include('bill/_delete_form.html.twig') }}
+{% endblock %}

@@ -87,11 +87,15 @@ class Client
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: ClientInteraction::class)]
+    private Collection $clientInteractions;
+
     public function __construct()
     {
         $this->bills = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->clientInteractions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +104,11 @@ class Client
     }
 
     public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function __toString()
     {
         return $this->name;
     }
@@ -291,6 +300,36 @@ class Client
             // set the owning side to null (unless already changed)
             if ($notification->getClient() === $this) {
                 $notification->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientInteraction>
+     */
+    public function getClientInteractions(): Collection
+    {
+        return $this->clientInteractions;
+    }
+
+    public function addClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if (!$this->clientInteractions->contains($clientInteraction)) {
+            $this->clientInteractions->add($clientInteraction);
+            $clientInteraction->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if ($this->clientInteractions->removeElement($clientInteraction)) {
+            // set the owning side to null (unless already changed)
+            if ($clientInteraction->getClient() === $this) {
+                $clientInteraction->setClient(null);
             }
         }
 
