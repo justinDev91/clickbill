@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Form\ClientType;
-use App\Form\SearchFormType;
+use App\Form\CustomSearchFormType;
 use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
+use App\Service\InteractionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class ClientController extends AbstractController
         $statusFilterForm->handleRequest($request);
 
         //Search Clients
-        $searchForm = $this->createForm(SearchFormType::class);
+        $searchForm = $this->createForm(CustomSearchFormType::class);
         $searchForm->handleRequest($request);
 
         if ($statusFilterForm->isSubmitted() && $statusFilterForm->isValid()) {
@@ -48,8 +49,11 @@ class ClientController extends AbstractController
     }
 
     #[Route('/new', name: 'app_client_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        InteractionService $interactionService
+    ): Response {
         $client = new Client();
         $connectedUserId = $this->getUser()->getId();
 
@@ -65,6 +69,12 @@ class ClientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($client);
+
+            $interactionService->createClientInteraction(
+                $client,
+                sprintf("Client %s is created", $client->getName())
+            );
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
@@ -85,12 +95,22 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Client $client, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Client $client,
+        EntityManagerInterface $entityManager,
+        InteractionService $interactionService
+    ): Response {
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $interactionService->createClientInteraction(
+                $client,
+                sprintf("Client %s is edited", $client->getName())
+            );
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
@@ -103,10 +123,20 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_client_delete', methods: ['POST'])]
-    public function delete(Request $request, Client $client, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(
+        Request $request,
+        Client $client,
+        EntityManagerInterface $entityManager,
+        InteractionService $interactionService
+    ): Response {
         if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token'))) {
             $entityManager->remove($client);
+
+            $interactionService->createClientInteraction(
+                $client,
+                sprintf("Client %s is edited", $client->getName())
+            );
+
             $entityManager->flush();
         }
 
