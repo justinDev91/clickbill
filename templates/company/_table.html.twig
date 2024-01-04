@@ -1,0 +1,42 @@
+<div class="relative overflow-x-auto my-12 ">
+	<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+		<tbody>
+			<div class="text-xs border-b border-t text-gray-700 uppercase bg-gray-200 dark:text-gray-400 p-2">
+				<div class="flex items-center space-x-3 rtl:space-x-reverse">
+					<svg class="flex-shrink-0 w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 16 12">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+					</svg>
+					<div>
+						<div>
+							Joseph PIRTEUH a acquitté la facture #4633
+						</div>
+					</div>
+					{% for client in clients %}
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+							<th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
+								<a href="{{ path('app_client_show', {'id': client.id}) }}">Facture</a>
+							</th>
+							<td class="px-6 py-4">
+								96332
+							</td>
+							<td class="px-6 py-4">
+								<div class="bg-green-100 p-1">Acquittée à 25%</div>
+							</td>
+							<td class="px-6 py-4">
+
+								Joseph TIRPEUH
+							</td>
+							<td class="px-6 py-4">
+								06/11/2023
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="11">Aucun client trouvé</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</tbody>
+	</div>
+</div>
