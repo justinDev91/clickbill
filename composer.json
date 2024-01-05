@@ -24,6 +24,7 @@
         "symfony/flex": "^2",
         "symfony/form": "6.*",
         "symfony/framework-bundle": "6.*",
+        "symfony/google-mailer": "6.*",
         "symfony/http-client": "6.*",
         "symfony/intl": "6.*",
         "symfony/mailer": "6.*",

@@ -6,7 +6,7 @@
 
 <div class="flex items-center min-h-screen md:grid md:grid-cols-2">
 	
-	{{ include('_components/_not_logged_register_picture.html.twig') }}
+	{{ include('_components/_not_logged_left_picture.html.twig', {'picture': 'images/left_base_register_picture.jpeg'}) }}
 	
 	<div class="container w-full mx-auto text-gray-400">
 
@@ -29,30 +29,21 @@
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
 			}) }}
 
-			{# {{ form_row(registrationForm.user.lastName, {
-				label: 'Nom',
+			{{ form_row(registrationForm.phone, {
+				label: 'Numéro de téléphone',
 				row_attr: {"class": "inline-grid"},
 				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
 			}) }}
 
-			{{ form_row(registrationForm.user.email, {
+			{{ form_row(registrationForm.infos, {
+				label: "Plus d'informations",
 				row_attr: {"class": "inline-grid"},
-				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
-			}) }} #}
-
-			{# {{ form_row(registrationForm.plainPassword, {
-				label: 'Mot de passe',
-				row_attr: {"class": "inline-grid"},
-				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
+				attr: {"class": "w-full h-24 px-4 mt-1 border rounded form-control required"}
 			}) }}
-
-			{{ form_row(registrationForm.agreeTerms, {
-				label: "J'ai lu et accepte les CGU",
-				row_attr: {"class" : "mb-4 flex flex-row-reverse mx-auto"},
-				attr: {"class": "mr-1.5"}
-			}) }} #}
 		
 		</div>
+
+		<div class="mb-4 text-center"><a class="border-b hover:text-orange-300 hover:border-solid border-b-orange-300" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
 
 		<div class="col-span-2 text-center">
 			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-yellow">Nous contacter</button>

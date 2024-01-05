@@ -23,6 +23,7 @@ module.exports = {
         gray: "var(--gray)",
         black: "var(--black)",
         white: "var(--white)",
+        transparent: "var(--transparent)",
       },
     },
   },
