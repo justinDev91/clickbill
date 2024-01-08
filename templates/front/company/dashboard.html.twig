@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			<div>
+				<div class="grid grid-cols-4 gap-3 mb-2">
+					<dl class="bg-orange-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+						<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-orange-600 bg-orange-100 rounded-full dark:bg-gray-500 dark:text-orange-300">12</dt>
+						<dd class="text-sm font-medium text-orange-600 dark:text-orange-300">Les clients</dd>
+					</dl>
+					<dl class="bg-teal-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+						<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-teal-600 bg-teal-100 rounded-full dark:bg-gray-500 dark:text-teal-300">23</dt>
+						<dd class="text-sm font-medium text-teal-600 dark:text-teal-300">Les devis</dd>
+					</dl>
+					<dl class="bg-blue-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+						<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-full dark:bg-gray-500 dark:text-blue-300">64</dt>
+						<dd class="text-sm font-medium text-blue-600 dark:text-blue-300">Les factures</dd>
+					</dl>
+					<dl class="bg-purple-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+						<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full dark:bg-gray-500 dark:text-purple-300">64</dt>
+						<dd class="text-sm font-medium text-purple-600 dark:text-purple-">Les factures impayés</dd>
+					</dl>
+				</div>
+			</div>
+			<div class="mt-8">
+				<div class="grid grid-cols-3 gap-16">
+					<dl class="flex flex-col items-center justify-center rounded-lg">
+						{{ render_chart(barChart) }}
+					</dl>
+					<dl class="flex flex-col items-center justify-center rounded-lg ">
+						{{ render_chart(lineChart) }}
+					</dl>
+					<dl class="flex flex-col items-center justify-center rounded-lg">
+						<div class="w-80">
+							{{ render_chart(doughnutChart) }}
+						</div>
+					</dl>
+				</div>
+			</div>
+
+			{{ include('_components/front/company/_table.html.twig') }}
+
+		</section>
+	</main>
+{% endblock %}

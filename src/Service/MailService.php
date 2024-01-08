@@ -13,12 +13,13 @@ class MailService
     public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
+        $this->sender = $_ENV['CLICKBILL_MAIL'];
     }
 
     public function sendTemplatedEmail(string $to, string $subject, string $template, array $variables)
     {
         $email = (new TemplatedEmail())
-            ->from('mailer.clickbill@gmail.com')
+            ->from($this->sender)
             ->to($to)
             ->subject($subject)
             ->htmlTemplate($template)

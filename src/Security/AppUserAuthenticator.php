@@ -49,7 +49,8 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('front_dashboard_index'));
+        // TODO : Maybe check the role of the user and redirect him according to his role (Admin/Company/Accountant)
+        return new RedirectResponse($this->urlGenerator->generate('front_company_app_dashboard'));
         // throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }
 

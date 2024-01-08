@@ -6,9 +6,12 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already a client with this email')]
 class Client
 {
     #[ORM\Id]
@@ -16,15 +19,49 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Name cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 500,
+        minMessage: "Name should be at least {{ limit }} characters long.",
+        maxMessage: "Name should not be longer than {{ limit }} characters."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotNull]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Phone cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 20,
+        minMessage: "Phone should be at least {{ limit }} characters long.",
+        maxMessage: "Phone should not be longer than {{ limit }} characters."
+    )]
+    #[Assert\Regex(
+        pattern: "/^\+?[0-9]+$/",
+        message: "Invalid characters in Phone. Only numeric characters are allowed."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Address cannot be blank.")]
+    #[Assert\Length(
+        min: 10,
+        max: 500,
+        minMessage: "Address should be at least {{ limit }} characters long.",
+        maxMessage: "Address should not be longer than {{ limit }} characters."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\-\' ]+$/",
+        message: "Invalid characters in address. Only alphanumeric characters are allowed."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -41,26 +78,26 @@ class Client
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $isDeleted = null;
+    private ?bool $isDeleted = false;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Bill::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Bill::class)]
     private Collection $bills;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Quote::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Quote::class)]
     private Collection $quotes;
 
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Payment::class)]
-    private Collection $payments;
-
-    #[ORM\OneToMany(mappedBy: 'clientId', targetEntity: Notification::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Notification::class)]
     private Collection $notifications;
+
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: ClientInteraction::class)]
+    private Collection $clientInteractions;
 
     public function __construct()
     {
         $this->bills = new ArrayCollection();
         $this->quotes = new ArrayCollection();
-        $this->payments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->clientInteractions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +106,11 @@ class Client
     }
 
     public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function __toString()
     {
         return $this->name;
     }
@@ -188,7 +230,7 @@ class Client
     {
         if (!$this->bills->contains($bill)) {
             $this->bills->add($bill);
-            $bill->setClientId($this);
+            $bill->setClient($this);
         }
 
         return $this;
@@ -198,8 +240,8 @@ class Client
     {
         if ($this->bills->removeElement($bill)) {
             // set the owning side to null (unless already changed)
-            if ($bill->getClientId() === $this) {
-                $bill->setClientId(null);
+            if ($bill->getClient() === $this) {
+                $bill->setClient(null);
             }
         }
 
@@ -218,7 +260,7 @@ class Client
     {
         if (!$this->quotes->contains($quote)) {
             $this->quotes->add($quote);
-            $quote->setClientId($this);
+            $quote->setClient($this);
         }
 
         return $this;
@@ -228,38 +270,8 @@ class Client
     {
         if ($this->quotes->removeElement($quote)) {
             // set the owning side to null (unless already changed)
-            if ($quote->getClientId() === $this) {
-                $quote->setClientId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setClientId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getClientId() === $this) {
-                $payment->setClientId(null);
+            if ($quote->getClient() === $this) {
+                $quote->setClient(null);
             }
         }
 
@@ -278,7 +290,7 @@ class Client
     {
         if (!$this->notifications->contains($notification)) {
             $this->notifications->add($notification);
-            $notification->setClientId($this);
+            $notification->setClient($this);
         }
 
         return $this;
@@ -288,8 +300,38 @@ class Client
     {
         if ($this->notifications->removeElement($notification)) {
             // set the owning side to null (unless already changed)
-            if ($notification->getClientId() === $this) {
-                $notification->setClientId(null);
+            if ($notification->getClient() === $this) {
+                $notification->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientInteraction>
+     */
+    public function getClientInteractions(): Collection
+    {
+        return $this->clientInteractions;
+    }
+
+    public function addClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if (!$this->clientInteractions->contains($clientInteraction)) {
+            $this->clientInteractions->add($clientInteraction);
+            $clientInteraction->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if ($this->clientInteractions->removeElement($clientInteraction)) {
+            // set the owning side to null (unless already changed)
+            if ($clientInteraction->getClient() === $this) {
+                $clientInteraction->setClient(null);
             }
         }
 

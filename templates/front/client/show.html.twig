@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			<h1 class="py-8 text-5xl font-bold">{{ client.name }}</h1>
+			{# {{ include('front/search/index.html.twig',
+								{'buttonPath': 'app_client_new',
+								'label': 'Nouveau devis',
+								}) }} #}
+			{# TODO: Afficher la liste des devis et factures liés à l'utilisateur #}
+			<div>La liste des factures et devis liés à l'utilisateur</div>
+		</section>
+	</main>
+
+
+{% endblock %}

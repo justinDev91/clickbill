@@ -21,29 +21,29 @@ class Notification
     private ?string $notificationType = null;
 
     #[ORM\Column]
-    private ?bool $isSent = null;
+    private ?bool $isSent = false;
 
     #[ORM\Column]
-    private ?bool $isRead = null;
+    private ?bool $isRead = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Quote $quoteId = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Quote $quote = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userId = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $clientId = null;
+    private ?Client $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Bill $billId = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Bill $bill = null;
 
     public function getId(): ?int
     {
@@ -110,50 +110,50 @@ class Notification
         return $this;
     }
 
-    public function getQuoteId(): ?Quote
+    public function getQuote(): ?Quote
     {
-        return $this->quoteId;
+        return $this->quote;
     }
 
-    public function setQuoteId(?Quote $quoteId): static
+    public function setQuote(?Quote $quote): static
     {
-        $this->quoteId = $quoteId;
+        $this->quote = $quote;
 
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): static
+    public function setUser(?User $user): static
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getClientId(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->clientId;
+        return $this->client;
     }
 
-    public function setClientId(?Client $clientId): static
+    public function setClient(?Client $client): static
     {
-        $this->clientId = $clientId;
+        $this->client = $client;
 
         return $this;
     }
 
-    public function getBillId(): ?Bill
+    public function getBill(): ?Bill
     {
-        return $this->billId;
+        return $this->bill;
     }
 
-    public function setBillId(?Bill $billId): static
+    public function setBill(?Bill $bill): static
     {
-        $this->billId = $billId;
+        $this->bill = $bill;
 
         return $this;
     }

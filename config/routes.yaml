@@ -2,11 +2,17 @@ controllers_security:
     resource: ../src/Controller/SecurityController.php
     type: attribute
 
-controllers_front:
-    resource: ../src/Controller/Front
+controllers_front_company:
+    resource: ../src/Controller/Front/Company
     type: attribute
-    name_prefix:  front_
-    prefix: /app
+    name_prefix:  front_company_
+    prefix: /company
+
+controllers_front_accountant:
+    resource: ../src/Controller/Front/Accountant
+    type: attribute
+    name_prefix:  front_accountant_
+    prefix: /accountant
 
 controllers_back:
     resource: ../src/Controller/Back

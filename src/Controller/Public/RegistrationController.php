@@ -20,7 +20,8 @@ class RegistrationController extends AbstractController
     public function register(Request $request, MailService $mailService): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('front_dashboard_index');
+            # TODO : Redirect to another route according the role.
+            return $this->redirectToRoute('front_company_app_dashboard');
         }
         
         $form = $this->createForm(RegistrationFormType::class);
@@ -33,7 +34,7 @@ class RegistrationController extends AbstractController
             try {
                 // Send email to us when user want to create new account.
                 $mailService->sendTemplatedEmail(
-                    'mailer.clickbill@gmail.com',
+                    $_ENV['CLICKBILL_MAIL'],
                     'Demande de création de compte | Clickbill',
                     'emails/registration.html.twig',
                     [
@@ -60,7 +61,8 @@ class RegistrationController extends AbstractController
     public function resetPassword(Request $request, MailService $mailService, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('front_dashboard_index');
+            # TODO : Redirect to another route according the role.
+            return $this->redirectToRoute('front_app_company_dashboard');
         }
         
         $form = $this->createForm(ResetPasswordFormType::class);

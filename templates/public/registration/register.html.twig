@@ -6,13 +6,13 @@
 
 <div class="flex items-center min-h-screen md:grid md:grid-cols-2">
 	
-	{{ include('_components/_not_logged_left_picture.html.twig', {'picture': 'images/left_base_register_picture.jpeg'}) }}
+	{{ include('_components/public/_left_picture.html.twig', {'picture': 'images/left_base_register_picture.jpeg'}) }}
 	
-	<div class="container w-full mx-auto text-gray-400">
+	<div class="container w-full mx-auto">
 
-		{{ include('_components/_not_logged_logo_banner.html.twig') }}
+		{{ include('_components/public/_logo_banner.html.twig') }}
 
-		<div class="flex w-3/4 mx-auto mb-4 justify-evenly md:w-3/5 lg:w-2/4">
+		<div class="flex w-3/4 mx-auto mb-4 text-gray-400 justify-evenly md:w-3/5 lg:w-2/4">
 			<a href="{{ path('app_login') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">Se connecter</h1></a>
 			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-orange-300">S'enregistrer</h1></span>
 		</div>
@@ -46,7 +46,7 @@
 		<div class="mb-4 text-center"><a class="border-b hover:text-orange-300 hover:border-solid border-b-orange-300" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
 
 		<div class="col-span-2 text-center">
-			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-yellow">Nous contacter</button>
+			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">Nous contacter</button>
 		</div>
 
 		{{ form_end(registrationForm) }}
