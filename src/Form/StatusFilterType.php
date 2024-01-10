@@ -33,7 +33,7 @@ class StatusFilterType extends AbstractType
                 ],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Submit',
+                'label' => false,
             ]);
     }
 

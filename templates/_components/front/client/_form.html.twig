@@ -40,11 +40,11 @@
 				<div class="text-red-500">{{ form_errors(form.address) }}</div>
 			{% endif %}
 
-			<a href="{{ path('front_app_client_index') }}" class="text-gray-700">Retourner à la liste</a>
+			<a href="{{ path('front_company_app_client_new') }}" class="text-gray-700">Retourner à la liste</a>
 		</div>
 
 		<div class="col-span-2 text-center">
-			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">Ajouter</button>
+			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">{{ button_label }}</button>
 		</div>
 		{{ form_end(form) }}
 	</div>

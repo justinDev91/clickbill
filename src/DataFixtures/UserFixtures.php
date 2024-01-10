@@ -10,7 +10,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher) {}
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
+    {
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -20,12 +22,11 @@ class UserFixtures extends Fixture
             ->setFirstName('Company')
             ->setLastName('Test')
             ->setEmail('company@user.fr')
-            ->setRoles(['ROLE_COMPANY']);
-        ;
+            ->setRoles(['ROLE_COMPANY']);;
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
 
-        $company = (New Company())
+        $company = (new Company())
             ->setName('Test')
             ->setAddress('242 faubourg Saint-Antoine')
             ->setPhone('0654326494')
@@ -33,7 +34,6 @@ class UserFixtures extends Fixture
             ->setLogo('logo.png')
             ->setCreatedBy($user->getId())
             ->setCreatedAt(new \DateTime('now'));
-        ;
         $manager->persist($company);
         $manager->flush();
 
@@ -46,8 +46,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('user@user.fr')
             ->setRoles(['ROLE_USER'])
-            ->setCompany($company);
-        ;
+            ->setCompany($company);;
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
 
@@ -56,8 +55,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('accountant@user.fr')
             ->setRoles(['ROLE_ACCOUNTANT'])
-            ->setCompany($company);
-        ;
+            ->setCompany($company);;
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
 
@@ -65,8 +63,7 @@ class UserFixtures extends Fixture
             ->setFirstName('Admin')
             ->setLastName('Test')
             ->setEmail('admin@user.fr')
-            ->setRoles(['ROLE_ADMIN'])
-        ;
+            ->setRoles(['ROLE_ADMIN']);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
         $manager->flush();

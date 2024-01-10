@@ -9,6 +9,7 @@ use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
 use App\Service\InteractionService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class ClientController extends AbstractController
     #[Route('/', name: 'app_client_index', methods: ['GET', 'POST'])]
     public function index(Request $request, ClientRepository $clientRepository): Response
     {
-        $clients = $clientRepository->findAll();
+        $clients = $clientRepository->findAllActiveClients();
 
         //Status filter
         $statusFilterForm = $this->createForm(StatusFilterType::class);
@@ -38,7 +39,7 @@ class ClientController extends AbstractController
         }
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $searchTerm = $searchForm->get('search')->getData();
+            $searchTerm = strtolower($searchForm->get('search')->getData());
             $clients = $clientRepository->searchClientByNameOrEmail($searchTerm);
         }
 
@@ -114,7 +115,7 @@ class ClientController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('front_app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_company_app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('front/client/edit.html.twig', [
@@ -131,7 +132,9 @@ class ClientController extends AbstractController
         InteractionService $interactionService
     ): Response {
         if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($client);
+
+            // Perform soft delete
+            $client->setIsDeleted(true);
 
             $interactionService->createClientInteraction(
                 $client,

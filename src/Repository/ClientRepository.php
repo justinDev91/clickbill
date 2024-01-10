@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClientRepository extends ServiceEntityRepository
 {
+    private const IS_NOT_DELETED = 'client.isDeleted = false';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Client::class);
@@ -31,6 +33,7 @@ class ClientRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('client')
             ->andWhere('client.name LIKE :searchTerm OR client.email LIKE :searchTerm')
+            ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('searchTerm', '%' . $term . '%')
             ->getQuery()
             ->getResult();
@@ -47,12 +50,24 @@ class ClientRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('client')
             ->join('client.bills', 'bill')
             ->andWhere('bill.status = :status')
+            ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('status', $status)
             ->getQuery()
             ->getResult();
     }
 
-
+    /**
+     * Get all active clients
+     *
+     * @return Client[]
+     */
+    public function findAllActiveClients(): array
+    {
+        return $this->createQueryBuilder('client')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Client[] Returns an array of Client objects
     //     */
