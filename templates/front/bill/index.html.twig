@@ -1,55 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bill index{% endblock %}
+{% block title %}Mes Factures
+{% endblock %}
 
 {% block body %}
-    <h1>Bill index</h1>
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			<h1 class="pb-4 mb-10 text-4xl">Mes Factures</h1>
+			{{ include('_components/front/bill/_add_bill_popup.html.twig') }}
+			{# TODO: ajouter la search bar et les filtres #}
+			{% for error in errors %}
+			{{ include('_components/front/global/_toast.html.twig', {
+				'message' : error, 
+				'state' : 'error'} ) }}			
+			{% endfor %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Quantity</th>
-                <th>TotalAmount</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>IsDownPayment</th>
-                <th>CreatedBy</th>
-                <th>CreatedAt</th>
-                <th>UpdatedBy</th>
-                <th>UpdatedAt</th>
-                <th>IsDeleted</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for bill in bills %}
-            <tr>
-                <td>{{ bill.id }}</td>
-                <td>{{ bill.quantity }}</td>
-                <td>{{ bill.totalAmount }}</td>
-                <td>{{ bill.date ? bill.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ bill.description }}</td>
-                <td>{{ bill.status }}</td>
-                <td>{{ bill.isDownPayment ? 'Yes' : 'No' }}</td>
-                <td>{{ bill.createdBy }}</td>
-                <td>{{ bill.createdAt ? bill.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ bill.updatedBy }}</td>
-                <td>{{ bill.updatedAt ? bill.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ bill.isDeleted ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('front_company_app_bill_show', {'id': bill.id}) }}">show</a>
-                    <a href="{{ path('front_company_app_bill_edit', {'id': bill.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="13">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('front_company_app_bill_new') }}">Create new</a>
+			{{ include('_components/front/bill/_table.html.twig', bills) }}
+		</section>
+	</main>
 {% endblock %}

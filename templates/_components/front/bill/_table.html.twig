@@ -3,75 +3,70 @@
 		<thead class="text-xs text-gray-700 uppercase border-t border-b bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 			<tr>
 				<th scope="col" class="px-6 py-3">
-					Prénom
+					Client
+				</th>
+                <th scope="col" class="px-6 py-3">
+					Devis
 				</th>
 				<th scope="col" class="px-6 py-3">
-					Nom
+					Type
 				</th>
 				<th scope="col" class="px-6 py-3">
-					Email
+					Montant
 				</th>
 				<th scope="col" class="px-6 py-3">
-					Téléphone
-				</th>
-				<th scope="col" class="px-6 py-3">
-					Adresse
-				</th>
-				<th scope="col" class="px-6 py-3">
-					Mis à jour le
+					Statut
 				</th>
 				<th scope="col" class="px-6 py-3"></th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for client in pagination %}
+			{% for bill in bills %}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">{{ client.firstName }}</a>
-					</th>
-					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">{{ client.lastName }}</a>
+						<a href="{{ path('front_company_app_bill_show', {'id': bill.id}) }}">{{ bill.client }}</a>
 					</th>
 					<td class="px-6 py-4">
-						{{ client.email }}
+						{{ bill.quote.id }}
 					</td>
 					<td class="px-6 py-4">
-						{{ client.phone }}
+						{% if bill.isDownPayment %}
+						Acompte
+						{% endif %}	
 					</td>
 					<td class="px-6 py-4">
-						{{ client.address }}
+						{{ bill.amount }} €
 					</td>
 					<td class="px-6 py-4">
-						{{ client.updatedAt ? client.updatedAt|date('d/m/Y H:i') : '' }}
+						{{ bill.status }}
 					</td>
 					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
-						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{client.id}}" data-dropdown-trigger="hover" class="p-3" type="button">
+						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverBill{{bill.id}}" data-dropdown-trigger="hover" class="p-3" type="button">
 							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
 						</button>
 					</td>
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="11">Aucun client trouvé</td>
+					<td colspan="11">Aucune facture</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	{{ include('_components/front/global/_pagination.html.twig') }}
 </div>
 
-<!-- Client Dropdown menu -->
-{% for client in pagination %}
-	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+<!-- bill Dropdown menu -->
+{% for bill in bills %}
+	<div id="dropdownHoverBill{{bill.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
 			<li>
-				<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+				<a href="{{ path('front_company_app_bill_show', {'id': bill.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir</a>
 			</li>
 			<li>
-				<a href="{{ path('front_company_app_client_edit', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
-			</li>
-			<li>
-				{{ include('_components/front/client/_delete_form.html.twig', {'clientSlug': client.slug}) }}
+				{{ include('_components/front/global/_delete_form.html.twig',{
+                    'path': 'front_company_app_bill_delete',
+                    'id': bill.id,
+                })}}
 			</li>
 		</ul>
 	</div>

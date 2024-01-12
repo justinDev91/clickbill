@@ -27,7 +27,7 @@ class Quote
     #[ORM\Column(type: 'string', nullable: false)]
     private ?string $status = self::EN_ATTENTE;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $downPayment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -62,9 +62,13 @@ class Quote
     #[ORM\OneToMany(mappedBy: 'quoteId', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Bill::class)]
+    private Collection $bills;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection();
+        $this->bills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,6 +247,36 @@ class Quote
     public function setProductsInfo(array $productsInfo): static
     {
         $this->productsInfo = $productsInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bill>
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bill $bill): static
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills->add($bill);
+            $bill->setQuote($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bill $bill): static
+    {
+        if ($this->bills->removeElement($bill)) {
+            // set the owning side to null (unless already changed)
+            if ($bill->getQuote() === $this) {
+                $bill->setQuote(null);
+            }
+        }
 
         return $this;
     }

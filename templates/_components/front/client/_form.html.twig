@@ -47,7 +47,6 @@
 			{% if form_errors(form.address) %}
 				<div class="text-red-500">{{ form_errors(form.address) }}</div>
 			{% endif %}
-
 		</div>
 
 		<div class="col-span-2 text-center">
@@ -56,6 +55,8 @@
 				Annulé
 			</a>
 		</div>
+
+		<a href="{{ path('front_company_app_bill_index') }}" class="hover:underline">< Retour</a>
 		{{ form_end(form) }}
 	</div>
 </div>

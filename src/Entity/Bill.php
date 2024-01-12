@@ -11,9 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: BillRepository::class)]
 class Bill
 {
-    private const EN_COURS = 'en cours';
-    private const ANNULE = 'annulé';
-    private const VALIDE = 'validé';
+    public const WAITING_FOR_DOWNPAYMENT = 'En attente du paiement de l\'acompte';
+    public const READY = 'Prête à l\'envoi';
+    public const WAITING_FOR_PAYMENT = 'En attente de paiement';
+    public const PAID = 'Acquitté';
+    public const UNPAID = 'Aon acquitté';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,27 +23,24 @@ class Bill
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
-
-    #[ORM\Column]
-    private ?float $totalAmount = null;
+    private ?float $amount = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $status = self::EN_COURS;
+    private ?string $status = self::WAITING_FOR_PAYMENT;
 
     #[ORM\Column]
     private ?bool $isDownPayment = false;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $createdBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -64,6 +63,10 @@ class Bill
     #[ORM\OneToMany(mappedBy: 'bill', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\ManyToOne(inversedBy: 'bills')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Quote $quote = null;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection();
@@ -74,26 +77,14 @@ class Bill
         return $this->id;
     }
 
-    public function getQuantity(): ?int
+    public function getAmount(): ?float
     {
-        return $this->quantity;
+        return $this->amount;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setAmount(float $amount): static
     {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getTotalAmount(): ?float
-    {
-        return $this->totalAmount;
-    }
-
-    public function setTotalAmount(float $totalAmount): static
-    {
-        $this->totalAmount = $totalAmount;
+        $this->amount = $amount;
 
         return $this;
     }
@@ -129,7 +120,7 @@ class Bill
 
     public function setStatus($status)
     {
-        if (!in_array($status, array(self::EN_COURS, self::ANNULE, self::VALIDE))) {
+        if (!in_array($status, array(self::READY, self::WAITING_FOR_DOWNPAYMENT, self::WAITING_FOR_PAYMENT, self::UNPAID, self::PAID))) {
             throw new \InvalidArgumentException("Invalid status");
         }
         $this->status = $status;
@@ -257,6 +248,18 @@ class Bill
     public function setIsDownPayment(bool $isDownPayment): static
     {
         $this->isDownPayment = $isDownPayment;
+
+        return $this;
+    }
+
+    public function getQuote(): ?Quote
+    {
+        return $this->quote;
+    }
+
+    public function setQuote(?Quote $quote): static
+    {
+        $this->quote = $quote;
 
         return $this;
     }

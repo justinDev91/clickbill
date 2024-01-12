@@ -1,0 +1,9 @@
+<form 
+    method="post" 
+    action="{{ path( path , {'id': id}) }}" 
+    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
+    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
+    
+	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+	<button class="btn">Supprimer</button>
+</form>
