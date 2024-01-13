@@ -8,6 +8,7 @@ use App\Form\CustomSearchFormType;
 use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
 use App\Service\InteractionService;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,11 @@ class ClientController extends AbstractController
 {
 
     #[Route('/', name: 'app_client_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ClientRepository $clientRepository): Response
-    {
+    public function index(
+        Request $request,
+        ClientRepository $clientRepository,
+        PaginationService $paginationService
+    ): Response {
         $clients = $clientRepository->findAllActiveClients();
 
         //Status filter
@@ -43,10 +47,16 @@ class ClientController extends AbstractController
             $clients = $clientRepository->searchClientByNameOrEmail($searchTerm);
         }
 
+        $pagination = $paginationService->paginate(
+            $clients,
+            $request
+        );
+
         return $this->render('front/client/index.html.twig', [
             'clients' => $clients,
             'statusFilterForm' => $statusFilterForm,
             'searchForm' => $searchForm,
+            'pagination' => $pagination,
         ]);
     }
 

@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for client in clients %}
+			{% for client in pagination %}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
 						<a href="{{ path('front_company_app_client_show', {'id': client.id}) }}">{{ client.name }}</a>
@@ -50,10 +50,11 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	{{ include('_components/front/global/_pagination.html.twig') }}
 </div>
 
 <!-- Client Dropdown menu -->
-{% for client in clients %}
+{% for client in pagination %}
 	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
 			<li>
