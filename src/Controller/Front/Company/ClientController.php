@@ -84,7 +84,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is created", $client->getName())
+                sprintf("Client %s is created", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();
@@ -120,7 +120,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getName())
+                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();
@@ -148,7 +148,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getName())
+                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();

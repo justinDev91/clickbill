@@ -3,13 +3,21 @@
 		{{ form_start(form, {'attr': {'class': 'w-3/4 mx-auto'}}) }}
 		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
 			<h1 class="pb-4 text-4xl text-black">{{ title }}</h1>
-
-			{{ form_row(form.name, {
-                label: 'Nom',
+			{{ form_row(form.firstName, {
+                label: 'FirstName',
                 row_attr: {"class": "client-row-attr"},
                 attr: {"class": "client-form-attr"}
             }) }}
-			{% if form_errors(form.name) %}
+			{% if form_errors(form.firstName) %}
+				<div class="text-red-500">{{ form_errors(form.name) }}</div>
+			{% endif %}
+
+			{{ form_row(form.lastName, {
+                label: 'LastName',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{% if form_errors(form.lastName) %}
 				<div class="text-red-500">{{ form_errors(form.name) }}</div>
 			{% endif %}
 
@@ -40,11 +48,13 @@
 				<div class="text-red-500">{{ form_errors(form.address) }}</div>
 			{% endif %}
 
-			<a href="{{ path('front_company_app_client_new') }}" class="text-gray-700">Retourner à la liste</a>
 		</div>
 
 		<div class="col-span-2 text-center">
 			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">{{ button_label }}</button>
+			<a href="{{ path('front_company_app_client_index')}}" class="w-48 px-6 py-3 font-bold text-black rounded bg-redButton ">
+				Annulé
+			</a>
 		</div>
 		{{ form_end(form) }}
 	</div>

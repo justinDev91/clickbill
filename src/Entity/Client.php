@@ -20,15 +20,26 @@ class Client
     private ?int $id = null;
 
     #[Assert\NotNull]
-    #[Assert\NotBlank(message: "Name cannot be blank.")]
+    #[Assert\NotBlank(message: "First name cannot be blank.")]
     #[Assert\Length(
-        min: 10,
-        max: 500,
-        minMessage: "Name should be at least {{ limit }} characters long.",
-        maxMessage: "Name should not be longer than {{ limit }} characters."
+        min: 2,
+        max: 255,
+        minMessage: "First name should be at least {{ limit }} characters long.",
+        maxMessage: "First name should not be longer than {{ limit }} characters."
     )]
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $firstName = null;
+
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Last name cannot be blank.")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Last name should be at least {{ limit }} characters long.",
+        maxMessage: "Last name should not be longer than {{ limit }} characters."
+    )]
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
 
     #[Assert\NotNull]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
@@ -105,21 +116,33 @@ class Client
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function __toString()
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
+        return $this->firstName;
     }
 
     public function getEmail(): ?string
