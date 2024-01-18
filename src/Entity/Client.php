@@ -9,14 +9,17 @@ use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already a client with this email')]
 class Client
 {
+    use Traits\Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -40,6 +43,10 @@ class Client
     )]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
+
+    #[ORM\Column(length: 128, unique: true)]
+    #[Gedmo\Slug(fields: ['firstName', 'lastName'])]
+    private $slug;
 
     #[Assert\NotNull]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
@@ -71,7 +78,7 @@ class Client
     )]
     #[Assert\Regex(
         pattern: "/^[a-zA-Z0-9\-\' ]+$/",
-        message: "Invalid characters in address. Only alphanumeric characters are allowed."
+        message: "Invalid characters in address. Only letters, numbers, and spaces are allowed."
     )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
@@ -79,14 +86,8 @@ class Client
     #[ORM\Column]
     private ?int $createdBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -127,6 +128,25 @@ class Client
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Client
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
 
     public function getLastName(): ?string
     {
@@ -193,18 +213,6 @@ class Client
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -213,18 +221,6 @@ class Client
     public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

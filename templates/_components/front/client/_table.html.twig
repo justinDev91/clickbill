@@ -27,10 +27,10 @@
 			{% for client in pagination %}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'id': client.id}) }}">{{ client.firstName }}</a>
+						<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">{{ client.firstName }}</a>
 					</th>
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'id': client.id}) }}">{{ client.lastName }}</a>
+						<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">{{ client.lastName }}</a>
 					</th>
 					<td class="px-6 py-4">
 						{{ client.email }}
@@ -64,13 +64,13 @@
 	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
 			<li>
-				<a href="{{ path('front_company_app_client_show', {'id': client.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+				<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
 			</li>
 			<li>
-				<a href="{{ path('front_company_app_client_edit', {'id': client.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
+				<a href="{{ path('front_company_app_client_edit', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
 			</li>
 			<li>
-				{{ include('_components/front/client/_delete_form.html.twig', {'clientId': client.id}) }}
+				{{ include('_components/front/client/_delete_form.html.twig', {'clientSlug': client.slug}) }}
 			</li>
 		</ul>
 	</div>
