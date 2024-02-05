@@ -16,8 +16,22 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Security('is_granted("ROLE_COMPANY")')] # TODO: Add id for company and check if user has access to this company
 class BillController extends AbstractController
 {
-    #[Route('/', name: 'app_bill_index', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'app_bill_index', methods: ['GET'])]
     public function index(BillRepository $billRepository, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    {
+        $bill = new Bill();
+        $form = $this->createForm(BillType::class, $bill);
+        $form->handleRequest($request);
+
+        return $this->render('front/bill/index.html.twig', [
+            'bills' => $billRepository->findAllActiveBills(),
+            'form' => $form,
+            'errors' => $session->getFlashBag()->get('error', []),
+        ]);
+    }
+
+    #[Route('/new', name: 'app_bill_new', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, BillRepository $billRepository, SessionInterface $session): Response
     {
         // add new bill
         $bill = new Bill();
@@ -71,11 +85,7 @@ class BillController extends AbstractController
             }
         }
 
-        return $this->render('front/bill/index.html.twig', [
-            'bills' => $billRepository->findAllActiveBills(),
-            'form' => $form,
-            'errors' => $session->getFlashBag()->get('error', []),
-        ]);
+        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
     }
 
     #[Route('/{id}', name: 'app_bill_show', methods: ['GET'])]
