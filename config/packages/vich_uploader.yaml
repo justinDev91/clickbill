@@ -11,4 +11,4 @@ vich_uploader:
             namer:
                 service: Vich\UploaderBundle\Naming\PropertyNamer
                 options: { property: 'firstName' }
-            
+        
