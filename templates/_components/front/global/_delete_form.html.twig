@@ -1,6 +1,18 @@
+{% if type=='guid' %}
+    {% set params = { 'guid': id } %}
+{% endif %}
+
+{% if type=='slug' %}
+    {% set params = { 'slug': id } %}
+{% endif %}
+
+{% if type=='id' %}
+    {% set params = { 'id': id } %}
+{% endif %}
+
 <form 
     method="post" 
-    action="{{ path( path , {'id': id}) }}" 
+    action="{{ path( path , params) }}" 
     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
     onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?');">
     

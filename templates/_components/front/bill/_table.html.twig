@@ -24,7 +24,7 @@
 			{% for bill in bills %}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_bill_show', {'id': bill.id}) }}">{{ bill.client }}</a>
+						<a href="{{ path('front_company_app_bill_show', {'guid': bill.guid}) }}">{{ bill.client }}</a>
 					</th>
 					<td class="px-6 py-4">
 						{{ bill.quote.id }}
@@ -41,7 +41,7 @@
 						{{ bill.status }}
 					</td>
 					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
-						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverBill{{bill.id}}" data-dropdown-trigger="hover" class="p-3" type="button">
+						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverBill{{bill.guid}}" data-dropdown-trigger="hover" class="p-3" type="button">
 							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
 						</button>
 					</td>
@@ -57,15 +57,16 @@
 
 <!-- bill Dropdown menu -->
 {% for bill in bills %}
-	<div id="dropdownHoverBill{{bill.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+	<div id="dropdownHoverBill{{bill.guid}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
 			<li>
-				<a href="{{ path('front_company_app_bill_show', {'id': bill.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir</a>
+				<a href="{{ path('front_company_app_bill_show', {'guid': bill.guid}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir</a>
 			</li>
 			<li>
 				{{ include('_components/front/global/_delete_form.html.twig',{
                     'path': 'front_company_app_bill_delete',
-                    'id': bill.id,
+					'type': 'guid',
+					'id': bill.guid,
                 })}}
 			</li>
 		</ul>

@@ -35,7 +35,7 @@
             <tr>
                 <th>Créée par</th>
                 {# TODO: aller récup le nom du user de cet id #}
-                <td>{{ bill.createdBy }}</td> 
+                <td>{{ createdBy.firstname }} {{ createdBy.lastname }}</td> 
             </tr>
             <tr>
                 <th>Créée le</th>
@@ -71,11 +71,11 @@
     </table>
 
     <div class="flex my-3 space-x-3 ">  
-        <form method="post" action="{{ path('front_company_app_bill_delete', {'id': bill.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.id) }}">
+        <form method="post" action="{{ path('front_company_app_bill_delete', {'guid': bill.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.guid) }}">
             {{ include('_components/front/global/_button_id.html.twig',
                 {'path': 'front_company_app_bill_delete',
-                'id': bill.id,
+                'params': { 'guid': bill.guid },
                 'color': 'bg-gray-300',
                 'title': 'Supprimer',
             }) }}   

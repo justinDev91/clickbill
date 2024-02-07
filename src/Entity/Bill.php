@@ -7,10 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
 
 #[ORM\Entity(repositoryClass: BillRepository::class)]
 class Bill
 {
+    use Traits\Timestampable;
+
     public const WAITING_FOR_DOWNPAYMENT = 'En attente du paiement de l\'acompte';
     public const READY = 'Prête à l\'envoi';
     public const WAITING_FOR_PAYMENT = 'En attente de paiement';
@@ -21,6 +25,9 @@ class Bill
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(type: Types::GUID, unique: true)]
+    private ?string $guid = null;
 
     #[ORM\Column]
     private ?float $amount = null;
@@ -37,17 +44,11 @@ class Bill
     #[ORM\Column]
     private ?bool $isDownPayment = false;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $createdBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column(nullable: false)]
+    private int $createdBy;
 
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -69,6 +70,7 @@ class Bill
 
     public function __construct()
     {
+        $this->guid = Uuid::uuid4()->toString();
         $this->notifications = new ArrayCollection();
     }
 
@@ -138,18 +140,6 @@ class Bill
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -158,18 +148,6 @@ class Bill
     public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -260,6 +238,18 @@ class Bill
     public function setQuote(?Quote $quote): static
     {
         $this->quote = $quote;
+
+        return $this;
+    }
+
+    public function getGuid(): ?string
+    {
+        return $this->guid;
+    }
+
+    public function setGuid(string $guid): static
+    {
+        $this->guid = $guid;
 
         return $this;
     }

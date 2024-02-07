@@ -5,6 +5,7 @@ namespace App\Controller\Front\Company;
 use App\Entity\Bill;
 use App\Form\BillType;
 use App\Repository\BillRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,14 +54,15 @@ class BillController extends AbstractController
                         ->setQuote($form->get('quote')->getData())
                         ->setAmount($form->get('quote')->getData()->getAmount() * ($form->get('quote')->getData()->getDownPayment()/100))
                         ->setClient($form->get('quote')->getData()->getClient())
-                        ->setCompany($form->get('quote')->getData()->getCompany()) # TODO: setCompany to current company
+                        ->setCompany($this->getUser()->getCompany()) # TODO: setCompany to current company
                         ->setDate($form->get('quote')->getData()->getDate())
                         ->setIsDownPayment(true)
                         ->setStatus(Bill::READY);
-                        // ->setCreatedBy(1); # TODO: setCreatedBy to current user 
 
                     $entityManager->persist($downPaymentBill);
-                    $downPaymentBill->setCreatedAt(new \DateTimeImmutable());
+                    $downPaymentBill
+                        ->setCreatedAt(new \DateTime())
+                        ->setCreatedBy($this->getUser()->getId());
                     $entityManager->persist($downPaymentBill);
 
                     $entityManager->flush();
@@ -69,13 +71,14 @@ class BillController extends AbstractController
                 $bill
                     ->setAmount($form->get('quote')->getData()->getAmount() - $downPaymentBill->getAmount())
                     ->setClient($form->get('quote')->getData()->getClient())
-                    ->setCompany($form->get('quote')->getData()->getCompany()) # TODO: setCreatedBy to current company
+                    ->setCompany($this->getUser()->getCompany())
                     ->setDate($form->get('quote')->getData()->getDate())
                     ->setIsDownPayment(false)
                     ->setStatus($billStatus);
-                    // ->setCreatedBy(1); # TODO: setCreatedBy to current user 
                 $entityManager->persist($bill);
-                $downPaymentBill->setCreatedAt(new \DateTimeImmutable());
+                $bill
+                    ->setCreatedAt(new \DateTime())
+                    ->setCreatedBy($this->getUser()->getId());
                 $entityManager->persist($bill);
 
                 $entityManager->flush();  
@@ -88,20 +91,23 @@ class BillController extends AbstractController
         return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
     }
 
-    #[Route('/{id}', name: 'app_bill_show', methods: ['GET'])]
-    public function show(Bill $bill): Response
+    #[Route('/{guid}', name: 'app_bill_show', methods: ['GET'])]
+    public function show(Bill $bill, UserRepository $userRepository): Response
     {
+        $user = $userRepository->findOneBy(['id' => $bill->getCreatedBy()]);
+        
         return $this->render('front/bill/show.html.twig', [
             'bill' => $bill,
+            'createdBy' => [ 'firstname' => $user->getFirstName(), 'lastname' => $user->getLastName() ],
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bill_delete', methods: ['POST'])]
+    #[Route('/{guid}', name: 'app_bill_delete', methods: ['POST'])]
     public function delete(Request $request, Bill $bill, BillRepository $billRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $billAlreadySent = null;
 
-        if ($this->isCsrfTokenValid('delete' . $bill->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $bill->getGuid(), $request->request->get('_token'))) {
             $billsToDelete = $billRepository->findByQuoteId($bill->getQuote());
             $filteredBills = $billsToDelete->filter(fn($bill) => $bill->getStatus() != Bill::READY && $bill->getStatus() != Bill::WAITING_FOR_DOWNPAYMENT );
             $allowDelete = $filteredBills->isEmpty();
