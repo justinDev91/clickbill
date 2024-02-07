@@ -1,0 +1,14 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        userPicture:
+            uri_prefix: /uploads/images/users/picture
+            upload_destination: '%kernel.project_dir%/public/uploads/images/users/picture'
+            namer:
+                service: Vich\UploaderBundle\Naming\PropertyNamer
+                options: { property: 'name' }
+            
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

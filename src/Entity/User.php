@@ -9,10 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -34,9 +37,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
-    
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePicture = null;
+
+    #[Vich\UploadableField(mapping: 'organisationLogo', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Assert\Image(
+        maxSize: '500k',
+        minWidth: 500,
+        maxSizeMessage: 'L\'image est trop lourde ({{ size }} {{ suffix }}). La taille maximale autorisée est de {{ limit }} {{ suffix }}.',
+        minWidthMessage: 'La largeur de l\'image est trop petite ({{ width }}px). La largeur minimale attendue est de {{ min_width }}px.',
+    )]
+    private ?File $imageFile = null;
+
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
@@ -298,15 +314,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfilePicture(): ?string
+    public function getImageFile(): ?File
     {
-        return $this->profilePicture;
+        return $this->imageFile;
     }
 
-    public function setProfilePicture(?string $profilePicture): static
+    public function setImageName(?string $imageName): void
     {
-        $this->profilePicture = $profilePicture;
+        $this->imageName = $imageName;
+    }
 
-        return $this;
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
     }
 }
