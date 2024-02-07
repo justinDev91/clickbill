@@ -8,11 +8,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 trait Timestampable
 {
     #[Gedmo\Timestampable(on: 'create')]
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
     private \DateTime $createdAt;
 
     #[Gedmo\Timestampable(on: 'update')]
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
     private \DateTime $updatedAt;
 
     public function getCreatedAt(): \DateTime
