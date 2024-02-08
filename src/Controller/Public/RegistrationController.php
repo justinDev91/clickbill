@@ -23,14 +23,14 @@ class RegistrationController extends AbstractController
             # TODO : Redirect to another route according the role.
             return $this->redirectToRoute('front_company_app_dashboard');
         }
-        
+
         $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Get datas from form
             $formData = $form->getData();
-            
+
             try {
                 // Send email to us when user want to create new account.
                 $mailService->sendTemplatedEmail(
@@ -64,23 +64,23 @@ class RegistrationController extends AbstractController
             # TODO : Redirect to another route according the role.
             return $this->redirectToRoute('front_app_company_dashboard');
         }
-        
+
         $form = $this->createForm(ResetPasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Get datas from form
             $formData = $form->getData();
-            
+
             // Get the user.
             $user = $entityManager
                 ->getRepository(User::class)
                 ->findOneByEmail(strtolower($formData['email']));
 
-            if($user){
+            if ($user) {
                 // Generate a random password
                 $newPassword = bin2hex(random_bytes(8));
-                
+
                 try {
                     $mailService->sendTemplatedEmail(
                         $formData['email'],

@@ -3,6 +3,7 @@
 namespace App\Controller\Front\Company;
 
 use App\Repository\ClientRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +13,7 @@ use Symfony\UX\Chartjs\Model\Chart;
 class CompanyController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function chart(ChartBuilderInterface $chartBuilder, ClientRepository $clientRepository): Response
+    public function chart(ChartBuilderInterface $chartBuilder, ClientRepository $clientRepository, UserRepository $userRepository): Response
     {
         //TODO: Get company client include bill and devis
         $clients = $clientRepository->findAll();

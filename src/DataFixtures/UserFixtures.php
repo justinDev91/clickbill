@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('user@user.fr')
             ->setRoles(['ROLE_USER'])
-            ->setCompany($company);;
+            ->setCompany($company);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
 
