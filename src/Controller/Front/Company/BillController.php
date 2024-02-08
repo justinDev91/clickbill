@@ -5,77 +5,125 @@ namespace App\Controller\Front\Company;
 use App\Entity\Bill;
 use App\Form\BillType;
 use App\Repository\BillRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[Route('/bill')]
+#[Security('is_granted("ROLE_COMPANY")')] # TODO: Add id for company and check if user has access to this company
 class BillController extends AbstractController
 {
     #[Route('/', name: 'app_bill_index', methods: ['GET'])]
-    public function index(BillRepository $billRepository): Response
-    {
-        return $this->render('front/bill/index.html.twig', [
-            'bills' => $billRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_bill_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(BillRepository $billRepository, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $bill = new Bill();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($bill);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('front/bill/new.html.twig', [
-            'bill' => $bill,
+        return $this->render('front/bill/index.html.twig', [
+            'bills' => $billRepository->findAllActiveBills(),
             'form' => $form,
+            'errors' => $session->getFlashBag()->get('error', []),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bill_show', methods: ['GET'])]
-    public function show(Bill $bill): Response
+    #[Route('/new', name: 'app_bill_new', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, BillRepository $billRepository, SessionInterface $session): Response
     {
-        return $this->render('front/bill/show.html.twig', [
-            'bill' => $bill,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_bill_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
-    {
+        // add new bill
+        $bill = new Bill();
+        $downPaymentBill = new Bill();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
-
+        $errorBillAlreadyExist = null;
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $existantBills = $billRepository->findByQuoteId($form->get('quote')->getData());
 
-            return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);
+            if($existantBills->isEmpty()){
+                $billStatus = Bill::READY;
+
+                if ($form->get('quote')->getData()->getDownPayment() != null) {
+                    $billStatus = Bill::WAITING_FOR_DOWNPAYMENT;
+
+                    $downPaymentBill
+                        ->setQuote($form->get('quote')->getData())
+                        ->setAmount($form->get('quote')->getData()->getAmount() * ($form->get('quote')->getData()->getDownPayment()/100))
+                        ->setClient($form->get('quote')->getData()->getClient())
+                        ->setCompany($this->getUser()->getCompany()) # TODO: setCompany to current company
+                        ->setDate($form->get('quote')->getData()->getDate())
+                        ->setIsDownPayment(true)
+                        ->setStatus(Bill::READY);
+
+                    $entityManager->persist($downPaymentBill);
+                    $downPaymentBill
+                        ->setCreatedAt(new \DateTime())
+                        ->setCreatedBy($this->getUser()->getId());
+                    $entityManager->persist($downPaymentBill);
+
+                    $entityManager->flush();
+                }
+
+                $bill
+                    ->setAmount($form->get('quote')->getData()->getAmount() - $downPaymentBill->getAmount())
+                    ->setClient($form->get('quote')->getData()->getClient())
+                    ->setCompany($this->getUser()->getCompany())
+                    ->setDate($form->get('quote')->getData()->getDate())
+                    ->setIsDownPayment(false)
+                    ->setStatus($billStatus);
+                $entityManager->persist($bill);
+                $bill
+                    ->setCreatedAt(new \DateTime())
+                    ->setCreatedBy($this->getUser()->getId());
+                $entityManager->persist($bill);
+
+                $entityManager->flush();  
+            } else {
+                $errorBillAlreadyExist = "Facture(s) déjà existante(s) pour ce devis";
+                $session->getFlashBag()->add('error', $errorBillAlreadyExist);
+            }
         }
 
-        return $this->render('front/bill/edit.html.twig', [
+        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
+    }
+
+    #[Route('/{guid}', name: 'app_bill_show', methods: ['GET'])]
+    public function show(Bill $bill, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->findOneBy(['id' => $bill->getCreatedBy()]);
+        
+        return $this->render('front/bill/show.html.twig', [
             'bill' => $bill,
-            'form' => $form,
+            'createdBy' => [ 'firstname' => $user->getFirstName(), 'lastname' => $user->getLastName() ],
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bill_delete', methods: ['POST'])]
-    public function delete(Request $request, Bill $bill, EntityManagerInterface $entityManager): Response
+    #[Route('/{guid}', name: 'app_bill_delete', methods: ['POST'])]
+    public function delete(Request $request, Bill $bill, BillRepository $billRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $bill->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($bill);
-            $entityManager->flush();
+        $billAlreadySent = null;
+
+        if ($this->isCsrfTokenValid('delete' . $bill->getGuid(), $request->request->get('_token'))) {
+            $billsToDelete = $billRepository->findByQuoteId($bill->getQuote());
+            $filteredBills = $billsToDelete->filter(fn($bill) => $bill->getStatus() != Bill::READY && $bill->getStatus() != Bill::WAITING_FOR_DOWNPAYMENT );
+            $allowDelete = $filteredBills->isEmpty();
+
+            if ($allowDelete) {
+                foreach ($billsToDelete as $bill){
+                    //soft delete
+                    $bill->setIsDeleted(true);
+                    $entityManager->flush();
+                }
+            } else {
+                $billAlreadySent = "Les factures liéés au devis #" . $bill->getQuote()->getId() . " ont déjà été émises et ne peuvent être supprimées";
+                $session->getFlashBag()->add('error', $billAlreadySent);
+            }
         }
 
-        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
     }
 }
