@@ -18,10 +18,10 @@ class CustomSearchFormType extends AbstractType
     $builder
       ->add('search', SearchType::class, [
         'label' => false,
-        'attr' => [
-          'placeholder' => 'Search',
-          'class' => 'block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-100 focus:ring-yellow-400 dark:bg-gray-500 dark:placeholder-gray-400 dark:text-white',
-        ],
+        // 'attr' => [
+        //   'placeholder' => 'Search',
+        //   'class' => 'block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-100 focus:ring-yellow-400 dark:bg-gray-500 dark:placeholder-gray-400 dark:text-white',
+        // ],
         'required' => true,
         'constraints' => [
           new NotBlank(),

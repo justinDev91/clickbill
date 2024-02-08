@@ -7,8 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Vich\Uploadable]
 class Product
 {
     #[ORM\Id]
@@ -19,14 +24,33 @@ class Product
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 128, unique: true)]
+    #[Gedmo\Slug(fields: ['name'])]
+    private $slug;
+
     #[ORM\Column]
     private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
     
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $picture = null;
+    // #[ORM\Column(length: 255, nullable: true)]
+    // private ?string $picture = null;
+
+    #[Vich\UploadableField(mapping: 'productLogo', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Assert\Image(
+        maxSize: '500k',
+        minWidth: 300,
+        maxSizeMessage: 'L\'image est trop lourde ({{ size }} {{ suffix }}). La taille maximale autorisée est de {{ limit }} {{ suffix }}.',
+        minWidthMessage: 'La largeur de l\'image est trop petite ({{ width }}px). La largeur minimale attendue est de {{ min_width }}px.',
+    )]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
 
     #[ORM\Column]
     private ?int $createdBy = null;
@@ -65,6 +89,24 @@ class Product
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Client
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
         return $this;
     }
 
@@ -176,15 +218,49 @@ class Product
         return $this;
     }
 
-    public function getPicture(): ?string
+    // public function getPicture(): ?string
+    // {
+    //     return $this->picture;
+    // }
+
+    // public function setPicture(?string $picture): static
+    // {
+    //     $this->picture = $picture;
+
+    //     return $this;
+    // }
+
+    public function getImageFile(): ?File
     {
-        return $this->picture;
+        return $this->imageFile;
     }
 
-    public function setPicture(?string $picture): static
+    public function setImageFile(?File $imageFile = null): void
     {
-        $this->picture = $picture;
+        $this->imageFile = $imageFile;
 
-        return $this;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }

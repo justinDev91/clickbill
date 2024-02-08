@@ -16,9 +16,35 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    private const IS_NOT_DELETED = 'product.isDeleted = false';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
+    }
+
+    /**
+     * Get all active products
+     * 
+     * @return Product[] Array of all products not deleted
+     */
+    public function getAllActiveProducts(): array {
+        return $this->createQueryBuilder('product')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function searchProductsByNameOrDescription($term): ?array {
+        return $this->createQueryBuilder('product')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('product.name LIKE :searchTerm')
+            ->andWhere('product.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%'.$term.'%')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**
