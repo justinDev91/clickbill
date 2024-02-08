@@ -4,9 +4,11 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Edit User</h1>
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			{{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}
+		</section>
+	</main>
 
-	{{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('back_app_user_index') }}">back to list</a>
 {% endblock %}

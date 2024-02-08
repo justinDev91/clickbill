@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpClient\Chunk\LastChunk;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -174,7 +173,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param mixed $slug
-     * @return Client
+     * @return User
      */
     public function setSlug($slug)
     {
