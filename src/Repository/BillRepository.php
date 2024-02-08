@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Bill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @extends ServiceEntityRepository<Bill>
@@ -16,10 +17,38 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BillRepository extends ServiceEntityRepository
 {
+    private const IS_NOT_DELETED = 'bill.isDeleted = false';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bill::class);
     }
+
+    
+    /**
+     * Get all active clients
+     *
+     * @return Client[]
+     */
+    public function findAllActiveBills(): array
+    {
+        return $this->createQueryBuilder('bill')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByQuoteId($id): ArrayCollection
+    {
+       $results = $this->createQueryBuilder('bill')
+           ->andWhere('bill.quote = :quote AND bill.isDeleted = false')
+           ->setParameter('quote', $id)
+           ->getQuery()
+           ->getResult();
+        return new ArrayCollection($results);
+       ;
+    }
+
 
 //    /**
 //     * @return Bill[] Returns an array of Bill objects
