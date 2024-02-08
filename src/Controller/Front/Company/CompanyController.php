@@ -73,14 +73,11 @@ class CompanyController extends AbstractController
             ],
         ]);
 
-        dd($this->getUser());
-
         return $this->render('front/company/dashboard.html.twig', [
             'barChart' => $barChart,
             'lineChart' => $lineChart,
             'doughnutChart' => $doughnutChart,
             'clients' => $clients,
-            // 'user' => $this->getUser()
         ]);
     }
 }

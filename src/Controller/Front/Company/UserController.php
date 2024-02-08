@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller\Front\Company;
 
 
 use App\Entity\User;
