@@ -8,6 +8,7 @@ use App\Form\CustomSearchFormType;
 use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
 use App\Service\InteractionService;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,11 @@ class ClientController extends AbstractController
 {
 
     #[Route('/', name: 'app_client_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ClientRepository $clientRepository): Response
-    {
+    public function index(
+        Request $request,
+        ClientRepository $clientRepository,
+        PaginationService $paginationService
+    ): Response {
         $clients = $clientRepository->findAllActiveClients();
 
         //Status filter
@@ -43,10 +47,16 @@ class ClientController extends AbstractController
             $clients = $clientRepository->searchClientByNameOrEmail($searchTerm);
         }
 
+        $pagination = $paginationService->paginate(
+            $clients,
+            $request
+        );
+
         return $this->render('front/client/index.html.twig', [
             'clients' => $clients,
             'statusFilterForm' => $statusFilterForm,
             'searchForm' => $searchForm,
+            'pagination' => $pagination,
         ]);
     }
 
@@ -60,8 +70,6 @@ class ClientController extends AbstractController
         $connectedUserId = $this->getUser()->getId();
 
         $client
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
             ->setIsDeleted(false)
             ->setCreatedBy($connectedUserId)
             ->setUpdatedBy($connectedUserId);
@@ -74,7 +82,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is created", $client->getName())
+                sprintf("Client %s is created", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();
@@ -88,7 +96,7 @@ class ClientController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_client_show', methods: ['GET'])]
     public function show(Client $client): Response
     {
         return $this->render('front/client/show.html.twig', [
@@ -96,7 +104,7 @@ class ClientController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Client $client,
@@ -110,7 +118,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getName())
+                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();
@@ -124,21 +132,21 @@ class ClientController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_client_delete', methods: ['POST'])]
+    #[Route('/{slug}', name: 'app_client_delete', methods: ['POST'])]
     public function delete(
         Request $request,
         Client $client,
         EntityManagerInterface $entityManager,
         InteractionService $interactionService
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $client->getSlug(), $request->request->get('_token'))) {
 
             // Perform soft delete
             $client->setIsDeleted(true);
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getName())
+                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
             );
 
             $entityManager->flush();

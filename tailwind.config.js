@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
+
   content: [
     "./assets/**/*.js",
     "./templates/**/*.html.twig",
@@ -21,6 +23,7 @@ module.exports = {
         // },
         amberYellow: "var(--primary-color)",
         transparent: "var(--transparent)",
+        redButton: "var(--red-button)"
         // gray: "var(--gray)",
         // black: "var(--black)",c
         // white: "var(--white)",

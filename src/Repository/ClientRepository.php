@@ -24,7 +24,7 @@ class ClientRepository extends ServiceEntityRepository
     }
 
     /**
-     * Search clients by name or email
+     * Search clients by firstName/lastName or email
      *
      * @param string $value
      * @return Client
@@ -32,7 +32,10 @@ class ClientRepository extends ServiceEntityRepository
     public function searchClientByNameOrEmail($term): ?array
     {
         return $this->createQueryBuilder('client')
-            ->andWhere('client.name LIKE :searchTerm OR client.email LIKE :searchTerm')
+            ->andWhere('
+                client.firstName LIKE :searchTerm OR
+                client.lastName LIKE :searchTerm OR
+                client.email LIKE :searchTerm')
             ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('searchTerm', '%' . $term . '%')
             ->getQuery()

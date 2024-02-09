@@ -108,7 +108,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ quote.id) }}">
                 {{ include('_components/front/global/_button_id.html.twig',
                     {'path': 'front_company_app_quote_delete',
-                    'id': quote.id,
+                    'params': { 'id': quote.id },
                     'color': 'bg-red-700 hover:bg-red-800',
                     'title': 'Supprimer',
                 }) }}   

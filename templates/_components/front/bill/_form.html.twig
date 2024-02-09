@@ -1,0 +1,22 @@
+{# {{ form_start(form, {'attr': {'class': 'p-4 md:p-5'}}) }} #}
+{{ form_start(form,{
+	action:path('front_company_app_bill_new'), 
+	'attr': {'class': 'p-4 md:p-5'}}) }}
+
+	<div class="grid gap-4 mb-4 grid-cols-2">
+		<div class="col-span-2">
+			<label for="devis" class="block mb-2 text-md text-gray-900 dark:text-white">Selectionner un devis</label>
+			{{ form_widget(form.quote, {
+				id: 'devis',
+				attr: {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-amberYellow focus:border-amberYellow block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"}
+			}) }}
+			{% if form_errors(form.quote) %}
+				<div class="text-red-500">{{ form_errors(form.quote) }}</div>
+			{% endif %}
+		</div>
+	</div>
+	<button type="submit" class="text-black inline-flex items-center bg-amberYellow focus:outline-none font-medium rounded text-sm px-5 py-2.5 text-center">
+		<svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+		{{ button_label }}
+	</button>
+{{ form_end(form) }}

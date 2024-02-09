@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			{{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}
+		</section>
+	</main>
+
+{% endblock %}

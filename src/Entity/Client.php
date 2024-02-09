@@ -9,26 +9,44 @@ use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already a client with this email')]
 class Client
 {
+    use Traits\Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[Assert\NotNull]
-    #[Assert\NotBlank(message: "Name cannot be blank.")]
+    #[Assert\NotBlank(message: "First name cannot be blank.")]
     #[Assert\Length(
-        min: 10,
-        max: 500,
-        minMessage: "Name should be at least {{ limit }} characters long.",
-        maxMessage: "Name should not be longer than {{ limit }} characters."
+        min: 2,
+        max: 255,
+        minMessage: "First name should be at least {{ limit }} characters long.",
+        maxMessage: "First name should not be longer than {{ limit }} characters."
     )]
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $firstName = null;
+
+    #[Assert\NotNull]
+    #[Assert\NotBlank(message: "Last name cannot be blank.")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Last name should be at least {{ limit }} characters long.",
+        maxMessage: "Last name should not be longer than {{ limit }} characters."
+    )]
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 128, unique: true)]
+    #[Gedmo\Slug(fields: ['firstName', 'lastName'])]
+    private $slug;
 
     #[Assert\NotNull]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
@@ -60,7 +78,7 @@ class Client
     )]
     #[Assert\Regex(
         pattern: "/^[a-zA-Z0-9\-\' ]+$/",
-        message: "Invalid characters in address. Only alphanumeric characters are allowed."
+        message: "Invalid characters in address. Only letters, numbers, and spaces are allowed."
     )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
@@ -68,14 +86,8 @@ class Client
     #[ORM\Column]
     private ?int $createdBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -105,21 +117,52 @@ class Client
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Client
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function __toString()
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
+        return $this->firstName;
     }
 
     public function getEmail(): ?string
@@ -170,18 +213,6 @@ class Client
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -190,18 +221,6 @@ class Client
     public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

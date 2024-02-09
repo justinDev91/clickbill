@@ -14,7 +14,7 @@
 					{% for client in clients %}
 						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 							<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-								<a href="{{ path('front_company_app_client_show', {'id': client.id}) }}">Facture</a>
+								<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">Facture</a>
 							</th>
 							<td class="px-6 py-4">
 								96332
