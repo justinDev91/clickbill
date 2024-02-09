@@ -153,7 +153,7 @@ class QuoteController extends AbstractController
     public function show(Quote $quote, UserRepository $userRepository): Response
     {
         $createdByUser = $userRepository->find($quote->getCreatedBy());
-        $createdBy = ['name' => $createdByUser->getFirstName() . ' ' . $createdByUser->getLastName()];
+        $createdBy = ['name' => $createdByUser->getDisplayName()];
         $htAmount = 0;
         $tvaAmount = 0;
         $totalAmount = 0;
