@@ -27,7 +27,9 @@ class QuoteType extends AbstractType
             ])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
-                'choice_label' => 'name',
+                'choice_label' => function($client){
+                    return $client->getFirstName().' '.$client->getLastName();
+                },
             ])
             ->add('downPayment', NumberType::class, [
                 'scale' => 2,
