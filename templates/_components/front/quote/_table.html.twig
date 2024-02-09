@@ -1,0 +1,75 @@
+<div class="relative my-6 overflow-x-auto ">
+	<table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+		<thead class="text-xs text-gray-700 uppercase border-t border-b bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+			<tr>
+				<th scope="col" class="px-6 py-3">
+					Client
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Montant
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Acompte
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Statut
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Date
+				</th>
+				<th scope="col" class="px-6 py-3"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for quote in quotes %}
+				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+						<a href="{{ path('front_company_app_client_show', {'id': quote.client.id}) }}">{{ quote.client }}</a>
+					</th>
+					<td class="px-6 py-4">
+						{{ quote.amount }} €
+					</td>
+					<td class="px-6 py-4">
+						{% if quote.downPayment %}
+							{{ quote.downPayment}} %
+						{% else %}
+							Aucun
+						{% endif %}
+					</td>
+					<td class="px-6 py-4">
+						{{ quote.status }}
+					</td>
+					<td class="px-6 py-4">
+						{{ quote.date ? quote.date|date('d/m/Y H:i') : '' }}
+					</td>
+					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
+						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{quote.id}}" data-dropdown-trigger="hover" class="" type="button">...</button>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="11">Aucun devis trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<!-- Client Dropdown menu -->
+{% for quote in quotes %}
+	<div id="dropdownHoverClient{{quote.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+			<li>
+				<a href="{{ path('front_company_app_quote_show', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+			</li>
+			{% if quote.status == 'brouillon' %}
+				<li>
+					<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
+				</li>
+				<li>
+					{{ include('_components/front/quote/_delete_form.html.twig', {'quoteId': quote.id}) }}
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+{% endfor %}

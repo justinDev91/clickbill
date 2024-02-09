@@ -11,10 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
-    private const EN_ATTENTE = "en attente";
-    private const EN_COURS = 'en cours';
-    private const ANNULE = 'annulé';
-    private const VALIDE = 'validé';
+    private const DRAFT = "brouillon";
+    private const WAITING_FOR_DOWNPAYMENT = "en attente du paiement de l'accompte";
+    private const IN_PROGRESS = 'en cours';
+    private const CANCELED = 'annulé';
+    private const VALIDATED = 'validé';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,10 +26,10 @@ class Quote
     private ?float $amount = null;
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $status = self::EN_ATTENTE;
+    private ?string $status = self::DRAFT;
 
-    #[ORM\Column]
-    private ?float $downPayment = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $downPayment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
@@ -36,7 +37,7 @@ class Quote
     #[ORM\Column(type: 'json')]
     private array $productsInfo = [];
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $createdBy = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -97,12 +98,12 @@ class Quote
         $this->status = $status;
     }
 
-    public function getDownPayment(): ?float
+    public function getDownPayment(): ?int
     {
         return $this->downPayment;
     }
 
-    public function setDownPayment(float $downPayment): static
+    public function setDownPayment(int $downPayment): static
     {
         $this->downPayment = $downPayment;
 

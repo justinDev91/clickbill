@@ -2,8 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
+use App\Entity\Category;
 use App\Entity\Company;
+use App\Entity\Product;
+use App\Entity\Quote;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,13 +21,17 @@ class UserFixtures extends Fixture
     {
         $pwd = 'test';
 
-        $user = (new User())
+        // First User for company
+
+        $company_user = (new User())
             ->setFirstName('Company')
             ->setLastName('Test')
             ->setEmail('company@user.fr')
             ->setRoles(['ROLE_COMPANY']);;
-        $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
-        $manager->persist($user);
+        $company_user->setPassword($this->passwordHasher->hashPassword($company_user, $pwd));
+        $manager->persist($company_user);
+
+        // Company
 
         $company = (new Company())
             ->setName('Test')
@@ -32,14 +39,16 @@ class UserFixtures extends Fixture
             ->setPhone('0654326494')
             ->setEmail('company@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy($user->getId())
+            ->setCreatedBy($company_user->getId())
             ->setCreatedAt(new \DateTime('now'));
         $manager->persist($company);
         $manager->flush();
 
-        $user->setCompany($company);
-        $manager->persist($user);
+        $company_user->setCompany($company);
+        $manager->persist($company_user);
         $manager->flush();
+
+        // Users
 
         $user = (new User())
             ->setFirstName('User')
@@ -55,7 +64,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('accountant@user.fr')
             ->setRoles(['ROLE_ACCOUNTANT'])
-            ->setCompany($company);;
+            ->setCompany($company);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
 
@@ -68,6 +77,42 @@ class UserFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
+        // Category
+        $category_one = (new Category())
+            ->setName('Evenement')
+            ->setDescription('Les photos durant les évenements')
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt(new \DateTime('now'));
+        $manager->persist($category_one);
+
+        $category_two = (new Category())
+            ->setName('Entreprise')
+            ->setDescription('Les photos pour les entreprises')
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt(new \DateTime('now'));
+        $manager->persist($category_two);
+        $manager->flush();
+
+        // Products
+        $product = (new Product())
+            ->setName('Séance Photo 1H')
+            ->setDescription('Séance photo pendant 1 heure, plusieurs clichés sont réaliser..')
+            ->setCategory($category_one)
+            ->setCompany($company)
+            ->setPrice(25.99)
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt(new \DateTime('now'));
+        $manager->persist($product);
+
+        $product = (new Product())
+            ->setName('Photo en entreprise')
+            ->setDescription('Séance photo pour une entreprise, portrait de chaque salariées..')
+            ->setCategory($category_two)
+            ->setCompany($company)
+            ->setPrice(179.99)
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt(new \DateTime('now'));
+        $manager->persist($product);
         $manager->flush();
     }
 }
