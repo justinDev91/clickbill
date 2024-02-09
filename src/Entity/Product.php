@@ -37,7 +37,7 @@ class Product
     // #[ORM\Column(length: 255, nullable: true)]
     // private ?string $picture = null;
 
-    #[Vich\UploadableField(mapping: 'productLogo', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(mapping: 'productPicture', fileNameProperty: 'imageName', size: 'imageSize')]
     #[Assert\Image(
         maxSize: '500k',
         minWidth: 300,
