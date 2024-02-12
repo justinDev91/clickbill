@@ -114,16 +114,6 @@
 					{{ bill.date ? bill.date|date('d/m/Y') : '' }}
 				</div>
 			</div>
-
-			{% set bill = {
-    	"quote": {
-        "productsInfo": [
-            {"description": "Product 1", "quantity": 2, "unit": "pcs", "unitPrice": 10, "tva": 20, "amount": 20},
-            {"description": "Product 2", "quantity": 1, "unit": "kg", "unitPrice": 5, "tva": 10, "amount": 5},
-            {"description": "Product 3", "quantity": 3, "unit": "m", "unitPrice": 7, "tva": 15, "amount": 21}
-        ]
-   	 }
-			} %}
 			<!-- Products Information -->
 			<div class="section">
 				<table class="table">
