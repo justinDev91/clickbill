@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture #{{ bill.id }}
+{% endblock %}
+
+{% block stylesheets %}
+	<style>
+		.container {
+			margin: 0 auto;
+			padding: 8px;
+		}
+
+		.section-title {
+			font-size: 1.5rem;
+			font-weight: bold;
+		}
+
+		.client-info {
+			font-size: 1rem;
+			color: #4a5568;
+		}
+
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 2rem;
+		}
+
+		.table th,
+		.table td {
+			padding: 0.75rem;
+			text-align: left;
+			border: 1px solid #cbd5e0;
+			color: #4a5568;
+		}
+
+		.table th {
+			background-color: #edf2f7;
+		}
+
+		.table td {
+			border-color: #cbd5e0;
+			text-align: right;
+		}
+
+		.container-header {
+			display: flex;
+			justify-content: space-between;
+		}
+		.container-header > div {
+			flex: 1;
+			padding: 5px;
+		}
+		.left-column {
+			text-align: left;
+		}
+		.right-column {
+			text-align: right;
+			margin-top: -10rem;
+		}
+
+		.table-header th {
+			text-align: center;
+		}
+
+		.table-total-amount {
+			text-align: right;
+			margin-top: 1rem;
+			font-weight: bold;
+		}
+
+		.bill-info {
+			margin-bottom: 1rem;
+		}
+	</style>
+
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div
+			class="container-header">
+			<!-- Company Information -->
+			<div class="left-column">
+				<div class="section-title">{{ bill.company.name ?? 'PhotoPassion' }}</div>
+				<div>{{ bill.company.address ?? '17 Rue des orfèvre, Paris' }}</div>
+				<div>{{ bill.company.email ?? 'photopassion@gmail.com' }}</div>
+			</div>
+
+			<!-- Client Information -->
+			<div class="right-column">
+				<div class="section-title">
+					{{ bill.client.firstName ?? '' }}
+					{{ bill.client.lastName ?? '' }}
+				</div>
+				<div>{{ bill.client.address ?? '' }}
+				</div>
+				<div>
+					{{ bill.client.email ?? '' }}
+				</div>
+			</div>
+		</div>
+		<!-- Bill Information -->
+		<div style="margin-top: 5rem;">
+			<h1 class="section-title">Facture #{{ bill.id }}</h1>
+			<div class="client-info">
+				<div class="bill-info">
+					Créée le :
+					{{ bill.createdAt ? bill.createdAt|date('d/m/Y') : '' }}
+				</div>
+
+				<div class="bill-info">
+					Payée le :
+					{{ bill.date ? bill.date|date('d/m/Y') : '' }}
+				</div>
+			</div>
+
+			{% set bill = {
+    	"quote": {
+        "productsInfo": [
+            {"description": "Product 1", "quantity": 2, "unit": "pcs", "unitPrice": 10, "tva": 20, "amount": 20},
+            {"description": "Product 2", "quantity": 1, "unit": "kg", "unitPrice": 5, "tva": 10, "amount": 5},
+            {"description": "Product 3", "quantity": 3, "unit": "m", "unitPrice": 7, "tva": 15, "amount": 21}
+        ]
+   	 }
+			} %}
+			<!-- Products Information -->
+			<div class="section">
+				<table class="table">
+					<thead class="table-header">
+						<tr>
+							<th>Description</th>
+							<th>Quantité</th>
+							<th>Unité</th>
+							<th>Prix unitaire</th>
+							<th>TVA</th>
+							<th>Montant HT</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for product in bill.quote.productsInfo ?? [] %}
+							<tr>
+								<td style="text-align: left;">{{ product.description }}</td>
+								<td>{{ product.quantity }}</td>
+								<td>{{ product.unit }}</td>
+								<td>{{ product.unitPrice }}
+									€</td>
+								<td>{{ product.tva }}
+									%</td>
+								<td>{{ product.amount }}
+									€</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+				<div class="table-total-amount ">Total Amount Due:
+					{{billTotalAmount}}€
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}
