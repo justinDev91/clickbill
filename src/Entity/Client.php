@@ -44,6 +44,9 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $displayName = null;
+
     #[ORM\Column(length: 128, unique: true)]
     #[Gedmo\Slug(fields: ['firstName', 'lastName'])]
     private $slug;
@@ -158,6 +161,13 @@ class Client
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        $this->displayName = $this->firstName . ' ' . $this->lastName;
+
+        return $this->displayName;
     }
 
     public function __toString()

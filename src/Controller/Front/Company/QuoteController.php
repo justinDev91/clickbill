@@ -133,7 +133,7 @@ class QuoteController extends AbstractController
 
             // Set Accompte if value exist.
             $downPayment = $form->get('downPayment')->getData();
-            if($downPayment){
+            if ($downPayment) {
                 $quote->setDownPayment($downPayment);
             }
 
@@ -153,7 +153,7 @@ class QuoteController extends AbstractController
     public function show(Quote $quote, UserRepository $userRepository): Response
     {
         $createdByUser = $userRepository->find($quote->getCreatedBy());
-        $createdBy = ['name' => $createdByUser->getFirstName().' '.$createdByUser->getLastName()];
+        $createdBy = ['name' => $createdByUser->getFirstName() . ' ' . $createdByUser->getLastName()];
         $htAmount = 0;
         $tvaAmount = 0;
         $totalAmount = 0;
@@ -179,7 +179,6 @@ class QuoteController extends AbstractController
         if ($quote->getStatus() !== 'brouillon') {
             throw new AccessDeniedException("Vous ne pouvez plus modifier un devis qui n'est plus en brouillon");
         }
-    
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
 
@@ -246,7 +245,7 @@ class QuoteController extends AbstractController
 
             // Set Accompte if value exist.
             $downPayment = $form->get('downPayment')->getData();
-            if($downPayment){
+            if ($downPayment) {
                 $quote->setDownPayment($downPayment);
             }
 
@@ -265,7 +264,7 @@ class QuoteController extends AbstractController
     #[Route('/{id}', name: 'app_quote_delete', methods: ['POST'])]
     public function delete(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$quote->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quote->getId(), $request->request->get('_token'))) {
             $entityManager->remove($quote);
             $entityManager->flush();
         }

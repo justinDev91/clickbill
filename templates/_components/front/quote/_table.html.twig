@@ -24,14 +24,16 @@
 			{% for quote in quotes %}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'id': quote.client.id}) }}">{{ quote.client }}</a>
+						<a href="{{ path('front_company_app_client_show', {'slug': quote.client.slug}) }}">{{ quote.client.displayName }}</a>
 					</th>
 					<td class="px-6 py-4">
-						{{ quote.amount }} €
+						{{ quote.amount }}
+						€
 					</td>
 					<td class="px-6 py-4">
 						{% if quote.downPayment %}
-							{{ quote.downPayment}} %
+							{{ quote.downPayment}}
+							%
 						{% else %}
 							Aucun
 						{% endif %}
