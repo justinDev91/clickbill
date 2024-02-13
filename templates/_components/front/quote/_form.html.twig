@@ -1,0 +1,180 @@
+<div class="flex items-center">
+	<div class="container w-full mx-auto text-gray-400">
+		{{ form_start(form, {'attr': {'class': 'w-3/4 mx-auto', 'id': 'id_quote_form'}}) }}
+		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
+			<h1 class="pb-4 text-4xl text-black">{{ title }}</h1>
+			{{ form_row(form.client, {
+                label: 'Client',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			{{ form_row(form.product, {
+                label: 'Produit',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			<button type="button" id="add-product" class="w-64 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow">Ajouter le produit</button>
+			{% if customError is defined %}
+				<div class="text-red-500">{{ customError }}</div>
+			{% endif %}
+			<table id="product-table" class="{% if not quote.productsInfo %}hidden{% endif %} w-full text-black border-collapse border-spacing-x-4">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="product-list">
+                    {% if quote.productsInfo %}
+                        {% for product in quote.productsInfo %}
+                            <tr class="text-center product-item">
+                                <td>
+                                    <span class="product-name" product="{{ product.product_id }}">{{ product.description }}</span>
+                                </td>
+                                <td>
+                                    <input type="number" class="w-16 md:w-20 product-quantity" value="{{ product.quantity }}" min="1">
+                                </td>
+                                <td>
+                                    <button type="button" class="product-delete-btn">Supprimer</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+			<button type="button" id="add-acompte-btn" class="{% if quote.downPayment %}hidden{% endif %} w-64 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow">Ajouter un acompte</button>
+			{{ form_row(form.downPayment, {
+                label: 'Acompte',
+                row_attr: {"class": "client-row-attr downPayment" ~ (quote.downPayment ? '' : ' hidden')},
+                attr: {"class": "client-form-attr"}
+            }) }}
+			<input type="hidden" name="products_datas" id="product-data">
+			
+		</div>
+		
+		<div class="col-span-2 text-center">
+			<a href="{{ path('front_company_app_quote_index') }}">
+                <button type="button" class="w-48 px-6 py-3 mb-4 font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Retour à la liste</button>
+            </a>
+			<button type="submit" class="w-48 px-6 py-3 mb-4 font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">{{ button_label }}</button>
+		</div>
+
+		{{ form_end(form) }}
+	</div>
+</div>
+
+<script>
+	// Script in order to hide/show acompte field.
+	document.addEventListener("DOMContentLoaded", (event) => {
+		let acompte_btn = document.getElementById('add-acompte-btn');
+		acompte_btn.addEventListener("click", (e) => {
+			acompte_btn.classList.add('hidden');
+			document.querySelector('.downPayment').classList.remove('hidden');
+		});
+		
+		const addProductButton = document.getElementById('add-product');
+        // Event listener for add product button
+        addProductButton.addEventListener('click', function() {
+			createProductsInList();
+        });
+
+		// Event listener for form submission
+        document.getElementById('id_quote_form').addEventListener('submit', function(event) {
+            // Collect product data
+            const productData = updateProductsData();
+            // Set hidden input value with collected data
+            document.getElementById('product-data').value = productData;
+        });
+
+		// Event delegation for dynamically created delete buttons
+        document.getElementById('product-list').addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('product-delete-btn')) {
+				// Find the parent tr element and remove it
+				const trElement = event.target.closest('tr');
+				if (trElement) {
+					trElement.remove();
+					updateProductsData();
+				}
+            }
+        });
+		// Event delegation for dynamically update value to 1
+		document.getElementById('product-list').addEventListener('change', function(event) {
+            if (event.target && event.target.classList.contains('product-quantity')) {
+                if (parseInt(event.target.value) < 1) {
+					// Set the value to 1
+					event.target.value = 1;
+				}
+            }
+        });
+	});
+
+	function updateProductsData() {
+		const productTable = document.getElementById('product-table');
+		const productList = document.getElementById('product-list');
+		const productElements = productList.querySelectorAll('.product-item');
+		const productData = [];
+
+		if(productElements.length < 1){
+			if(!productTable.classList.contains('hidden')){
+				productTable.classList.add('hidden');
+			}
+		} else {
+			if(productTable.classList.contains('hidden')){
+				productTable.classList.remove('hidden');
+			}
+		}
+
+		for (let i = 0; i < productElements.length; i++) {
+			const productElement = productElements[i];
+			const product = productElement.querySelector('.product-name').getAttribute('product');
+			const quantity = productElement.querySelector('.product-quantity').value;
+
+			productData.push({ product_id: product, quantity: quantity });
+		}
+
+		return JSON.stringify(productData);
+	}
+
+	function createProductsInList(){
+		const productList = document.getElementById('product-list');
+		const productTr = document.createElement('tr');
+		productTr.className = 'text-center product-item';
+
+		// Get the selected product name
+		const selectedProduct = document.querySelector('select[name="quote[product]"]');
+
+		// Create span for product name
+		const productNameTd = document.createElement('td');
+		const productNameSpan = document.createElement('span');
+		productNameSpan.className = 'product-name';
+		productNameSpan.textContent = selectedProduct.options[selectedProduct.selectedIndex].text;
+		productNameSpan.setAttribute('product', selectedProduct.value);
+		productNameTd.appendChild(productNameSpan);
+
+		// Create quantity input field
+		const quantityInputTd = document.createElement('td');
+		const quantityInput = document.createElement('input');
+		quantityInput.type = 'number';
+		quantityInput.className = 'w-16 md:w-20 product-quantity';
+		quantityInput.value = 1;
+		quantityInput.setAttribute('min', 1);
+		quantityInputTd.appendChild(quantityInput)
+
+		const productDeleteBtnTd = document.createElement('td');
+		const productDeleteBtn = document.createElement('button');
+		productDeleteBtn.type = 'button';
+		productDeleteBtn.textContent = 'Supprimer';
+		productDeleteBtn.className = 'product-delete-btn';
+		productDeleteBtnTd.appendChild(productDeleteBtn);
+
+
+		// Append product name and quantity input fields to product list
+		productTr.appendChild(productNameTd);
+		productTr.appendChild(quantityInputTd);
+		productTr.appendChild(productDeleteBtnTd);
+		productList.appendChild(productTr);
+		updateProductsData();
+	}
+	
+</script>

@@ -6,6 +6,7 @@ use App\Entity\Bill;
 use App\Form\BillType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
+use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +19,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class BillController extends AbstractController
 {
     #[Route('/', name: 'app_bill_index', methods: ['GET'])]
-    public function index(BillRepository $billRepository, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
-    {
+    public function index(
+        BillRepository $billRepository,
+        Request $request,
+        SessionInterface $session
+    ): Response {
         $bill = new Bill();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
@@ -40,11 +44,10 @@ class BillController extends AbstractController
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
         $errorBillAlreadyExist = null;
-        
         if ($form->isSubmitted() && $form->isValid()) {
             $existantBills = $billRepository->findByQuoteId($form->get('quote')->getData());
 
-            if($existantBills->isEmpty()){
+            if ($existantBills->isEmpty()) {
                 $billStatus = Bill::READY;
 
                 if ($form->get('quote')->getData()->getDownPayment() != null) {
@@ -52,7 +55,7 @@ class BillController extends AbstractController
 
                     $downPaymentBill
                         ->setQuote($form->get('quote')->getData())
-                        ->setAmount($form->get('quote')->getData()->getAmount() * ($form->get('quote')->getData()->getDownPayment()/100))
+                        ->setAmount($form->get('quote')->getData()->getAmount() * ($form->get('quote')->getData()->getDownPayment() / 100))
                         ->setClient($form->get('quote')->getData()->getClient())
                         ->setCompany($this->getUser()->getCompany()) # TODO: setCompany to current company
                         ->setDate($form->get('quote')->getData()->getDate())
@@ -81,24 +84,23 @@ class BillController extends AbstractController
                     ->setCreatedBy($this->getUser()->getId());
                 $entityManager->persist($bill);
 
-                $entityManager->flush();  
+                $entityManager->flush();
             } else {
                 $errorBillAlreadyExist = "Facture(s) déjà existante(s) pour ce devis";
                 $session->getFlashBag()->add('error', $errorBillAlreadyExist);
             }
         }
 
-        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
+        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{guid}', name: 'app_bill_show', methods: ['GET'])]
     public function show(Bill $bill, UserRepository $userRepository): Response
     {
         $user = $userRepository->findOneBy(['id' => $bill->getCreatedBy()]);
-        
         return $this->render('front/bill/show.html.twig', [
             'bill' => $bill,
-            'createdBy' => [ 'firstname' => $user->getFirstName(), 'lastname' => $user->getLastName() ],
+            'createdBy' => ['firstname' => $user->getFirstName(), 'lastname' => $user->getLastName()],
         ]);
     }
 
@@ -109,11 +111,11 @@ class BillController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete' . $bill->getGuid(), $request->request->get('_token'))) {
             $billsToDelete = $billRepository->findByQuoteId($bill->getQuote());
-            $filteredBills = $billsToDelete->filter(fn($bill) => $bill->getStatus() != Bill::READY && $bill->getStatus() != Bill::WAITING_FOR_DOWNPAYMENT );
+            $filteredBills = $billsToDelete->filter(fn ($bill) => $bill->getStatus() != Bill::READY && $bill->getStatus() != Bill::WAITING_FOR_DOWNPAYMENT);
             $allowDelete = $filteredBills->isEmpty();
 
             if ($allowDelete) {
-                foreach ($billsToDelete as $bill){
+                foreach ($billsToDelete as $bill) {
                     //soft delete
                     $bill->setIsDeleted(true);
                     $entityManager->flush();
@@ -124,6 +126,23 @@ class BillController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);        
+        return $this->redirectToRoute('front_company_app_bill_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{guid}/pdf', name: 'app_bill_pdf', methods: ['GET'])]
+    public function generatePdf(
+        Bill $bill,
+        PdfGeneratorService $pdfGeneratorService,
+    ): Response {
+        $pdfContent = $pdfGeneratorService->generateBillPdf($bill);
+
+        return new Response(
+            $pdfContent,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="bill.pdf"',
+            ]
+        );
     }
 }

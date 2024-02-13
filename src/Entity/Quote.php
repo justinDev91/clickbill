@@ -11,10 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
-    private const EN_ATTENTE = "en attente";
-    private const EN_COURS = 'en cours';
-    private const ANNULE = 'annulé';
-    private const VALIDE = 'validé';
+    use Traits\Timestampable;
+
+    private const DRAFT = "brouillon";
+    private const WAITING_FOR_DOWNPAYMENT = "en attente du paiement de l'accompte";
+    private const IN_PROGRESS = 'en cours';
+    private const CANCELED = 'annulé';
+    private const VALIDATED = 'validé';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,28 +28,22 @@ class Quote
     private ?float $amount = null;
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private ?string $status = self::EN_ATTENTE;
+    private ?string $status = self::DRAFT;
 
     #[ORM\Column(nullable: true)]
-    private ?float $downPayment = null;
+    private ?int $downPayment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
- 
+
     #[ORM\Column(type: 'json')]
     private array $productsInfo = [];
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $createdBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -101,12 +98,12 @@ class Quote
         $this->status = $status;
     }
 
-    public function getDownPayment(): ?float
+    public function getDownPayment(): ?int
     {
         return $this->downPayment;
     }
 
-    public function setDownPayment(float $downPayment): static
+    public function setDownPayment(int $downPayment): static
     {
         $this->downPayment = $downPayment;
 
@@ -137,18 +134,6 @@ class Quote
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -157,18 +142,6 @@ class Quote
     public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
