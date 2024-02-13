@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
+    use Traits\Timestampable;
+
     private const DRAFT = "brouillon";
     private const WAITING_FOR_DOWNPAYMENT = "en attente du paiement de l'accompte";
     private const IN_PROGRESS = 'en cours';
@@ -40,14 +42,8 @@ class Quote
     #[ORM\Column(nullable: true)]
     private ?int $createdBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -138,18 +134,6 @@ class Quote
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -158,18 +142,6 @@ class Quote
     public function setUpdatedBy(?int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

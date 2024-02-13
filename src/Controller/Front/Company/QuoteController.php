@@ -81,8 +81,6 @@ class QuoteController extends AbstractController
                 ->setCompany($connectedUserCompany)
                 ->setClient($formData->getClient())
                 ->setDate(new \DateTime('now'))
-                ->setUpdatedAt(new \DateTime('now'))
-                ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedBy($connectedUser->getId())
                 ->setCreatedBy($connectedUser->getId());
 
@@ -190,7 +188,6 @@ class QuoteController extends AbstractController
             $quote
                 ->setClient($formData->getClient())
                 ->setDate(new \DateTime('now'))
-                ->setUpdatedAt(new \DateTime('now'))
                 ->setUpdatedBy($connectedUser->getId());
 
             $productsInfoArray = [];
