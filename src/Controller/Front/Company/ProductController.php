@@ -19,13 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Security('is_granted("ROLE_USER")')]
 class ProductController extends AbstractController
 {
-    #[Route('/', name: 'app_product_index', methods: ['GET'])]
+    #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
     public function index(
         ProductRepository $productRepository,
         Request $request,
         PaginationService $paginationService
-    ): Response
-    {
+    ): Response {
         $products = $productRepository->getAllActiveProducts();
 
         //Searchs Products
@@ -34,14 +33,13 @@ class ProductController extends AbstractController
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchTerm = strtolower($searchForm->get('search')->getData());
-            #TODO: Créer fonction dans le repo pour filtrer la recherche
             $products = $productRepository->searchProductsByNameOrDescription($searchTerm);
         }
 
-        $pagination = $paginationService->paginate($products,$request);
+        $pagination = $paginationService->paginate($products, $request);
 
         return $this->render(
-            'front/product/index.html.twig', 
+            'front/product/index.html.twig',
             [
                 'controller_name' => 'ProductController',
                 'products' => $products,
@@ -49,15 +47,16 @@ class ProductController extends AbstractController
                 'pagination' => $pagination,
                 'buttonPath' => 'front_company_app_product_new',
                 'buttonLabel' => 'Ajouter un produit'
-            ]);
+            ]
+        );
     }
-    #[Route('/new', name: 'app_product_new', methods:['GET', 'POST'])]
+    #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     #[Security('is_granted("ROLE_COMPANY")')]
     public function new(
         Request $request,
         EntityManagerInterface $entityManagerInterface,
         InteractionService $interactionService
-    ) : Response {
+    ): Response {
         $product = new Product();
         $currentUserId = $this->getUser()->getId();
         $currentCompanyId = $this->getUser()->getCompany();
@@ -66,20 +65,19 @@ class ProductController extends AbstractController
             ->setIsDeleted(false)
             ->setCreatedBy($currentUserId)
             ->setCreatedAt(new \DateTime())
-            ->setCompany($currentCompanyId)
-        ;
+            ->setCompany($currentCompanyId);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManagerInterface->persist($product);
             $entityManagerInterface->flush();
 
             $this->addFlash('success', "Le produit {$product->getName()} a bien été créé");
 
             return $this->redirectToRoute(
-                'front_company_app_product_details', 
+                'front_company_app_product_details',
                 ['slug' => $product->getSlug()]
             );
         }
@@ -94,21 +92,23 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'app_product_details', methods: ['GET'])]
-    public function details(Product $product) : Response {
+    public function details(Product $product): Response
+    {
         return $this->render(
             'front/product/details.html.twig',
             [
                 'product' => $product
-            ]);
+            ]
+        );
     }
 
     #[Route('/{slug}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     #[Security('is_granted("ROLE_COMPANY")')]
     public function edit(
-            Product $product,
-            EntityManagerInterface $entityManagerInterface,
-            Request $request,
-    ) : Response {
+        Product $product,
+        EntityManagerInterface $entityManagerInterface,
+        Request $request,
+    ): Response {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -122,7 +122,7 @@ class ProductController extends AbstractController
             $this->addFlash('success', "Le produit {$product->getName()} a bien été modifié");
 
             return $this->redirectToRoute(
-                'front_company_app_product_details', 
+                'front_company_app_product_details',
                 ['slug' => $product->getSlug()]
             );
         }
@@ -131,7 +131,6 @@ class ProductController extends AbstractController
             'product', $product,
             'form' => $form
         ]);
-
     }
 
     #[Route('/{slug}/delete', name: 'app_product_delete', methods: ['POST'])]
@@ -140,7 +139,7 @@ class ProductController extends AbstractController
         Product $product,
         Request $request,
         EntityManagerInterface $entityManagerInterface
-    ) : Response {
+    ): Response {
         if ($this->isCsrfTokenValid('delete' . $product->getSlug(), $request->request->get('_token'))) {
 
             $product->setIsDeleted(true);

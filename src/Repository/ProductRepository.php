@@ -28,47 +28,47 @@ class ProductRepository extends ServiceEntityRepository
      * 
      * @return Product[] Array of all products not deleted
      */
-    public function getAllActiveProducts(): array {
+    public function getAllActiveProducts(): array
+    {
         return $this->createQueryBuilder('product')
             ->andWhere(self::IS_NOT_DELETED)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    public function searchProductsByNameOrDescription($term): ?array {
+    public function searchProductsByNameOrDescription($term): ?array
+    {
         return $this->createQueryBuilder('product')
             ->andWhere(self::IS_NOT_DELETED)
-            ->andWhere('product.name LIKE :searchTerm')
-            ->andWhere('product.description LIKE :searchTerm')
-            ->setParameter('searchTerm', '%'.$term.'%')
+            ->andWhere('product.name LIKE :searchTerm
+            OR product.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $term . '%')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-//    /**
-//     * @return Product[] Returns an array of Product objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Product[] Returns an array of Product objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Product
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Product
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
