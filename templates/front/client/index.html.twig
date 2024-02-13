@@ -11,9 +11,10 @@
 			{{ include('front/search/index.html.twig',
 					{'buttonPath': 'front_company_app_client_new',
 					'label': 'Ajouter un client',
+					'filter': 'Status',
 					}) }}
-			{{ include('front/filter/index.html.twig') }}
-			{{ include('_components/front/client/_table.html.twig', clients) }}
-		</section>
-	</main>
-{% endblock %}
+			{# TODO: A implémenter plus tard  #}
+			{# {{ include('front/filter/index.html.twig') }} #}
+		{{ include('_components/front/client/_table.html.twig', clients) }}
+	</section>
+</main>{% endblock %}

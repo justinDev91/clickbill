@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Produits
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-8 pt-8 overflow-x-hidden overflow-y-auto">
+			<div>
+				<h1 class="mb-10 text-4xl font-bold">
+					Prestations &amp; Produits
+				</h1>
+			</div>
+			{{ include('front/search/index.html.twig',
+					{'buttonPath': 'front_company_app_product_new',
+					'label': 'Ajouter un produit',
+                    'filter': 'Catégorie',
+					}) }}
+			{{ include('_components/front/product/_table.html.twig') }}
+		</section>
+	</main>
+{% endblock %}
