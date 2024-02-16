@@ -19,7 +19,7 @@ class Bill
     public const READY = 'Prête à l\'envoi';
     public const WAITING_FOR_PAYMENT = 'En attente de paiement';
     public const PAID = 'Acquitté';
-    public const UNPAID = 'Aon acquitté';
+    public const UNPAID = 'Non acquitté';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

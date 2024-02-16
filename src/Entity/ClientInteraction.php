@@ -17,12 +17,20 @@ class ClientInteraction
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $action = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'clientInteractions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'clients', cascade: ["persist"])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
+
 
     public function getId(): ?int
     {
@@ -37,6 +45,18 @@ class ClientInteraction
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAction(): ?string
+    {
+        return $this->action;
+    }
+
+    public function setAction(?string $action): self
+    {
+        $this->action = $action;
 
         return $this;
     }
@@ -61,6 +81,18 @@ class ClientInteraction
     public function setClient(?client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -33,10 +33,6 @@ class Product
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-    
-    // #[ORM\Column(length: 255, nullable: true)]
-    // private ?string $picture = null;
-
     #[Vich\UploadableField(mapping: 'productPicture', fileNameProperty: 'imageName', size: 'imageSize')]
     #[Assert\Image(
         maxSize: '500k',
@@ -71,7 +67,7 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\ManyToOne(inversedBy: 'products', cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 

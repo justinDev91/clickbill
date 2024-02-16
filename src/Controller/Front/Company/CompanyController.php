@@ -2,9 +2,13 @@
 
 namespace App\Controller\Front\Company;
 
+use App\Repository\BillRepository;
+use App\Repository\ClientInteractionRepository;
 use App\Repository\ClientRepository;
-use App\Repository\UserRepository;
+use App\Repository\QuoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
@@ -13,15 +17,28 @@ use Symfony\UX\Chartjs\Model\Chart;
 class CompanyController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function chart(ChartBuilderInterface $chartBuilder, ClientRepository $clientRepository, UserRepository $userRepository): Response
-    {
-        //TODO: Get company client include bill and devis
-        $clients = $clientRepository->findAll();
+    public function chart(
+        ChartBuilderInterface $chartBuilder,
+        ClientRepository $clientRepository,
+        BillRepository $billRepository,
+        QuoteRepository $quoteRepository,
+        ClientInteractionRepository $clientInteractionRepository
+    ): Response {
+
+        $company = $this->getUser()->getCompany();
+
+        $data = [
+            'clients' => $clientRepository->findActiveClientsByCompany($company),
+            'clientsInteractions' => $clientInteractionRepository->findAllClientsInteractionsByCompany($company),
+            'totalClients' => $clientRepository->getTotalClientCountForCompany($company),
+            'totalBills' => $billRepository->getTotalBillCountByStatusForCompany($company),
+            'totalUnpaidBills' => $billRepository->getTotalBillCountByStatusForCompany($company, 'unpaid'),
+            'totalPaidBills' => $billRepository->getTotalBillCountByStatusForCompany($company, 'paid'),
+            'totalQuotes' => $quoteRepository->getTotalQuoteCountForCompany($company),
+        ];
 
         $barChart = $chartBuilder->createChart(Chart::TYPE_BAR);
-
         $lineChart = $chartBuilder->createChart(Chart::TYPE_LINE);
-
         $doughnutChart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
 
         $doughnutChart->setData([
@@ -30,7 +47,7 @@ class CompanyController extends AbstractController
                 [
                     'label' => 'Le nombre total des devis validés par mois',
                     'backgroundColor' => ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(246, 195, 30)'],
-                    'data' => [30, 20, 5],
+                    'data' => [$data['totalQuotes'], $data['totalPaidBills'], $data['totalUnpaidBills']],
                 ],
             ],
         ]);
@@ -77,7 +94,7 @@ class CompanyController extends AbstractController
             'barChart' => $barChart,
             'lineChart' => $lineChart,
             'doughnutChart' => $doughnutChart,
-            'clients' => $clients,
+            'data' => $data,
         ]);
     }
 }

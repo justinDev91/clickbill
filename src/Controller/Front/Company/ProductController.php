@@ -25,7 +25,9 @@ class ProductController extends AbstractController
         Request $request,
         PaginationService $paginationService
     ): Response {
-        $products = $productRepository->getAllActiveProducts();
+        $company = $this->getUser()->getCompany();
+
+        $products = $productRepository->getAllActiveProducts($company);
 
         //Searchs Products
         $searchForm = $this->createForm(CustomSearchFormType::class);
@@ -33,7 +35,7 @@ class ProductController extends AbstractController
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchTerm = strtolower($searchForm->get('search')->getData());
-            $products = $productRepository->searchProductsByNameOrDescription($searchTerm);
+            $products = $productRepository->searchProductsByNameOrDescription($searchTerm,  $company);
         }
 
         $pagination = $paginationService->paginate($products, $request);
@@ -59,13 +61,13 @@ class ProductController extends AbstractController
     ): Response {
         $product = new Product();
         $currentUserId = $this->getUser()->getId();
-        $currentCompanyId = $this->getUser()->getCompany();
+        $company = $this->getUser()->getCompany();
 
         $product
             ->setIsDeleted(false)
             ->setCreatedBy($currentUserId)
             ->setCreatedAt(new \DateTime())
-            ->setCompany($currentCompanyId);
+            ->setCompany($company);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);

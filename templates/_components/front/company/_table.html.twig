@@ -1,42 +1,26 @@
-<div class="relative my-12 overflow-x-auto ">
+<div class="relative my-5 overflow-x-auto">
 	<table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
 		<tbody>
-			<div class="p-2 text-xs text-gray-700 uppercase bg-gray-200 border-t border-b dark:text-gray-400">
-				<div class="flex items-center space-x-3 rtl:space-x-reverse">
-					<svg class="flex-shrink-0 w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 16 12">
-						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-					</svg>
-					<div>
-						<div>
-							Joseph PIRTEUH a acquitté la facture #4633
-						</div>
+			{% for clientInteraction in clientsInteractions|slice(0, 11) %}
+				<td class="px-6 pt-2">
+					<div class="py-1
+						{% if clientInteraction.action == 'deleted' %} bg-red-100
+						{% elseif clientInteraction.action == 'added' %}bg-blue-100
+						{% elseif clientInteraction.action == 'edited' %}	bg-green-100
+						{% endif %}">{{ clientInteraction.description }}
 					</div>
-					{% for client in clients %}
-						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-							<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-								<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">Facture</a>
-							</th>
-							<td class="px-6 py-4">
-								96332
-							</td>
-							<td class="px-6 py-4">
-								<div class="p-1 bg-green-100">Acquittée à 25%</div>
-							</td>
-							<td class="px-6 py-4">
-
-								Joseph TIRPEUH
-							</td>
-							<td class="px-6 py-4">
-								06/11/2023
-							</td>
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="11">Aucun client trouvé</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</tbody>
-	</div>
-</div>
+				</td>
+				<td class="px-6 pt-2">
+					{{ clientInteraction.client.displayName }}
+				</td>
+				<td class="px-6 pt-2">
+					{{ clientInteraction.date ? clientInteraction.date|date('d/m/Y') : '' }}
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="5">Aucun client trouvé</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</tbody></table></div>

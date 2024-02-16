@@ -27,8 +27,8 @@ class ClientController extends AbstractController
         ClientRepository $clientRepository,
         PaginationService $paginationService
     ): Response {
-        $clients = $clientRepository->findAllActiveClients();
-
+        $company = $this->getUser()->getCompany();
+        $clients = $clientRepository->findActiveClientsByCompany($company);
         //Status filter
         $statusFilterForm = $this->createForm(StatusFilterType::class);
         $statusFilterForm->handleRequest($request);
@@ -39,12 +39,12 @@ class ClientController extends AbstractController
 
         if ($statusFilterForm->isSubmitted() && $statusFilterForm->isValid()) {
             $status = $statusFilterForm->get('status')->getData();
-            $clients = $clientRepository->filterClientsByStatus($status);
+            $clients = $clientRepository->filterClientsByStatus($status,  $company);
         }
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchTerm = strtolower($searchForm->get('search')->getData());
-            $clients = $clientRepository->searchClientByNameOrEmail($searchTerm);
+            $clients = $clientRepository->searchClientByNameOrEmail($searchTerm,  $company);
         }
 
         $pagination = $paginationService->paginate(
@@ -68,8 +68,10 @@ class ClientController extends AbstractController
     ): Response {
         $client = new Client();
         $connectedUserId = $this->getUser()->getId();
+        $company = $this->getUser()->getCompany();
 
         $client
+            ->setCompany($company)
             ->setIsDeleted(false)
             ->setCreatedBy($connectedUserId)
             ->setUpdatedBy($connectedUserId);
@@ -82,7 +84,9 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is created", $client->getFirstName(), $client->getLastName())
+                sprintf("Client %s is created", $client->getFirstName(), $client->getLastName()),
+                $company,
+                "added"
             );
 
             $entityManager->flush();
@@ -113,12 +117,16 @@ class ClientController extends AbstractController
     ): Response {
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
+        $company = $this->getUser()->getCompany();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
+                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName()),
+                $company,
+                "edited"
             );
 
             $entityManager->flush();
@@ -146,7 +154,9 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName())
+                sprintf("Client %s is deleted", $client->getFirstName(), $client->getLastName()),
+                $this->getUser()->getCompany(),
+                "deleted"
             );
 
             $entityManager->flush();
