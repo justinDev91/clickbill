@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Client;
+use App\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,7 +30,7 @@ class ClientRepository extends ServiceEntityRepository
      * @param string $value
      * @return Client
      */
-    public function searchClientByNameOrEmail($term): ?array
+    public function searchClientByNameOrEmail($term, $company): ?array
     {
         return $this->createQueryBuilder('client')
             ->andWhere('
@@ -37,7 +38,9 @@ class ClientRepository extends ServiceEntityRepository
                 client.lastName LIKE :searchTerm OR
                 client.email LIKE :searchTerm')
             ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('client.company = :company')
             ->setParameter('searchTerm', '%' . $term . '%')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }
@@ -48,29 +51,87 @@ class ClientRepository extends ServiceEntityRepository
      * @param string $status The status to filter by.
      * @return array|null An array of clients matching the specified status.
      */
-    public function filterClientsByStatus($status): ?array
+    public function filterClientsByStatus($status, $company): ?array
     {
         return $this->createQueryBuilder('client')
             ->join('client.bills', 'bill')
             ->andWhere('bill.status = :status')
+            ->andWhere('client.company = :company')
             ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('status', $status)
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * Get all active clients
+     * Find all active clients associated with a specific company.
      *
-     * @return Client[]
+     * @param Company $company The company for which to find active clients.
+     * @return Client[] An array of active clients associated with the company.
+
      */
-    public function findAllActiveClients(): array
+    public function findActiveClientsByCompany(Company $company): array
     {
+
         return $this->createQueryBuilder('client')
             ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('client.company = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Get the total number of clients associated with a company.
+     *
+     * @param Company $company The company for which to count clients.
+     * @return int The total number of clients associated with the company.
+     * @throws \Doctrine\ORM\NoResultException|\Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTotalClientCountForCompany(Company $company): int
+    {
+        try {
+            return $this->createQueryBuilder('client')
+                ->select('COUNT(client.id)')
+                ->andWhere('client.company = :company')
+                ->andWhere(self::IS_NOT_DELETED)
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
+    public function getTotalClientsByMonth(Company $company): array
+    {
+        $query = $this->createQueryBuilder('client')
+            ->select('EXTRACT(MONTH FROM client.createdAt) AS month_number, COUNT(client.id) AS total_clients')
+            ->andWhere('client.company = :company')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->groupBy('month_number')
+            ->orderBy('month_number')
+            ->setParameter('company', $company)
+            ->getQuery();
+
+        $results = $query->getResult();
+
+        $months = [
+            1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June',
+            7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+        ];
+
+        $clientsByMonth = [];
+        foreach ($results as $result) {
+            $monthName = $months[$result['month_number']];
+            $clientsByMonth[$monthName] = $result['total_clients'];
+        }
+
+        return $clientsByMonth;
+    }
+
+
     //    /**
     //     * @return Client[] Returns an array of Client objects
     //     */

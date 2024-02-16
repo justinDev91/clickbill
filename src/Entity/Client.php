@@ -107,6 +107,10 @@ class Client
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: ClientInteraction::class)]
     private Collection $clientInteractions;
 
+    #[ORM\ManyToOne(inversedBy: 'clients', cascade: ["persist"])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->bills = new ArrayCollection();
@@ -363,6 +367,18 @@ class Client
                 $clientInteraction->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

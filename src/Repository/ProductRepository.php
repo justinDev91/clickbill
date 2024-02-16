@@ -28,21 +28,26 @@ class ProductRepository extends ServiceEntityRepository
      * 
      * @return Product[] Array of all products not deleted
      */
-    public function getAllActiveProducts(): array
+    public function getAllActiveProducts($company): array
     {
         return $this->createQueryBuilder('product')
             ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('product.company = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }
 
-    public function searchProductsByNameOrDescription($term): ?array
+
+    public function searchProductsByNameOrDescription($term, $company): ?array
     {
         return $this->createQueryBuilder('product')
             ->andWhere(self::IS_NOT_DELETED)
             ->andWhere('product.name LIKE :searchTerm
             OR product.description LIKE :searchTerm')
+            ->andWhere('product.company = :company')
             ->setParameter('searchTerm', '%' . $term . '%')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }

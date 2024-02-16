@@ -31,7 +31,9 @@ class QuoteController extends AbstractController
     #[Route('/', name: 'app_quote_index', methods: ['GET', 'POST'])]
     public function index(Request $request, QuoteRepository $quoteRepository): Response
     {
-        $quotes = $quoteRepository->findAll();
+        $company = $this->getUser()->getCompany();
+
+        $quotes = $quoteRepository->findAllActiveQuotes($company);
 
         //Status filter
         // $statusFilterForm = $this->createForm(StatusFilterType::class);
@@ -50,7 +52,7 @@ class QuoteController extends AbstractController
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchTerm = strtolower($searchForm->get('search')->getData());
-            $quotes = $quoteRepository->searchClientByNameOrEmail($searchTerm);
+            $quotes = $quoteRepository->searchQuoteByClientNameOrEmail($searchTerm, $company);
         }
 
         return $this->render('front/quote/index.html.twig', [
@@ -71,7 +73,6 @@ class QuoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Get datas from form
             $formData = $form->getData();
-
             // Care when using company (Admin is not supposed to have company);
             $connectedUser = $this->getUser();
             $connectedUserCompany = $connectedUser->getCompany();
