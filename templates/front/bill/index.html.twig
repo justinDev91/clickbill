@@ -8,12 +8,14 @@
 		{{ include('_components/front/global/_side_bar.html.twig') }}
 		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
 			<h1 class="pb-4 mb-10 text-4xl">Mes Factures</h1>
+			{{ include('front/search/index.html.twig',
+                {'buttonPath': 'front_company_app_quote_new',
+            }) }}
 			{{ include('_components/front/bill/_add_bill_popup.html.twig') }}
-			{# TODO: ajouter la search bar et les filtres #}
 			{% for error in errors %}
-			{{ include('_components/front/global/_toast.html.twig', {
+				{{ include('_components/front/global/_toast.html.twig', {
 				'message' : error, 
-				'state' : 'error'} ) }}			
+				'state' : 'error'} ) }}
 			{% endfor %}
 
 			{{ include('_components/front/bill/_table.html.twig', bills) }}

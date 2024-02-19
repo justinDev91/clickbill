@@ -25,21 +25,23 @@ class ClientController extends AbstractController
     public function index(
         Request $request,
         ClientRepository $clientRepository,
-        PaginationService $paginationService
+        PaginationService $paginationService,
     ): Response {
+
         $company = $this->getUser()->getCompany();
         $clients = $clientRepository->findActiveClientsByCompany($company);
+
         //Status filter
-        $statusFilterForm = $this->createForm(StatusFilterType::class);
-        $statusFilterForm->handleRequest($request);
+        $filterForm = $this->createForm(StatusFilterType::class);
+        $filterForm->handleRequest($request);
 
         //Search Clients
         $searchForm = $this->createForm(CustomSearchFormType::class);
         $searchForm->handleRequest($request);
 
-        if ($statusFilterForm->isSubmitted() && $statusFilterForm->isValid()) {
-            $status = $statusFilterForm->get('status')->getData();
-            $clients = $clientRepository->filterClientsByStatus($status,  $company);
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $status = $filterForm->get('status')->getData();
+            if ($status) $clients = $clientRepository->filterClientsByStatus($status,  $company);
         }
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
@@ -54,7 +56,7 @@ class ClientController extends AbstractController
 
         return $this->render('front/client/index.html.twig', [
             'clients' => $clients,
-            'statusFilterForm' => $statusFilterForm,
+            'filterForm' => $filterForm,
             'searchForm' => $searchForm,
             'pagination' => $pagination,
         ]);
@@ -154,7 +156,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is deleted", $client->getFirstName(), $client->getLastName()),
+                sprintf("Client %s is ", $client->getFirstName(), $client->getLastName()),
                 $this->getUser()->getCompany(),
                 "deleted"
             );

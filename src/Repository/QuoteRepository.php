@@ -61,6 +61,24 @@ class QuoteRepository extends ServiceEntityRepository
     }
 
     /**
+     * Filters quotes by status
+     *
+     * @param string $status The status to filter by.
+     * @return array|null An array of quote matching the specified status.
+     */
+    public function filterQuotesByStatus($status, $company): ?array
+    {
+        return $this->createQueryBuilder('quote')
+            ->andWhere('quote.status = :status')
+            ->andWhere('quote.company = :company')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->setParameter('status', $status)
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get the total number of quotes associated with a company.
      *
      * @param Company $company The company for which to count quotes.

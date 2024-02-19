@@ -3,7 +3,9 @@
 namespace App\Controller\Front\Company;
 
 use App\Entity\Bill;
+use App\Form\BillFilterType;
 use App\Form\BillType;
+use App\Form\CustomSearchFormType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
 use App\Service\PdfGeneratorService;
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Security('is_granted("ROLE_COMPANY")')] # TODO: Add id for company and check if user has access to this company
 class BillController extends AbstractController
 {
-    #[Route('/', name: 'app_bill_index', methods: ['GET'])]
+    #[Route('/', name: 'app_bill_index', methods: ['GET', 'POST'])]
     public function index(
         BillRepository $billRepository,
         Request $request,
@@ -28,9 +30,33 @@ class BillController extends AbstractController
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
 
+        $company = $this->getUser()->getCompany();
+        $bills = $billRepository->findAllActiveBillsByCompany($company);
+
+        //Status filter
+        $filterForm = $this->createForm(BillFilterType::class);
+        $filterForm->handleRequest($request);
+
+        //Search Clients
+        $searchForm = $this->createForm(CustomSearchFormType::class);
+        $searchForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $status = $filterForm->get('status')->getData();
+            if ($status) $bills = $billRepository->filterBillsByStatus($status,  $company);
+        }
+
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $searchTerm = strtolower($searchForm->get('search')->getData());
+            $bills = $billRepository->searchBillsByClientNameOrEmail($searchTerm,  $company);
+        }
+
+
         return $this->render('front/bill/index.html.twig', [
-            'bills' => $billRepository->findAllActiveBills(),
+            'bills' => $bills,
             'form' => $form,
+            'searchForm' => $searchForm,
+            'filterForm' => $filterForm,
             'errors' => $session->getFlashBag()->get('error', []),
         ]);
     }

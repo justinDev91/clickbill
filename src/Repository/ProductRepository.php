@@ -52,6 +52,25 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Filters product by category 
+     *
+     * @param string $category to filter by.
+     * @return array|null An array of product matching the specified category.
+     */
+    public function filterProductsByCategory($category, $company): ?array
+    {
+        return $this->createQueryBuilder('product')
+            ->join('product.category', 'category')
+            ->andWhere('category.name = :category')
+            ->andWhere('product.company = :company')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->setParameter('category', $category)
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */

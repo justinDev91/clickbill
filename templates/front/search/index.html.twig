@@ -1,30 +1,15 @@
-<div class="flex w-full">
+<div
+	class="flex w-full">
 
-	{{ form_start(searchForm, {'attr': {'class': 'flex-auto'}})}}
-	<div class="flex">
-		<label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
-		<button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button">{{filter ?? 'Filter'}}
-			<svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 10 6">
-				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-			</svg>
-		</button>
-		<div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-			<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-				<li>
-					<button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
-				</li>
-				<li>
-					<button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
-				</li>
-				<li>
-					<button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
-				</li>
-				<li>
-					<button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
-				</li>
-			</ul>
-		</div>
+	{# Filter Form #}
+	<div class="">
+		{{ form_start(filterForm, {'attr': {'id': 'filter-select'}})}}
+		{{ form_end(filterForm) }}
+	</div>
 
+	{# SearchBar form #}
+	<div class="flex-auto">
+		{{ form_start(searchForm)}}
 		<div class="relative w-full">
 			{{ form_widget(searchForm.search) }}
 			<button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-gray-500 bg-gray-700 rounded-e-lg border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
@@ -35,14 +20,32 @@
 			</button>
 		</div>
 
+		{% if form_errors(searchForm.search) %}
+			<div class="text-red-500 text-xs mt-1">{{ form_errors(searchForm.search) }}</div>
+		{% endif %}
+		{{ form_end(searchForm) }}
 	</div>
-
-	{% if form_errors(searchForm.search) %}
-		<div class="text-red-500 text-xs mt-1">{{ form_errors(searchForm.search) }}</div>
-	{% endif %}
 </div>
-{{ form_end(searchForm) }}
 
-<a href="{{ path(buttonPath)}}">
-	<button type="button" class="w-30 text-black bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">{{label ?? 'Ajouter'}}</button>
-</a>
+{# Add new élément #}
+{% if label is defined %}
+	<a href="{{ path(buttonPath)}}">
+		<button type="button" class="w-30 text-black bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">{{label ?? 'Ajouter'}}</button>
+	</a>
+{% endif %}
+
+{# Get Selected option value #}
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+var elementName = document.getElementById('filter-select').name
+
+var elementId = elementName == 'status_filter' ? 'status_filter_status' : elementName == 'category_filter' ? 'category_filter_category' : 'bill_filter_status'
+
+console.log('test', elementName)
+
+const selectStatus = document.getElementById(elementId);
+selectStatus.addEventListener('change', function () {
+document.getElementById('filter-select').submit();
+});
+});
+</script>
