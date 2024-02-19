@@ -11,6 +11,7 @@ use App\Form\StatusFilterType;
 use App\Form\CustomSearchFormType;
 use App\Repository\QuoteRepository;
 use App\Repository\UserRepository;
+use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -291,5 +292,22 @@ class QuoteController extends AbstractController
         # TODO: Check if quote status already changed (not sended).
         # TODO: Send mail and change status of quote.
         return $this->redirectToRoute('front_company_app_quote_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/pdf', name: 'app_quote_pdf', methods: ['GET'])]
+    public function generatePdf(
+        Quote $quote,
+        PdfGeneratorService $pdfGeneratorService,
+    ): Response {
+        $pdfContent = $pdfGeneratorService->generateQuotePdf($quote);
+
+        return new Response(
+            $pdfContent,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="bill.pdf"',
+            ]
+        );
     }
 }

@@ -55,10 +55,16 @@ class PdfGeneratorService
 
     $creatorDisplayName = $user->getDisplayName();
 
+    $quoteTotalAmount = 0;
+
+    foreach ($quote->getProductsInfo() as $product) {
+      $quoteTotalAmount += $product["amount"];
+    }
 
     $html = $this->twig->render('front/quote/pdf_template.html.twig', [
       'quote' => $quote,
       'creatorDisplayName' => $creatorDisplayName,
+      'quoteTotalAmount' => $quoteTotalAmount,
     ]);
 
     $dompdf->loadHtml($html);
