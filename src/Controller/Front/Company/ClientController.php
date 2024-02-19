@@ -88,7 +88,7 @@ class ClientController extends AbstractController
                 $client,
                 sprintf("Client %s is created", $client->getFirstName(), $client->getLastName()),
                 $company,
-                "added"
+                "created"
             );
 
             $entityManager->flush();
