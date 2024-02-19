@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Facture #{{ bill.id }}
+{% block title %}Devis #{{ quote.id }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -30,12 +30,10 @@
 		.table td {
 			padding: 0.75rem;
 			text-align: left;
-			border: 1px solid #cbd5e0;
-			color: #4a5568;
 		}
 
 		.table th {
-			background-color: #edf2f7;
+			background-color: #F8F8F8;
 		}
 
 		.table td {
@@ -69,7 +67,7 @@
 			font-weight: bold;
 		}
 
-		.bill-info {
+		.quote-info {
 			margin-bottom: 1rem;
 		}
 	</style>
@@ -82,36 +80,33 @@
 			class="container-header">
 			<!-- Company Information -->
 			<div class="left-column">
-				<div class="section-title">{{ bill.company.name ?? '' }}</div>
-				<div>{{ bill.company.address ?? '' }}</div>
-				<div>{{ bill.company.email ?? '' }}</div>
+				<div class="section-title">{{ quote.company.name ?? '' }}</div>
+				<div>{{ quote.company.address ?? '' }}</div>
+				<div>{{ quote.company.email ?? '' }}</div>
 			</div>
+
 			<!-- Client Information -->
 			<div class="right-column">
 				<div class="section-title">
-					{{ bill.client.firstName ?? '' }}
-					{{ bill.client.lastName ?? '' }}
+					{{ quote.client.firstName ?? '' }}
+					{{ quote.client.lastName ?? '' }}
 				</div>
-				<div>{{ bill.client.address ?? '' }}
+				<div>{{ quote.client.address ?? '' }}
 				</div>
 				<div>
-					{{ bill.client.email ?? '' }}
+					{{ quote.client.email ?? '' }}
 				</div>
 			</div>
 		</div>
-		<!-- Bill Information -->
+		<!-- Quote Information -->
 		<div style="margin-top: 5rem;">
-			<h1 class="section-title">Facture #{{ bill.id }}</h1>
+			<h1 class="section-title">Devis #{{ quote.id }}</h1>
 			<div class="client-info">
-				<div class="bill-info">
-					Créée le :
-					{{ bill.createdAt ? bill.createdAt|date('d/m/Y') : '' }}
+				<div class="quote-info">
+					Date :
+					{{ quote.createdAt ? quote.createdAt|date('d/m/Y') : '' }}
 				</div>
 
-				<div class="bill-info">
-					Payée le :
-					{{ bill.date ? bill.date|date('d/m/Y') : '' }}
-				</div>
 			</div>
 			<!-- Products Information -->
 			<div class="section">
@@ -127,7 +122,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for product in bill.quote.productsInfo ?? [] %}
+						{% for product in quote.productsInfo ?? [] %}
 							<tr>
 								<td style="text-align: left;">{{ product.description }}</td>
 								<td>{{ product.quantity }}</td>
@@ -144,7 +139,7 @@
 				</table>
 
 				<div class="table-total-amount ">Total Amount Due:
-					{{billTotalAmount}}€
+					{{quoteTotalAmount}}€
 				</div>
 			</div>
 		</div>

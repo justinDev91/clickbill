@@ -17,6 +17,7 @@
 				<th scope="col" class="px-6 py-3">
 					Date
 				</th>
+				<th scope="col" class="px-6 py-3">PDF</th>
 				<th scope="col" class="px-6 py-3"></th>
 			</tr>
 		</thead>
@@ -43,6 +44,13 @@
 					</td>
 					<td class="px-6 py-4">
 						{{ quote.date ? quote.date|date('d/m/Y H:i') : '' }}
+					</td>
+					<td class="px-6 py-4">
+						<a href="{{ path('front_company_app_quote_pdf', {'id': quote.id}) }}">
+							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
+								<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
+							</svg>
+						</a>
 					</td>
 					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
 						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{quote.id}}" data-dropdown-trigger="hover" class="" type="button">...</button>

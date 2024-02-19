@@ -9,7 +9,8 @@
 	<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
 
 		<div class="flex">
-			<h1 class="pb-4 mb-10 text-4xl">Facture #{{ bill.id }}</h1>
+			<h1 class="pb-4 mb-10 text-4xl">Facture
+				{{ bill.id }}</h1>
 			<div class="px-6 py-4">
 				<a href="{{ path('front_company_app_bill_pdf', {'guid': bill.guid}) }}">
 					<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
