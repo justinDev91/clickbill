@@ -4,10 +4,10 @@
 			{% for clientInteraction in clientsInteractions|slice(0, 11) %}
 				<td class="px-6 pt-2">
 					<div class="py-1
-						{% if clientInteraction.action == 'deleted' %} bg-red-100
-						{% elseif clientInteraction.action == 'added' %}bg-blue-100
-						{% elseif clientInteraction.action == 'edited' %}	bg-green-100
-						{% endif %}">{{ clientInteraction.description }}
+												{% if clientInteraction.action == 'deleted' %} bg-red-100
+												{% elseif clientInteraction.action == 'created' %}bg-blue-100
+												{% elseif clientInteraction.action == 'edited' %}	bg-green-100
+												{% endif %}">{{ clientInteraction.description }}
 					</div>
 				</td>
 				<td class="px-6 pt-2">

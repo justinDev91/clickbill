@@ -19,6 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class BillRepository extends ServiceEntityRepository
 {
     private const IS_NOT_DELETED = 'bill.isDeleted = false';
+    public const PAID = 'Acquitté';
+    public const UNPAID = 'Non acquitté';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -44,7 +46,8 @@ class BillRepository extends ServiceEntityRepository
     public function findByQuoteId($id): ArrayCollection
     {
         $results = $this->createQueryBuilder('bill')
-            ->andWhere('bill.quote = :quote AND bill.isDeleted = false')
+            ->andWhere('bill.quote = :quote')
+            ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('quote', $id)
             ->getQuery()
             ->getResult();
@@ -70,10 +73,10 @@ class BillRepository extends ServiceEntityRepository
 
             switch ($status) {
                 case 'unpaid':
-                    $queryBuilder->andWhere("bill.status != 'Acquitté'");
+                    $queryBuilder->andWhere("bill.status != '" . self::PAID . "'");
                     break;
                 case 'paid':
-                    $queryBuilder->andWhere("bill.status = 'Acquitté'");
+                    $queryBuilder->andWhere("bill.status = '" . self::PAID . "'");
                     break;
                 default:
                     break;

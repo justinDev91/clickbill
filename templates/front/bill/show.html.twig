@@ -9,94 +9,96 @@
 	<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
 
 		<div class="flex">
-			<h1 class="pb-4 mb-10 text-4xl">Facture
-				{{ bill.id }}</h1>
-			<div class="px-6 py-4">
-				<a href="{{ path('front_company_app_bill_pdf', {'guid': bill.guid}) }}">
-					<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
-						<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
-					</svg>
-				</a>
-			</div>
+			<h1 class="pb-4 mb-10 text-4xl">
+				Facture
+			</h1>
+			{{ bill.id }}</h1>
+		<div class="px-6 py-4">
+			<a href="{{ path('front_company_app_bill_pdf', {'guid': bill.guid}) }}">
+				<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
+					<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
+				</svg>
+			</a>
 		</div>
+	</div>
 
-		<table class="table w-full">
-			<tbody class="text-left">
+	<table class="table w-full">
+		<tbody class="text-left">
+			<tr>
+				<th>Montant</th>
+				<td>{{ bill.amount }}
+					€</td>
+			</tr>
+			{% if bill.isDownPayment %}
 				<tr>
-					<th>Montant</th>
-					<td>{{ bill.amount }}
+					<th>Type</th>
+					<td>Acompte</td>
+				</tr>
+			{% endif %}
+			<tr>
+				<th>Status</th>
+				<td>{{ bill.status }}</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>{{ bill.date ? bill.date|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ bill.description }}</td>
+			</tr>
+			<tr>
+				<th>Créée par</th>
+				{# TODO: aller récup le nom du user de cet id #}
+				<td>{{ createdBy.firstname }}
+					{{ createdBy.lastname }}</td>
+			</tr>
+			<tr>
+				<th>Créée le</th>
+				<td>{{ bill.createdAt ? bill.createdAt|date('d/m/Y') : '' }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 class="text-2xl font-bold my-5">Produits</h2>
+	<table class="table w-full mb-10">
+		<thead class="text-left bg-gray-300 h-10">
+			<tr>
+				<th>Description</th>
+				<th>Qté</th>
+				<th>Unité</th>
+				<th>Prix unitaire</th>
+				<th>TVA</th>
+				<th>Montant HT</th>
+			</tr>
+		</thead>
+		<tbody class="text-left">
+			{% for product in bill.quote.productsInfo %}
+				<tr>
+					<td>{{ product.description }}</td>
+					<td>{{ product.quantity }}</td>
+					<td>{{ product.unit }}</td>
+					<td>{{ product.unitPrice }}
+						€</td>
+					<td>{{ product.tva }}
+						%</td>
+					<td>{{ product.amount }}
 						€</td>
 				</tr>
-				{% if bill.isDownPayment %}
-					<tr>
-						<th>Type</th>
-						<td>Acompte</td>
-					</tr>
-				{% endif %}
-				<tr>
-					<th>Status</th>
-					<td>{{ bill.status }}</td>
-				</tr>
-				<tr>
-					<th>Date</th>
-					<td>{{ bill.date ? bill.date|date('d/m/Y') : '' }}</td>
-				</tr>
-				<tr>
-					<th>Description</th>
-					<td>{{ bill.description }}</td>
-				</tr>
-				<tr>
-					<th>Créée par</th>
-					{# TODO: aller récup le nom du user de cet id #}
-					<td>{{ createdBy.firstname }}
-						{{ createdBy.lastname }}</td>
-				</tr>
-				<tr>
-					<th>Créée le</th>
-					<td>{{ bill.createdAt ? bill.createdAt|date('d/m/Y') : '' }}</td>
-				</tr>
-			</tbody>
-		</table>
+			{% endfor %}
+		</tbody>
+	</table>
 
-		<h2 class="text-2xl font-bold my-5">Produits</h2>
-		<table class="table w-full mb-10">
-			<thead class="text-left bg-gray-300 h-10">
-				<tr>
-					<th>Description</th>
-					<th>Qté</th>
-					<th>Unité</th>
-					<th>Prix unitaire</th>
-					<th>TVA</th>
-					<th>Montant HT</th>
-				</tr>
-			</thead>
-			<tbody class="text-left">
-				{% for product in bill.quote.productsInfo %}
-					<tr>
-						<td>{{ product.description }}</td>
-						<td>{{ product.quantity }}</td>
-						<td>{{ product.unit }}</td>
-						<td>{{ product.unitPrice }}
-							€</td>
-						<td>{{ product.tva }}
-							%</td>
-						<td>{{ product.amount }}
-							€</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		<div class="flex my-3 space-x-3 ">
-			<form method="post" action="{{ path('front_company_app_bill_delete', {'guid': bill.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
-				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.guid) }}">
-				{{ include('_components/front/global/_button_id.html.twig',
+	<div class="flex my-3 space-x-3 ">
+		<form method="post" action="{{ path('front_company_app_bill_delete', {'guid': bill.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
+			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.guid) }}">
+			{{ include('_components/front/global/_button_id.html.twig',
                 {'path': 'front_company_app_bill_delete',
                 'params': { 'guid': bill.guid },
                 'color': 'bg-gray-300',
                 'title': 'Supprimer',
             }) }}
-			</form>
-		</div>
-		<a href="{{ path('front_company_app_bill_index') }}" class="hover:underline">
-			<Retour à la liste</a> </section> </main> {% endblock %}
+		</form>
+	</div>
+	<a href="{{ path('front_company_app_bill_index') }}" class="hover:underline">
+		<Retour à la liste</a> </section> </main> {% endblock %}
