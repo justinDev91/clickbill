@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Devis{% endblock %}
+{% block title %}Mes Devis
+{% endblock %}
 
 {% block body %}
-    <main class="flex flex-col h-screen md:flex-row">
-        {{ include('_components/front/global/_side_bar.html.twig') }}
-        <section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-            <h1 class="pb-4 mb-10 text-4xl">Mes Devis</h1>
-            {{ include('front/search/index.html.twig',
+	<main class="flex flex-col h-screen md:flex-row">
+		{{ include('_components/front/global/_side_bar.html.twig') }}
+		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
+			<h1 class="pb-4 mb-10 text-4xl">Mes Devis</h1>
+			{{ include('front/search/index.html.twig',
                 {'buttonPath': 'front_company_app_quote_new',
                 'label': 'Créer un devis',
             }) }}
-            {# {{ include('front/filter/index.html.twig') }} #}
-            {{ include('_components/front/quote/_table.html.twig', quotes) }}
-        </section>
-    </main>
+			{{ include('_components/front/quote/_table.html.twig', quotes) }}
+		</section>
+	</main>
 {% endblock %}

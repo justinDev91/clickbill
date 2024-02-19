@@ -31,10 +31,12 @@ class BillRepository extends ServiceEntityRepository
      *
      * @return Bill[]
      */
-    public function findAllActiveBills(): array
+    public function findAllActiveBillsByCompany(Company $company): array
     {
         return $this->createQueryBuilder('bill')
             ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('bill.company = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult();
     }
@@ -82,6 +84,46 @@ class BillRepository extends ServiceEntityRepository
             return 0;
         }
     }
+
+    /**
+     * Filters bills by status
+     *
+     * @param string $status The status to filter by.
+     * @return array|null An array of bill matching the specified status.
+     */
+    public function filterBillsByStatus($status, $company): ?array
+    {
+        return $this->createQueryBuilder('bill')
+            ->andWhere('bill.status = :status')
+            ->andWhere('bill.company = :company')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->setParameter('status', $status)
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * search bills by client name or email
+     *
+     * @return Quote[]
+     */
+    public function searchBillsByClientNameOrEmail($term, $company): ?array
+    {
+        return $this->createQueryBuilder('bill')
+            ->join('bill.client', 'client')
+            ->andWhere('
+                client.firstName LIKE :searchTerm OR
+                client.lastName LIKE :searchTerm OR
+                client.email LIKE :searchTerm')
+            ->andWhere('bill.company = :company')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->setParameter('searchTerm', '%' . $term . '%')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Bill[] Returns an array of Bill objects

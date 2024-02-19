@@ -4,8 +4,10 @@ namespace App\Controller\Front\Company;
 
 use App\Repository\ProductRepository;
 use App\Entity\Product;
+use App\Form\CategoryFilterType;
 use App\Form\CustomSearchFormType;
 use App\Form\ProductType;
+use App\Form\StatusFilterType;
 use App\Service\InteractionService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +40,15 @@ class ProductController extends AbstractController
             $products = $productRepository->searchProductsByNameOrDescription($searchTerm,  $company);
         }
 
+        //Category filter
+        $filterForm = $this->createForm(CategoryFilterType::class);
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $category = $filterForm->get('category')->getData();
+            if ($category) $products = $productRepository->filterProductsByCategory($category,  $company);
+        }
+
         $pagination = $paginationService->paginate($products, $request);
 
         return $this->render(
@@ -46,6 +57,7 @@ class ProductController extends AbstractController
                 'controller_name' => 'ProductController',
                 'products' => $products,
                 'searchForm' => $searchForm,
+                'filterForm' => $filterForm,
                 'pagination' => $pagination,
                 'buttonPath' => 'front_company_app_product_new',
                 'buttonLabel' => 'Ajouter un produit'

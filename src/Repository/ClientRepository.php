@@ -54,8 +54,8 @@ class ClientRepository extends ServiceEntityRepository
     public function filterClientsByStatus($status, $company): ?array
     {
         return $this->createQueryBuilder('client')
-            ->join('client.bills', 'bill')
-            ->andWhere('bill.status = :status')
+            ->join('client.quotes', 'quote')
+            ->andWhere('quote.status = :status')
             ->andWhere('client.company = :company')
             ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('status', $status)

@@ -35,30 +35,27 @@ class QuoteController extends AbstractController
         $company = $this->getUser()->getCompany();
 
         $quotes = $quoteRepository->findAllActiveQuotes($company);
-
-        //Status filter
-        // $statusFilterForm = $this->createForm(StatusFilterType::class);
-        // $statusFilterForm->handleRequest($request);
-
         //Search Quote
         $searchForm = $this->createForm(CustomSearchFormType::class);
         $searchForm->handleRequest($request);
-
-        // TODO: Make search in repository
-        // Filter by Amount, Status, Client
-        // if ($statusFilterForm->isSubmitted() && $statusFilterForm->isValid()) {
-        //     $status = $statusFilterForm->get('status')->getData();
-        //     $quotes = $quoteRepository->filterClientsByStatus($status);
-        // }
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchTerm = strtolower($searchForm->get('search')->getData());
             $quotes = $quoteRepository->searchQuoteByClientNameOrEmail($searchTerm, $company);
         }
 
+        //Status filter
+        $filterForm = $this->createForm(StatusFilterType::class);
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $status = $filterForm->get('status')->getData();
+            if ($status) $quotes = $quoteRepository->filterQuotesByStatus($status,  $company);
+        }
+
         return $this->render('front/quote/index.html.twig', [
             'quotes' => $quotes,
-            // 'statusFilterForm' => $statusFilterForm,
+            'filterForm' => $filterForm,
             'searchForm' => $searchForm,
         ]);
     }
