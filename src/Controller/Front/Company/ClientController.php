@@ -86,7 +86,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is created", $client->getFirstName(), $client->getLastName()),
+                sprintf("Client %s is created", $client->getDisplayName()),
                 $company,
                 "created"
             );
@@ -126,7 +126,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getFirstName(), $client->getLastName()),
+                sprintf("Client %s is edited", $client->getDisplayName()),
                 $company,
                 "edited"
             );
@@ -156,7 +156,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is ", $client->getFirstName(), $client->getLastName()),
+                sprintf("Client %s is ", $client->getDisplayName()),
                 $this->getUser()->getCompany(),
                 "deleted"
             );

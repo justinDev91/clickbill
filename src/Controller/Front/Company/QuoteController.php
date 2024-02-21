@@ -11,6 +11,7 @@ use App\Form\StatusFilterType;
 use App\Form\CustomSearchFormType;
 use App\Repository\QuoteRepository;
 use App\Repository\UserRepository;
+use App\Service\InteractionService;
 use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
@@ -61,24 +62,30 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/new', name: 'app_quote_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        InteractionService $interactionService
+    ): Response {
         $quote = new Quote();
         $form = $this->createForm(QuoteType::class, $quote);
         $form->handleRequest($request);
+
         // Créer un select de produit et selon les produits, les récupérer et créer un dictionnaire pour ensuite l'associer au json.
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             // Get datas from form
             $formData = $form->getData();
             // Care when using company (Admin is not supposed to have company);
             $connectedUser = $this->getUser();
             $connectedUserCompany = $connectedUser->getCompany();
 
+            $client = $formData->getClient();
             // User Company
             $quote
                 ->setCompany($connectedUserCompany)
-                ->setClient($formData->getClient())
+                ->setClient($client)
                 ->setDate(new \DateTime('now'))
                 ->setUpdatedBy($connectedUser->getId())
                 ->setCreatedBy($connectedUser->getId());
@@ -135,6 +142,20 @@ class QuoteController extends AbstractController
             }
 
             $entityManager->persist($quote);
+
+            $interactionService->createClientInteraction(
+                $client,
+                sprintf(
+                    "Un devis : %s, avec un acompte de : %s, et montant total de : %s, a été crée pour %s.",
+                    $quote->getId(),
+                    $quote->getDownPayment(),
+                    $quote->getAmount(),
+                    $client->getDisplayName()
+                ),
+                $connectedUserCompany,
+                "created"
+            );
+
             $entityManager->flush();
 
             return $this->redirectToRoute('front_company_app_quote_index', [], Response::HTTP_SEE_OTHER);
@@ -171,8 +192,12 @@ class QuoteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_quote_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quote $quote, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Quote $quote,
+        EntityManagerInterface $entityManager,
+        InteractionService $interactionService
+    ): Response {
         if ($quote->getStatus() !== 'brouillon') {
             throw new AccessDeniedException("Vous ne pouvez plus modifier un devis qui n'est plus en brouillon");
         }
@@ -183,9 +208,11 @@ class QuoteController extends AbstractController
             $formData = $form->getData();
             $connectedUser = $this->getUser();
 
+            $client = $formData->getClient();
+
             // Edit Quote
             $quote
-                ->setClient($formData->getClient())
+                ->setClient($client)
                 ->setDate(new \DateTime('now'))
                 ->setUpdatedBy($connectedUser->getId());
 
@@ -244,6 +271,17 @@ class QuoteController extends AbstractController
             if ($downPayment) {
                 $quote->setDownPayment($downPayment);
             }
+
+            $interactionService->createClientInteraction(
+                $client,
+                sprintf(
+                    "Le devis : %s a été modifié pour %s.",
+                    $quote->getId(),
+                    $client->getDisplayName()
+                ),
+                $connectedUser->getCompany(),
+                "edited"
+            );
 
             $entityManager->persist($quote);
             $entityManager->flush();

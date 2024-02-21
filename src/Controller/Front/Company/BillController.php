@@ -8,6 +8,7 @@ use App\Form\BillType;
 use App\Form\CustomSearchFormType;
 use App\Repository\BillRepository;
 use App\Repository\UserRepository;
+use App\Service\InteractionService;
 use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,28 +63,36 @@ class BillController extends AbstractController
     }
 
     #[Route('/new', name: 'app_bill_new', methods: ['POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, BillRepository $billRepository, SessionInterface $session): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        BillRepository $billRepository,
+        SessionInterface $session,
+        InteractionService $interactionService
+    ): Response {
         // add new bill
         $bill = new Bill();
         $downPaymentBill = new Bill();
         $form = $this->createForm(BillType::class, $bill);
         $form->handleRequest($request);
         $errorBillAlreadyExist = null;
+
+        $company = $this->getUser()->getCompany();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $existantBills = $billRepository->findByQuoteId($form->get('quote')->getData());
+            $client = $form->get('quote')->getData()->getClient();
 
             if ($existantBills->isEmpty()) {
                 $billStatus = Bill::READY;
 
                 if ($form->get('quote')->getData()->getDownPayment() != null) {
                     $billStatus = Bill::WAITING_FOR_DOWNPAYMENT;
-
                     $downPaymentBill
                         ->setQuote($form->get('quote')->getData())
                         ->setAmount($form->get('quote')->getData()->getAmount() * ($form->get('quote')->getData()->getDownPayment() / 100))
-                        ->setClient($form->get('quote')->getData()->getClient())
-                        ->setCompany($this->getUser()->getCompany()) # TODO: setCompany to current company
+                        ->setClient($client)
+                        ->setCompany($company)
                         ->setDate($form->get('quote')->getData()->getDate())
                         ->setIsDownPayment(true)
                         ->setStatus(Bill::READY);
@@ -94,13 +103,24 @@ class BillController extends AbstractController
                         ->setCreatedBy($this->getUser()->getId());
                     $entityManager->persist($downPaymentBill);
 
+                    $interactionService->createClientInteraction(
+                        $client,
+                        sprintf(
+                            "Une facture : %s,  avec un acompte de : %s, a été créé pour %s.",
+                            $downPaymentBill->getGuid(),
+                            $downPaymentBill->getAmount(),
+                            $client->getDisplayName()
+                        ),
+                        $company,
+                        "created"
+                    );
                     $entityManager->flush();
                 }
 
                 $bill
                     ->setAmount($form->get('quote')->getData()->getAmount() - $downPaymentBill->getAmount())
-                    ->setClient($form->get('quote')->getData()->getClient())
-                    ->setCompany($this->getUser()->getCompany())
+                    ->setClient($client)
+                    ->setCompany($company)
                     ->setDate($form->get('quote')->getData()->getDate())
                     ->setIsDownPayment(false)
                     ->setStatus($billStatus);
@@ -109,6 +129,18 @@ class BillController extends AbstractController
                     ->setCreatedAt(new \DateTime())
                     ->setCreatedBy($this->getUser()->getId());
                 $entityManager->persist($bill);
+
+                $interactionService->createClientInteraction(
+                    $client,
+                    sprintf(
+                        "Une facture : %s, avec monant de : %s, a été créé pour %s.",
+                        $bill->getId(),
+                        $bill->getAmount(),
+                        $client->getDisplayName()
+                    ),
+                    $company,
+                    "created"
+                );
 
                 $entityManager->flush();
             } else {
