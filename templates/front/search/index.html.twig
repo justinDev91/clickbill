@@ -2,7 +2,7 @@
 	class="flex w-full">
 
 	{# Filter Form #}
-	<div class="">
+	<div>
 		{{ form_start(filterForm, {'attr': {'id': 'filter-select'}})}}
 		{{ form_end(filterForm) }}
 	</div>
@@ -12,11 +12,9 @@
 		{{ form_start(searchForm)}}
 		<div class="relative w-full">
 			{{ form_widget(searchForm.search) }}
-			<button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-gray-500 bg-gray-700 rounded-e-lg border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-				<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 20 20">
-					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-				</svg>
-				<span class="sr-only">Search</span>
+			<button type="submit" class="absolute top-0 end-1 p-2.5 text-sm font-medium h-full text-neutral-500 dark:text-neutral-700">
+				<svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+				<span class="sr-only">Rechercher</span>
 			</button>
 		</div>
 
@@ -27,25 +25,18 @@
 	</div>
 </div>
 
-{# Add new élément #}
-{% if label is defined %}
-	<a href="{{ path(buttonPath)}}">
-		<button type="button" class="w-30 text-black bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">{{label ?? 'Ajouter'}}</button>
-	</a>
-{% endif %}
-
 {# Get Selected option value #}
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
-var elementName = document.getElementById('filter-select').name
+		var elementName = document.getElementById('filter-select').name
 
-var elementId = elementName == 'status_filter' ? 'status_filter_status' : elementName == 'category_filter' ? 'category_filter_category' : 'bill_filter_status'
+		var elementId = elementName == 'status_filter' ? 'status_filter_status' : elementName == 'category_filter' ? 'category_filter_category' : 'bill_filter_status'
 
-console.log('test', elementName)
+		console.log('test', elementName)
 
-const selectStatus = document.getElementById(elementId);
-selectStatus.addEventListener('change', function () {
-document.getElementById('filter-select').submit();
-});
-});
+		const selectStatus = document.getElementById(elementId);
+		selectStatus.addEventListener('change', function () {
+			document.getElementById('filter-select').submit();
+		});
+	});
 </script>

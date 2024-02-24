@@ -20,7 +20,10 @@ class CustomSearchFormType extends AbstractType
         'label' => false,
         'attr' => [
           'placeholder' => 'Search',
-          'class' => 'block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-yellow-400  dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-gray-500',
+          'class' => '
+            block p-2.5 w-full z-20 text-sm rounded-e-lg border
+            text-neutral-900 border border-neutral-300 focus:ring-0 focus:border-neutral-300
+            dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-400 dark:text-neutral-200',
         ],
         'required' => true,
         'constraints' => [

@@ -1,0 +1,14 @@
+{% extends 'layout/front_office.html.twig' %}
+
+{% block title %}
+	Modifier le profil
+{% endblock %}
+
+{% block content %}
+	<a href="{{ path('front_company_app_user_index') }}" class="hover:underline block pb-3">< Retour</a>
+    <h1 class="pageTitle">Modifier mon profil</h1>
+
+	<div class="md:w-1/3">
+		{{ include('front/user/_form.html.twig', {'button_label': 'Update'}) }}
+	</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'layout/front_office.html.twig' %}
+
+{% block title %} 
+	Mon Profil
+{% endblock %}
+
+{% block content %}
+    <h1 class="pageTitle">Mon Profil</h1>
+
+    <div class="flex mb-4">
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" onclick="toggleDarkMode()" value="true" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-amberYellow"></div>
+        </label>
+        <p class="ms-4 whitespace-nowrap">Thème sombre</p>
+    </div>
+
+    <a href="{{ path( 'front_company_app_user_edit', {'slug': app.user.slug}) }}" class="primaryButton">
+        Modifier le profil
+    </a>	
+{% endblock %}

@@ -22,7 +22,7 @@ class ClientFixtures extends Fixture
 
   public function load(ObjectManager $manager)
   {
-    $faker = Factory::create();
+    $faker = Factory::create('fr_FR');
 
     //Create company
     $company = (new Company())
@@ -67,16 +67,23 @@ class ClientFixtures extends Fixture
 
     //Create company's clients
     for ($i = 0; $i < 20; $i++) {
+      $fakeFirstName = $faker->firstName;
+      $fakeLastName = $faker->lastName;
+      $fakeEmail = strtolower($fakeFirstName) . '.' . strtolower($fakeLastName) . '@demo.fr';
+      $fakeEmail = iconv('UTF-8', 'ASCII//TRANSLIT', $fakeEmail);
+      $fakeEmail = preg_replace('/[^a-zA-Z0-9.@]/', '', $fakeEmail);
+
+
       $client = new Client();
-      $client->setFirstName($faker->firstName);
-      $client->setLastName($faker->lastName);
-      $client->setEmail($faker->unique()->email);
-      $client->setPhone($faker->phoneNumber);
-      $client->setAddress($faker->address);
-      $client->setCreatedBy(1);
-      $client->setCompany($company);
-      $client->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
-      $client->setIsDeleted(false);
+      $client->setFirstName($fakeFirstName)
+        ->setLastName($fakeLastName)
+        ->setEmail($fakeEmail)
+        ->setPhone($faker->e164PhoneNumber())
+        ->setAddress($faker->address)
+        ->setCreatedBy(1)
+        ->setCompany($company)
+        ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+        ->setIsDeleted(false);
 
       $manager->persist($client);
     }

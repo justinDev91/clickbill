@@ -31,7 +31,11 @@ class StatusFilterType extends AbstractType
                 'placeholder' => 'Status',
                 'attr' => [
                     'id' => 'filter-select',
-                    'class' => 'flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-yellow-400 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600  dark:text-white dark:border-gray-600',
+                    'class' => '
+                        flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center border rounded-s-lg
+                        bg-neutral-100 text-neutral-900 border-neutral-300 focus:ring-0 focus:border-neutral-300
+                        dark:bg-neutral-700 dark:text-neutral-200 dark:border-neutral-700
+                    ',
                 ],
             ])
             ->add('submit', SubmitType::class, [

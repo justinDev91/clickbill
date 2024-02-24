@@ -1,24 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/front_office.html.twig' %}
 
-{% block title %}Mes Factures
+{% block title %} 
+	Mes Factures 
 {% endblock %}
 
-{% block body %}
-	<main class="flex flex-col h-screen md:flex-row">
-		{{ include('_components/front/global/_side_bar.html.twig') }}
-		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-			<h1 class="pb-4 mb-10 text-4xl">Mes Factures</h1>
-			{{ include('front/search/index.html.twig',
-                {'buttonPath': 'front_company_app_quote_new',
-            }) }}
-			{{ include('_components/front/bill/_add_bill_popup.html.twig') }}
-			{% for error in errors %}
-				{{ include('_components/front/global/_toast.html.twig', {
-				'message' : error, 
-				'state' : 'error'} ) }}
-			{% endfor %}
+{% block content %}
+	<h1 class="pageTitle">Factures</h1>
+	{% if is_granted('ROLE_COMPANY') %}	
+		{{ include('front/search/index.html.twig') }}
+		{{ include('_components/front/bill/_add_bill_popup.html.twig') }}
 
-			{{ include('_components/front/bill/_table.html.twig', bills) }}
-		</section>
-	</main>
+		{% for error in errors %}
+			{{ include('_components/front/global/_toast.html.twig', {
+				'message' : error, 
+				'state' : 'error'} ) }}			
+		{% endfor %}
+	{% endif %}
+
+
+	{{ include('_components/front/bill/_table.html.twig', bills) }}
 {% endblock %}

@@ -1,6 +1,6 @@
 <div class="relative my-6 overflow-x-auto ">
-	<table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-		<thead class="text-xs text-gray-700 uppercase border-t border-b bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+	<table class="table-auto w-full text-sm text-left text-neutral-500 rtl:text-right dark:text-neutral-400">
+		<thead class="text-xs text-neutral-700 uppercase border-t border-b bg-neutral-100 dark:bg-neutral-700 dark:text-neutral-400 dark:border-neutral-400">
 			<tr>
 				<th scope="col" class="px-6 py-3">
 					Prénom
@@ -25,7 +25,7 @@
 		</thead>
 		<tbody>
 			{% for client in pagination %}
-				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+				<tr class="bg-white hover:bg-neutral-100 border-b dark:hover:bg-neutral-700 dark:bg-neutral-800 dark:border-neutral-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
 						<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}">{{ client.firstName }}</a>
 					</th>
@@ -44,7 +44,7 @@
 					<td class="px-6 py-4">
 						{{ client.updatedAt ? client.updatedAt|date('d/m/Y H:i') : '' }}
 					</td>
-					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
+					<td class="text-lg text-center font-medium dark:text-white">
 						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{client.id}}" data-dropdown-trigger="hover" class="p-3" type="button">
 							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
 						</button>
@@ -62,13 +62,13 @@
 
 <!-- Client Dropdown menu -->
 {% for client in pagination %}
-	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+	<div id="dropdownHoverClient{{client.id}}" class="z-10 hidden bg-white divide-y divide-neutral-100 rounded-lg shadow w-44 dark:bg-neutral-700">
+		<ul class="py-2 text-sm text-neutral-700 dark:text-neutral-200" aria-labelledby="dropdownHoverButton">
 			<li>
-				<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+				<a href="{{ path('front_company_app_client_show', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Détails</a>
 			</li>
 			<li>
-				<a href="{{ path('front_company_app_client_edit', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
+				<a href="{{ path('front_company_app_client_edit', {'slug': client.slug}) }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Modifier</a>
 			</li>
 			<li>
 				{{ include('_components/front/client/_delete_form.html.twig', {'clientSlug': client.slug}) }}

@@ -1,12 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier un devis{% endblock %}
+{% block title %}
+    Modifier un devis
+{% endblock %}
 
 {% block body %}
-<main class="flex flex-col h-screen md:flex-row">
-    {{ include('_components/front/global/_side_bar.html.twig') }}
-    <section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-        {{ include('_components/front/quote/_form.html.twig', {'button_label': 'Modifier le devis', 'title': 'Modifier un Devis'}, ) }}
-    </section>
-</main>
+    {{ include('_components/front/quote/_form.html.twig', {'button_label': 'Modifier le devis', 'title': 'Modifier un Devis'}, ) }}
 {% endblock %}
