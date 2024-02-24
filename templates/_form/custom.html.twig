@@ -6,17 +6,20 @@
 {%- endblock form_row -%}
 
 {%- block widget_attributes -%}
-    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('mt-1 w-full')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('
+        w-full h-10 px-4 mt-1 border border-neutral-400 rounded focus:border-amberYellow focus:ring-amberYellow 
+        dark:bg-neutral-800 dark:placeholder-neutral-400 dark:text-neutral-200
+    ')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-neutral-300 text-neutral-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
     {{- parent() -}}
 {%- endblock widget_attributes -%}
 
 {%- block form_label -%}
-    {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('block text-gray-800')) }) -%}
+    {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('block text-neutral-800 dark:text-neutral-200')) }) -%}
     {{- parent() -}}
 {%- endblock form_label -%}
 
 {%- block form_help -%}
-    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('mt-1 text-gray-600')) }) -%}
+    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('mt-1 text-neutral-600')) }) -%}
     {{- parent() -}}
 {%- endblock form_help -%}
 

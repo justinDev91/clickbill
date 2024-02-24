@@ -1,18 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Facture #{{ bill.id }}
+{% block title %} 
+	Facture #{{ bill.id }} 
 {% endblock %}
 
 {% block body %}
-<main class="flex flex-col h-screen md:flex-row">
-	{{ include('_components/front/global/_side_bar.html.twig') }}
-	<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-
-		<div class="flex">
-			<h1 class="pb-4 mb-10 text-4xl">
-				Facture
-			</h1>
-			{{ bill.id }}</h1>
+	<div class="flex">
+		<h1 class="pageTitle">Facture #{{ bill.id }}</h1>
 		<div class="px-6 py-4">
 			<a href="{{ path('front_company_app_bill_pdf', {'guid': bill.guid}) }}">
 				<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
@@ -92,13 +86,12 @@
 	<div class="flex my-3 space-x-3 ">
 		<form method="post" action="{{ path('front_company_app_bill_delete', {'guid': bill.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
 			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.guid) }}">
-			{{ include('_components/front/global/_button_id.html.twig',
-                {'path': 'front_company_app_bill_delete',
-                'params': { 'guid': bill.guid },
-                'color': 'bg-gray-300',
-                'title': 'Supprimer',
-            }) }}
+			<a href="{{ path( 'front_company_app_bill_delete', { 'guid': bill.guid }) }}" class="deleteButton">
+				Supprimer
+			</a>	
 		</form>
 	</div>
 	<a href="{{ path('front_company_app_bill_index') }}" class="hover:underline">
-		<Retour à la liste</a> </section> </main> {% endblock %}
+		&lt; Retour à la liste
+	</a>
+{% endblock %}

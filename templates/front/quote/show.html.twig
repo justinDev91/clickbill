@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Devis
+{% block title %}
+	Devis
 {% endblock %}
 
 {% block body %}
+<<<<<<< HEAD
 	<main class="flex flex-col h-screen md:flex-row">
 		{{ include('_components/front/global/_side_bar.html.twig') }}
 		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
@@ -21,125 +23,120 @@
 			</div>
 			<table class="table w-9/12 md:w-3/12">
 				<tbody class="text-left">
+=======
+	<h1 class="pageTitle">Devis #{{ quote.id }}</h1>
+	<table class="table w-9/12 md:w-3/12">
+		<tbody class="text-left">
+			<tr>
+				<th>Client</th>
+				<td>{{quote.client.displayName}}</td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td>{{ quote.status }}</td>
+			</tr>
+			{% if quote.downPayment %}
+				<tr>
+					<th>Acompte</th>
+					<td>{{quote.downPayment}} %</td>
+				</tr>
+			{% endif %}
+			<tr>
+				<th>Date</th>
+				<td>{{ quote.date ? quote.date|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Créée le</th>
+				<td>{{ quote.createdAt ? quote.createdAt|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Créée par</th>
+				<td>{{ created_by.name }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<h2 class="my-5 text-2xl font-bold">Produits</h2>
+	<div class="overflow-x-auto">
+		<div class="overflow-hidden border-b border-black border-solid shadow">
+			<table class="min-w-full divide-y divide-gray-200">
+				<thead class="bg-gray-300">
+>>>>>>> b2eaada (feat(sidebar): link each roles to their own environement + dark mode)
 					<tr>
-						<th>Client</th>
-						<td>{{quote.client.displayName}}</td>
+						<th scope="col" class="px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase">Produit</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Quantité</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Prix unitaire</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">TVA</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Montant HT</th>
 					</tr>
-					<tr>
-						<th>Status</th>
-						<td>{{ quote.status }}</td>
-					</tr>
-					{% if quote.downPayment %}
+				</thead>
+				<tbody class="bg-white divide-y divide-gray-200">
+					{% for product in quote.productsInfo %}
 						<tr>
-							<th>Acompte</th>
-							<td>{{quote.downPayment}}
-								%</td>
+							<td class="px-6 py-4 whitespace-nowrap">
+								<div class="text-sm text-gray-900">{{ product.description }}</div>
+								<div class="text-sm text-gray-500 md:hidden">
+									Quantité : {{ product.quantity }}
+								</div>
+								<div class="text-sm text-gray-500 md:hidden">
+									Prix unitaire: {{ product.unitPrice }} €
+								</div>
+								<div class="text-sm text-gray-500 md:hidden">
+									TVA : {{ product.tva }} %
+								</div>
+								<div class="text-sm text-gray-500 md:hidden">Montant HT :
+									{{ product.amount }} €
+								</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm text-gray-900">{{ product.quantity }}</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm text-gray-900">{{ product.unitPrice }} €</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm text-gray-900">{{ product.tva }} %</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm text-gray-900">{{ product.amount }} €</div>
+							</td>
 						</tr>
-					{% endif %}
-					<tr>
-						<th>Date</th>
-						<td>{{ quote.date ? quote.date|date('d/m/Y') : '' }}</td>
-					</tr>
-					<tr>
-						<th>Créée le</th>
-						<td>{{ quote.createdAt ? quote.createdAt|date('d/m/Y') : '' }}</td>
-					</tr>
-					<tr>
-						<th>Créée par</th>
-						<td>{{ created_by.name }}</td>
-					</tr>
+					{% endfor %}
 				</tbody>
 			</table>
-			<h2 class="my-5 text-2xl font-bold">Produits</h2>
-			<div class="overflow-x-auto">
-				<div class="overflow-hidden border-b border-black border-solid shadow">
-					<table class="min-w-full divide-y divide-gray-200">
-						<thead class="bg-gray-300">
-							<tr>
-								<th scope="col" class="px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase">Produit</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Quantité</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Prix unitaire</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">TVA</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Montant HT</th>
-							</tr>
-						</thead>
-						<tbody class="bg-white divide-y divide-gray-200">
-							{% for product in quote.productsInfo %}
-								<tr>
-									<td class="px-6 py-4 whitespace-nowrap">
-										<div class="text-sm text-gray-900">{{ product.description }}</div>
-										<div class="text-sm text-gray-500 md:hidden">Quantité :
-											{{ product.quantity }}</div>
-										<div class="text-sm text-gray-500 md:hidden">Prix unitaire:
-											{{ product.unitPrice }}
-											€</div>
-										<div class="text-sm text-gray-500 md:hidden">TVA :
-											{{ product.tva }}
-											%</div>
-										<div class="text-sm text-gray-500 md:hidden">Montant HT :
-											{{ product.amount }}
-											€</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.quantity }}</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.unitPrice }}
-											€</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.tva }}
-											%</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.amount }}
-											€</div>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="flex justify-end">
-				<table class="table w-9/12 mt-4 md:w-2/12">
-					<tbody class="text-left">
-						<tr>
-							<th>Montant HT</th>
-							<td class="text-right">{{ht_amount}}
-								€</td>
-						</tr>
-						<tr class="border-b-2 border-black border-solid">
-							<th>Montant TVA</th>
-							<td class="text-right">{{ tva_amount }}
-								€</td>
-						</tr>
-						<tr>
-							<th>Total</th>
-							<td class="text-right">{{ total_amount }}
-								€</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		</div>
+	</div>
+	<div class="flex justify-end">
+		<table class="table w-9/12 mt-4 md:w-2/12">
+			<tbody class="text-left">
+				<tr>
+					<th>Montant HT</th>
+					<td class="text-right">{{ht_amount}} €</td>
+				</tr>
+				<tr class="border-b-2 border-black border-solid">
+					<th>Montant TVA</th>
+					<td class="text-right">{{ tva_amount }} €</td>
+				</tr>
+				<tr>
+					<th>Total</th>
+					<td class="text-right">{{ total_amount }} €</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-			<div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
-				<a href="{{ path('front_company_app_quote_index') }}">
-					<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Retour à la liste</button>
-				</a>
-				<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}">
-					<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Modifier</button>
-				</a>
-				<form method="post" action="{{ path('front_company_app_quote_delete', {'id': quote.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce Devis ?');">
-					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ quote.id) }}">
-					{{ include('_components/front/global/_button_id.html.twig',
-                    {'path': 'front_company_app_quote_delete',
-                    'params': { 'id': quote.id },
-                    'color': 'bg-red-700 hover:bg-red-800',
-                    'title': 'Supprimer',
-                }) }}
-				</form>
-			</div>
-		</section>
-	</main>
+	<div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
+		<a href="{{ path('front_company_app_quote_index') }}">
+			<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Retour à la liste</button>
+		</a>
+		<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}">
+			<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Modifier</button>
+		</a>
+		<form method="post" action="{{ path('front_company_app_quote_delete', {'id': quote.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce Devis ?');">
+			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ quote.id) }}">
+
+			<a href="{{ path( 'front_company_app_quote_delete', { 'id': quote.id }) }}" class="deleteButton">
+				Supprimer
+			</a>	
+		</form>
+	</div>
 {% endblock %}
