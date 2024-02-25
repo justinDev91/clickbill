@@ -5,13 +5,8 @@
 @layer base {
 
   :root {
-    /* TODO : Add or changes colors as the project progresses */
     --primary-color: #F6C31E;
-    --black: #000000;
-    --gray: #EFEAE4;
     --white: #F9F9F9;
-    --transparent: rgba(0, 0, 0, 0);
-    --red-button: #FF004D
   }
 
   html {
@@ -27,6 +22,7 @@
 
   .required:after {
     content: " *";
+    font-weight: 700;
     color: var(--primary-color);
   }
 
@@ -40,18 +36,22 @@
 
 @layer components {
   .pageTitle {
-    @apply pb-4 mb-10 text-4xl font-bold;
+    @apply pb-4 mb-6 text-4xl font-bold text-center lg:text-left;
+  }
+
+  .backToPrevious {
+    @apply hover:underline block pb-3 text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white;
   }
 
   .primaryButton {
-    @apply block w-full md:w-48 my-3 px-6 py-3 font-bold text-center text-black rounded bg-amberYellow
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-black rounded bg-amberYellow dark:bg-amberYellowDarker
   }
 
   .secondaryButton {
-    @apply block w-full md:w-48 my-3 px-6 py-3 font-bold text-center text-white rounded bg-neutral-950
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-white rounded bg-neutral-950
   }
 
   .deleteButton {
-    @apply block w-full md:w-48 my-3 px-6 py-3 font-bold text-center text-black rounded bg-red-600
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-black rounded bg-red-600
   }
 }

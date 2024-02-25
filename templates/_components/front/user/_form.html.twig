@@ -3,9 +3,8 @@
 {{ form_row(form.firstName, { label: 'Prénom',              attr: { placeholder: 'Sarah' }}) }}
 {{ form_row(form.lastName,  { label: 'Nom',                 attr: { placeholder: 'TARTUF' } }) }}
 {{ form_row(form.email,     { label: 'Email',               attr: { placeholder: 'sarah.tartuf@gmail.com' } }) }}
-{{ form_row(form.phone,     { label: 'Numéro de téléphone', attr: { placeholder: '06XXXXXXXX' } }) }}
-{{ form_row(form.address,   { label: 'Adresse',             attr: { placeholder: '4 rue des abricot 77800 Jean-sur-Place' } }) }}
+{{ form_row(form.imageFile, { label: 'Photo de profil' }) }}
 
-<button type="submit" class="primaryButton">{{ button_label }}</button>
+<button type="submit" class="primaryButton">Sauvegarder</button>
 
 {{ form_end(form) }}

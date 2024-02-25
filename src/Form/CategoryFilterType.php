@@ -34,6 +34,9 @@ class CategoryFilterType extends AbstractType
       ])
       ->add('submit', SubmitType::class, [
         'label' => false,
+        'attr' => [
+          'class' => 'hidden',
+        ],
       ]);
   }
 

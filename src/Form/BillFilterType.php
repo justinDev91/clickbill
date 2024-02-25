@@ -23,7 +23,7 @@ class BillFilterType extends AbstractType
           'Non acquittée' => 'Non acquitté'
         ],
         'label' => false,
-        'placeholder' => 'Status',
+        'placeholder' => 'Statut',
         'attr' => [
           'id' => 'filter-select',
           'class' => '
@@ -35,6 +35,9 @@ class BillFilterType extends AbstractType
       ])
       ->add('submit', SubmitType::class, [
         'label' => false,
+        'attr' => [
+          'class' => 'hidden',
+        ],
       ]);
   }
 

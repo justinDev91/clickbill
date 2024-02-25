@@ -28,7 +28,7 @@ class StatusFilterType extends AbstractType
                     ]),
                 ],
                 'label' => false,
-                'placeholder' => 'Status',
+                'placeholder' => 'Statut',
                 'attr' => [
                     'id' => 'filter-select',
                     'class' => '
@@ -40,6 +40,9 @@ class StatusFilterType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => false,
+                'attr' => [
+                    'class' => 'hidden',
+                ],
             ]);
     }
 

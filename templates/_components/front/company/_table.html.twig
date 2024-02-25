@@ -1,13 +1,13 @@
 <div class="relative my-5 overflow-x-auto">
-	<table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+	<table class="w-full text-sm text-left text-neutral-500 rtl:text-right dark:text-neutral-400">
 		<tbody>
 			{% for clientInteraction in clientsInteractions|slice(0, 11) %}
 				<td class="px-6 pt-2">
-					<div class="py-1
-												{% if clientInteraction.action == 'deleted' %} bg-red-100
-												{% elseif clientInteraction.action == 'created' %}bg-blue-100
-												{% elseif clientInteraction.action == 'edited' %}	bg-green-100
-												{% endif %}">{{ clientInteraction.description }}
+					<div class="py-2 px-4
+						{% if clientInteraction.action == 'deleted' %} 		bg-red-100 	dark:bg-red-800/30 rounded
+						{% elseif clientInteraction.action == 'created' %}	bg-blue-100 dark:bg-blue-800/30 rounded
+						{% elseif clientInteraction.action == 'edited' %}	bg-green-100 dark:bg-green-800/30 rounded
+						{% endif %}">{{ clientInteraction.description }}
 					</div>
 				</td>
 				<td class="px-6 pt-2">

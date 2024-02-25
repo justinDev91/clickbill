@@ -1,6 +1,6 @@
 <div class="relative my-6 overflow-x-auto ">
-	<table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-		<thead class="text-xs text-gray-700 uppercase border-t border-b bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+	<table class="w-full text-sm text-left text-neutral-500 rtl:text-right dark:text-neutral-400">
+		<thead class="text-xs text-neutral-700 uppercase border-t border-b border-neutral-200 dark:border-neutral-400 bg-neutral-100 dark:bg-neutral-700 dark:text-neutral-400">
 			<tr>
 				<th scope="col" class="px-6 py-3">
 					Client
@@ -23,7 +23,7 @@
 		</thead>
 		<tbody>
 			{% for quote in quotes %}
-				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+				<tr class="bg-white hover:bg-neutral-100 border-b dark:hover:bg-neutral-700 dark:bg-neutral-800 dark:border-neutral-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
 						<a href="{{ path('front_company_app_client_show', {'slug': quote.client.slug}) }}">{{ quote.client.displayName }}</a>
 					</th>
@@ -52,8 +52,10 @@
 							</svg>
 						</a>
 					</td>
-					<td class="flex justify-end mr-4 text-lg font-medium dark:text-white">
-						<button id="dropdownHoverButton" data-dropdown-toggle="dropdownHoverClient{{quote.id}}" data-dropdown-trigger="hover" class="" type="button">...</button>
+					<td class="text-lg text-center font-medium dark:text-white">
+						<button id="dropdownHoverQuote" data-dropdown-toggle="dropdownHoverQuote{{quote.id}}" data-dropdown-trigger="click" class="p-3" type="button">
+							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
+						</button>
 					</td>
 				</tr>
 			{% else %}
@@ -67,17 +69,20 @@
 
 <!-- Client Dropdown menu -->
 {% for quote in quotes %}
-	<div id="dropdownHoverClient{{quote.id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+	<div id="dropdownHoverQuote{{quote.id}}" class="z-10 hidden bg-white divide-y divide-neutral-100 rounded-lg shadow w-44 dark:bg-neutral-700">
+		<ul class="py-2 text-sm text-neutral-700 dark:text-neutral-200" aria-labelledby="dropdownHoverButton">
 			<li>
-				<a href="{{ path('front_company_app_quote_show', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Détails</a>
+				<a href="{{ path('front_company_app_quote_show', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Détails</a>
 			</li>
 			{% if quote.status == 'brouillon' %}
 				<li>
-					<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
+					<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Modifier</a>
 				</li>
 				<li>
-					{{ include('_components/front/quote/_delete_form.html.twig', {'quoteId': quote.id}) }}
+					<form method="post" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white" action="{{ path('front_company_app_quote_delete', {'id': quote.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ quote.id) }}">
+						<button class="btn font-bold text-red-600">Supprimer</button>
+					</form>	
 				</li>
 			{% endif %}
 		</ul>

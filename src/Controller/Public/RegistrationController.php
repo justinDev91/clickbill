@@ -19,14 +19,9 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, MailService $mailService): Response
     {
-        if (in_array('ROLE_COMPANY', $this->getUser()->getRoles())) {
+        if ($this->getUser()) {
+            # TODO : Redirect to another route according the role.
             return $this->redirectToRoute('front_company_app_dashboard');
-        }
-        if (in_array('ROLE_ACCOUNTANT', $this->getUser()->getRoles())) {
-            return $this->redirectToRoute('front_accountant_app_dashboard');
-        }
-        if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
-            return $this->redirectToRoute('back_app_dashboard');
         }
 
         $form = $this->createForm(RegistrationFormType::class);
