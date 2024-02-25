@@ -19,7 +19,7 @@ class CustomSearchFormType extends AbstractType
       ->add('search', SearchType::class, [
         'label' => false,
         'attr' => [
-          'placeholder' => 'Search',
+          'placeholder' => 'Rechercher',
           'class' => '
             block p-2.5 w-full z-20 text-sm rounded-e-lg border
             text-neutral-900 border border-neutral-300 focus:ring-0 focus:border-neutral-300

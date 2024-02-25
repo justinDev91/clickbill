@@ -1,68 +1,49 @@
-<div class="flex items-center">
-	<div class="container w-full mx-auto text-gray-400">
-		{{ form_start(form, {'attr': {'class': 'w-3/4 mx-auto', 'id': 'id_quote_form'}}) }}
-		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
-			<h1 class="pb-4 text-4xl text-black">{{ title }}</h1>
-			{{ form_row(form.client, {
-                label: 'Client',
-                row_attr: {"class": "client-row-attr"},
-                attr: {"class": "client-form-attr"}
-            }) }}
-			{{ form_row(form.product, {
-                label: 'Produit',
-                row_attr: {"class": "client-row-attr"},
-                attr: {"class": "client-form-attr"}
-            }) }}
-			<button type="button" id="add-product" class="w-64 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow">Ajouter le produit</button>
-			{% if customError is defined %}
-				<div class="text-red-500">{{ customError }}</div>
+{{ form_start(form, {'attr': {'id': 'id_quote_form'}}) }}
+	{{ form_row(form.client, {
+		label: 'Client',
+	}) }}
+	{{ form_row(form.product, {
+		label: 'Produit',
+	}) }}
+	<button type="button" id="add-product" class="primaryButton my-3 w-full">Ajouter le produit</button>
+	{% if customError is defined %}
+		<div class="text-red-500">{{ customError }}</div>
+	{% endif %}
+	<table id="product-table" class="{% if not quote.productsInfo %}hidden{% endif %} my-3 w-full text-black border-collapse border-spacing-x-4 dark:text-neutral-200">
+		<thead>
+			<tr>
+				<th>Produit</th>
+				<th>Quantité</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody id="product-list">
+			{% if quote.productsInfo %}
+				{% for product in quote.productsInfo %}
+					<tr class="text-center product-item">
+						<td>
+							<span class="product-name" product="{{ product.product_id }}">{{ product.description }}</span>
+						</td>
+						<td>
+							<input type="number" class="w-16 md:w-20 product-quantity" value="{{ product.quantity }}" min="1">
+						</td>
+						<td>
+							<button type="button" class="product-delete-btn">Supprimer</button>
+						</td>
+					</tr>
+				{% endfor %}
 			{% endif %}
-			<table id="product-table" class="{% if not quote.productsInfo %}hidden{% endif %} w-full text-black border-collapse border-spacing-x-4">
-                <thead>
-                    <tr>
-                        <th>Produit</th>
-                        <th>Quantité</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="product-list">
-                    {% if quote.productsInfo %}
-                        {% for product in quote.productsInfo %}
-                            <tr class="text-center product-item">
-                                <td>
-                                    <span class="product-name" product="{{ product.product_id }}">{{ product.description }}</span>
-                                </td>
-                                <td>
-                                    <input type="number" class="w-16 md:w-20 product-quantity" value="{{ product.quantity }}" min="1">
-                                </td>
-                                <td>
-                                    <button type="button" class="product-delete-btn">Supprimer</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-			<button type="button" id="add-acompte-btn" class="{% if quote.downPayment %}hidden{% endif %} w-64 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow">Ajouter un acompte</button>
-			{{ form_row(form.downPayment, {
-                label: 'Acompte',
-                row_attr: {"class": "client-row-attr downPayment" ~ (quote.downPayment ? '' : ' hidden')},
-                attr: {"class": "client-form-attr"}
-            }) }}
-			<input type="hidden" name="products_datas" id="product-data">
-			
-		</div>
-		
-		<div class="col-span-2 text-center">
-			<a href="{{ path('front_company_app_quote_index') }}">
-                <button type="button" class="w-48 px-6 py-3 mb-4 font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Retour à la liste</button>
-            </a>
-			<button type="submit" class="w-48 px-6 py-3 mb-4 font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">{{ button_label }}</button>
-		</div>
+		</tbody>
+	</table>
+	<button type="button" id="add-acompte-btn" class="{% if quote.downPayment %}hidden{% endif %} primaryButton my-3 w-full">Ajouter un acompte</button>
+	{{ form_row(form.downPayment, {
+		label: 'Acompte',
+		row_attr: {"class": "downPayment my-3" ~ (quote.downPayment ? '' : ' hidden')}
+	}) }}
+	<input type="hidden" name="products_datas" id="product-data">
+	<button type="submit" class="primaryButton my-3 w-full">{{ button_label }}</button>
 
-		{{ form_end(form) }}
-	</div>
-</div>
+{{ form_end(form) }}
 
 <script>
 	// Script in order to hide/show acompte field.
