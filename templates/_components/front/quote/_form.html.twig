@@ -5,7 +5,7 @@
 	{{ form_row(form.product, {
 		label: 'Produit',
 	}) }}
-	<button type="button" id="add-product" class="primaryButton my-3 w-full">Ajouter le produit</button>
+	<button type="button" id="add-product" class="w-full my-3 primaryButton">Ajouter le produit</button>
 	{% if customError is defined %}
 		<div class="text-red-500">{{ customError }}</div>
 	{% endif %}
@@ -28,7 +28,7 @@
 							<input type="number" class="w-16 md:w-20 product-quantity" value="{{ product.quantity }}" min="1">
 						</td>
 						<td>
-							<button type="button" class="product-delete-btn">Supprimer</button>
+							<button type="button" class="font-bold text-red-600 product-delete-btn btn">Supprimer</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -40,8 +40,11 @@
 		label: 'Acompte',
 		row_attr: {"class": "downPayment my-3" ~ (quote.downPayment ? '' : ' hidden')}
 	}) }}
+	{{ form_row(form.tva, {
+		label: 'TVA',
+	}) }}
 	<input type="hidden" name="products_datas" id="product-data">
-	<button type="submit" class="primaryButton my-3 w-full">{{ button_label }}</button>
+	<button type="submit" class="w-full my-3 primaryButton">{{ button_label }}</button>
 
 {{ form_end(form) }}
 

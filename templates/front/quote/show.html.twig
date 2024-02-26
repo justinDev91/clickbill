@@ -10,17 +10,10 @@
 	</a>    
 	
 	<h1 class="pageTitle">
-		Devis {{ quote.id }}
+		Devis #{{ quote.guid }}
 	</h1>
-	<div class="px-6 py-4">
-		<a href="{{ path('front_company_app_quote_pdf', {'id': quote.id}) }}">
-			<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
-				<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
-			</svg>
-		</a>
-	</div>
 	
-	<table class="table table-auto w-9/12 md:w-3/12">
+	<table class="table w-9/12 table-auto md:w-3/12">
 		<tbody class="text-left">
 			<tr>
 				<th>Client</th>
@@ -52,14 +45,13 @@
 	</table>
 	<h2 class="my-5 text-2xl font-bold">Produits</h2>
 	<div class="overflow-x-auto">
-		<div class="overflow-hidden border-b border-neutral-400 border-solid shadow">
-			<table class="table-auto min-w-full divide-y divide-neutral-200">
+		<div class="overflow-hidden border-b border-solid shadow border-neutral-400">
+			<table class="min-w-full divide-y table-auto divide-neutral-200">
 				<thead class="bg-neutral-200 dark:bg-neutral-500 dark:text-neutral-900">
 					<tr>
 						<th scope="col" class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase">Produit</th>
 						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Quantité</th>
 						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Prix unitaire</th>
-						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">TVA</th>
 						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Montant HT</th>
 					</tr>
 				</thead>
@@ -74,9 +66,6 @@
 								<div class="text-sm md:hidden">
 									Prix unitaire: {{ product.unitPrice }} €
 								</div>
-								<div class="text-sm md:hidden">
-									TVA : {{ product.tva }} %
-								</div>
 								<div class="text-sm md:hidden">Montant HT :
 									{{ product.amount }} €
 								</div>
@@ -88,9 +77,6 @@
 								<div class="text-sm">{{ product.unitPrice }} €</div>
 							</td>
 							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-								<div class="text-sm">{{ product.tva }} %</div>
-							</td>
-							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
 								<div class="text-sm">{{ product.amount }} €</div>
 							</td>
 						</tr>
@@ -100,32 +86,53 @@
 		</div>
 	</div>
 	<div class="flex justify-end">
-		<table class="table-auto table w-9/12 mt-4 md:w-2/12">
+		<table class="table w-9/12 mt-4 table-auto md:w-2/12">
 			<tbody class="text-left">
 				<tr>
 					<th>Montant HT</th>
-					<td class="text-right">{{ht_amount}} €</td>
-				</tr>
-				<tr class="border-b-2 border-neutral-900 border-solid">
-					<th>Montant TVA</th>
-					<td class="text-right">{{ tva_amount }} €</td>
+					<td class="text-right">
+						{{ht_amount}} €
+					</td>
 				</tr>
 				<tr>
-					<th>Total</th>
-					<td class="text-right">{{ total_amount }} €</td>
+					<th>Montant TVA</th>
+					<td class="text-right">
+						{{ tva_amount }} € 
+					</td>
+				</tr>
+				<tr class="border-b-2 border-black border-solid">
+					<th>TVA</th>
+					<td class="text-right">
+						{{quote_tva}} %
+					</td>
+				</tr>
+				<tr>
+					<th>Montant TTC</th>
+					<td class="text-right">
+						{{ total_amount }} €
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 
 	<div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
-		<a href="{{ path('front_company_app_quote_edit', {'id': quote.id}) }}">
-			<button type="button" class="primaryButton">Modifier</button>
-		</a>
-		{{ include('_components/front/global/_delete_form.html.twig',{
-			'path': 'front_company_app_quote_delete',
-			'type': 'id',
-			'id': quote.id,
-		})}}
+		<div class="px-6 py-4">
+			<a href="{{ path('front_company_app_quote_pdf', {'guid': quote.guid}) }}">
+				<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
+					<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
+				</svg>
+			</a>
+		</div>
+		{% if quote.status == 'brouillon' %}
+			<a href="{{ path('front_company_app_quote_edit', {'guid': quote.guid}) }}">
+				<button type="button" class="primaryButton">Modifier</button>
+			</a>
+			{{ include('_components/front/global/_delete_form.html.twig',{
+				'path': 'front_company_app_quote_delete',
+				'type': 'guid',
+				'id': quote.guid,
+			})}}
+		{% endif %}
 	</div>
 {% endblock %}

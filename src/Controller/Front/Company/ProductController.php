@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/product')]
-#[Security('is_granted("ROLE_USER")')]
+#[Security('is_granted("ROLE_COMPANY")')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]

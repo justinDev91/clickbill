@@ -7,17 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
 {
     use Traits\Timestampable;
 
-    private const DRAFT = "brouillon";
-    private const WAITING_FOR_DOWNPAYMENT = "en attente du paiement de l'accompte";
-    private const IN_PROGRESS = 'en cours';
-    private const CANCELED = 'annulé';
-    private const VALIDATED = 'validé';
+    public const DRAFT = "brouillon";
+    public const IN_PROGRESS = 'en cours';
+    public const WAITING_FOR_DOWNPAYMENT = "en attente du paiement de l'accompte";
+    public const VALIDATED = 'validé';
+    public const CANCELED = 'annulé';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -62,8 +63,15 @@ class Quote
     #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Bill::class)]
     private Collection $bills;
 
+    #[ORM\Column(type: Types::GUID)]
+    private ?string $guid = null;
+
+    #[ORM\Column]
+    private ?float $tva = null;
+
     public function __construct()
     {
+        $this->guid = Uuid::uuid4()->toString();
         $this->notifications = new ArrayCollection();
         $this->bills = new ArrayCollection();
     }
@@ -92,7 +100,7 @@ class Quote
 
     public function setStatus($status)
     {
-        if (!in_array($status, array(self::EN_ATTENTE, self::EN_COURS, self::ANNULE, self::VALIDE))) {
+        if (!in_array($status, array(self::DRAFT, self::IN_PROGRESS, self::WAITING_FOR_DOWNPAYMENT, self::VALIDATED, self::CANCELED))) {
             throw new \InvalidArgumentException("Invalid status");
         }
         $this->status = $status;
@@ -252,5 +260,50 @@ class Quote
         }
 
         return $this;
+    }
+
+    public function getGuid(): ?string
+    {
+        return $this->guid;
+    }
+
+    public function setGuid(string $guid): static
+    {
+        $this->guid = $guid;
+
+        return $this;
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getQuoteDetails()
+    {
+        $quoteTva = $this->getTva();
+        $htAmount = 0;
+        $tvaAmount = 0;
+        $totalAmount = 0;
+
+        foreach ($this->getProductsInfo() as $product) {
+            $htAmount += $product['amount'];
+            $tvaAmount += $product['amount'] * ($quoteTva / 100);
+            $totalAmount += $htAmount + $tvaAmount;
+        }
+
+        return [
+            'quoteTva' => $quoteTva,
+            'htAmount' => $htAmount,
+            'tvaAmount' => $tvaAmount,
+            'totalAmount' => $totalAmount
+        ];
     }
 }

@@ -7,9 +7,21 @@
 {% block content %}
     <h1 class="pageTitle">Mes Devis</h1>
     {{ include('front/search/index.html.twig') }}
+
+	{% for error in errors %}
+		{{ include('_components/front/global/_toast.html.twig', {
+		'message' : error, 
+		'state' : 'error'} ) }}
+	{% endfor %}
+	{% for succes in success %}
+		{{ include('_components/front/global/_toast.html.twig', {
+			'message' : succes, 
+			'state' : 'sucess'} ) }}
+	{% endfor %}
     
     <a href="{{ path('front_company_app_quote_new')}}" class="primaryButton">
 		Nouveau devis
 	</a>
+	
     {{ include('_components/front/quote/_table.html.twig', quotes) }}
 {% endblock %}
