@@ -12,6 +12,16 @@
                 {'buttonPath': 'front_company_app_quote_new',
                 'label': 'Créer un devis',
             }) }}
+			{% for error in errors %}
+				{{ include('_components/front/global/_toast.html.twig', {
+				'message' : error, 
+				'state' : 'error'} ) }}
+			{% endfor %}
+			{% for succes in success %}
+				{{ include('_components/front/global/_toast.html.twig', {
+					'message' : succes, 
+					'state' : 'sucess'} ) }}
+			{% endfor %}
 			{{ include('_components/front/quote/_table.html.twig', quotes) }}
 		</section>
 	</main>

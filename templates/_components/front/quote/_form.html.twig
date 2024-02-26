@@ -51,6 +51,11 @@
             }) }}
 			<input type="hidden" name="products_datas" id="product-data">
 			
+			{{ form_row(form.tva, {
+                label: 'TVA',
+                row_attr: {"class": "client-row-attr"},
+                attr: {"class": "client-form-attr"}
+            }) }}
 		</div>
 		
 		<div class="col-span-2 text-center">

@@ -29,7 +29,7 @@
 						<a href="{{ path('front_company_app_bill_show', {'guid': bill.guid}) }}">{{ bill.client }}</a>
 					</th>
 					<td class="px-6 py-4">
-						{{ bill.quote.id }}
+						{{ bill.quote.guid }}
 					</td>
 					<td class="px-6 py-4">
 						{% if bill.isDownPayment %}

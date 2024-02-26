@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Devis #{{ quote.id }}
+{% block title %}Devis #{{ quote.guid }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -57,8 +57,14 @@
 			margin-top: -10rem;
 		}
 
-		.table-header th {
-			text-align: center;
+		.table-header th,
+		.table-body td {
+			text-align: left;
+		}
+
+		.table-header th:last-child,
+		.table-body td:last-child {
+			text-align: right;
 		}
 
 		.table-total-amount {
@@ -69,6 +75,38 @@
 
 		.quote-info {
 			margin-bottom: 1rem;
+		}
+
+		.flex {
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		.table-container {
+			max-width: 45%;
+			margin-left: auto;
+		}
+
+		.custom-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.custom-table th,
+		.custom-table td {
+			padding: 0.5rem;
+		}
+
+		.text-left {
+			text-align: left;
+		}
+
+		.text-right {
+			text-align: right;
+		}
+
+		.border-bottom {
+			border-bottom: 2px solid black;
 		}
 	</style>
 
@@ -100,7 +138,7 @@
 		</div>
 		<!-- Quote Information -->
 		<div style="margin-top: 5rem;">
-			<h1 class="section-title">Devis #{{ quote.id }}</h1>
+			<h1 class="section-title">Devis #{{ quote.guid }}</h1>
 			<div class="client-info">
 				<div class="quote-info">
 					Date :
@@ -115,22 +153,19 @@
 						<tr>
 							<th>Description</th>
 							<th>Quantité</th>
-							<th>Unité</th>
+							{# <th>Unité</th> #}
 							<th>Prix unitaire</th>
-							<th>TVA</th>
 							<th>Montant HT</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="table-body">
 						{% for product in quote.productsInfo ?? [] %}
 							<tr>
-								<td style="text-align: left;">{{ product.description }}</td>
+								<td>{{ product.description }}</td>
 								<td>{{ product.quantity }}</td>
-								<td>{{ product.unit }}</td>
+								{# <td>{{ product.unit }}</td> #}
 								<td>{{ product.unitPrice }}
 									€</td>
-								<td>{{ product.tva }}
-									%</td>
 								<td>{{ product.amount }}
 									€</td>
 							</tr>
@@ -138,8 +173,37 @@
 					</tbody>
 				</table>
 
-				<div class="table-total-amount ">Total Amount Due:
-					{{quoteTotalAmount}}€
+				<div class="flex justify-end">
+					<div class="table-container">
+						<table class="custom-table">
+							<tbody class="text-left">
+								<tr>
+									<th class="text-left">Montant HT</th>
+									<td class="text-right">
+										{{ ht_amount }} €
+									</td>
+								</tr>
+								<tr>
+									<th class="text-left">Montant TVA</th>
+									<td class="text-right">
+										{{ tva_amount }} € 
+									</td>
+								</tr>
+								<tr class="border-bottom">
+									<th class="text-left">TVA</th>
+									<td class="text-right">
+										{{ quote_tva }} %
+									</td>
+								</tr>
+								<tr>
+									<th class="text-left">Montant TTC</th>
+									<td class="text-right">
+										{{ total_amount }} €
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
