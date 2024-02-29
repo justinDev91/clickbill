@@ -1,18 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/front_office.html.twig' %}
 
-{% block title %}Facture #{{ bill.id }}
+{% block title %} 
+	Facture #{{ bill.id }} 
 {% endblock %}
 
-{% block body %}
-<main class="flex flex-col h-screen md:flex-row">
-	{{ include('_components/front/global/_side_bar.html.twig') }}
-	<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-
-		<div class="flex">
-			<h1 class="pb-4 mb-10 text-4xl">
-				Facture
-			</h1>
-			{{ bill.id }}</h1>
+{% block content %}
+	<a href="{{ path('front_company_app_bill_index') }}" class="backToPrevious">
+		<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-128 128z"/></svg>
+	</a>
+	<div class="flex">
+		<h1 class="pageTitle">Facture #{{ bill.id }}</h1>
 		<div class="px-6 py-4">
 			<a href="{{ path('front_company_app_bill_pdf', {'guid': bill.guid}) }}">
 				<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
@@ -61,28 +58,28 @@
 	</table>
 
 	<h2 class="text-2xl font-bold my-5">Produits</h2>
-	<table class="table w-full mb-10">
-		<thead class="text-left bg-gray-300 h-10">
+	<table class="table-auto table w-full mb-10 divide-y divide-neutral-200">
+		<thead class="text-left bg-neutral-200 dark:bg-neutral-500 dark:text-neutral-900">
 			<tr>
-				<th>Description</th>
-				<th>Qté</th>
-				<th>Unité</th>
-				<th>Prix unitaire</th>
-				<th>TVA</th>
-				<th>Montant HT</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Description</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Qté</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Unité</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Prix unitaire</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">TVA</th>
+				<th class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Montant HT</th>
 			</tr>
 		</thead>
-		<tbody class="text-left">
+		<tbody class="bg-white divide-y divide-neutral-200 dark:bg-neutral-700 dark:text-neutral-200">
 			{% for product in bill.quote.productsInfo %}
 				<tr>
-					<td>{{ product.description }}</td>
-					<td>{{ product.quantity }}</td>
-					<td>{{ product.unit }}</td>
-					<td>{{ product.unitPrice }}
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.description }}</td>
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.quantity }}</td>
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.unit }}</td>
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.unitPrice }}
 						€</td>
-					<td>{{ product.tva }}
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.tva }}
 						%</td>
-					<td>{{ product.amount }}
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.amount }}
 						€</td>
 				</tr>
 			{% endfor %}
@@ -90,15 +87,10 @@
 	</table>
 
 	<div class="flex my-3 space-x-3 ">
-		<form method="post" action="{{ path('front_company_app_bill_delete', {'guid': bill.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?');">
-			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bill.guid) }}">
-			{{ include('_components/front/global/_button_id.html.twig',
-                {'path': 'front_company_app_bill_delete',
-                'params': { 'guid': bill.guid },
-                'color': 'bg-gray-300',
-                'title': 'Supprimer',
-            }) }}
-		</form>
+		{{ include('_components/front/global/_delete_form.html.twig',{
+			'path': 'front_company_app_bill_delete',
+			'type': 'guid',
+			'id': bill.guid,
+		})}}
 	</div>
-	<a href="{{ path('front_company_app_bill_index') }}" class="hover:underline">
-		<Retour à la liste</a> </section> </main> {% endblock %}
+{% endblock %}

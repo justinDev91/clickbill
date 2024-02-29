@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -16,8 +14,6 @@ use Symfony\Component\HttpFoundation\File\File;
 #[Vich\Uploadable]
 class Product
 {
-    private const CATEGORIES = ['mode', 'portrait', 'événement', 'commercial', 'voyage'];
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -197,11 +193,8 @@ class Product
         return $this->category;
     }
 
-    public function setCategory(?string $category): self
+    public function setCategory(?Category $category): self
     {
-        if (!in_array($category, self::CATEGORIES, true)) {
-            throw new \InvalidArgumentException(sprintf('Invalid category "%s".', $category));
-        }
 
         $this->category = $category;
 

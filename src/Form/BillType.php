@@ -19,6 +19,7 @@ class BillType extends AbstractType
     {
         $builder
             ->add('quote', EntityType::class, [
+                'label' => 'Devis',
                 'class' => Quote::class,
                 'choice_label' => function ($quote) {
                     return  '#' . $quote->getId() . ' ' . $quote->getClient();

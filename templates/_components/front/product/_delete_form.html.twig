@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('front_company_app_product_delete', {'slug': productSlug}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+<form method="post" action="{{ path('front_company_app_product_delete', {'slug': productSlug}) }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
 	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ productSlug) }}">
-	<button class="btn">Supprimer</button>
+	<button class="btn font-bold text-red-600">Supprimer</button>
 </form>

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'public_base.html.twig' %}
 
 {% block title %}Connexion{% endblock %}
 
@@ -13,8 +13,8 @@
 		{{ include('_components/public/_logo_banner.html.twig') }}
 
 		<div class="flex w-3/4 mx-auto mb-4 text-gray-400 justify-evenly md:w-3/5 lg:w-2/4">
-			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-orange-300">Se connecter</h1></span>
-			<a href="{{ path('public_app_register') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">S'enregistrer</h1></a>
+			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-amberYellow">Se connecter</h1></span>
+			<a href="{{ path('public_app_register') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-amberYellow hover:border-b hover:border-solid hover:text-black">S'enregistrer</h1></a>
 		</div>
 
 		<form class="w-3/4 mx-auto" method="post">
@@ -25,11 +25,11 @@
 			<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
 				<div class="inline-grid">
 					<label class="required" for="inputEmail">Email</label>
-					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="w-full h-10 px-4 mt-1 border rounded form-control required" autocomplete="email" required autofocus>
+					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="w-full h-10 px-4 mt-1 border rounded form-control required focus:border-amberYellow focus:ring-amberYellow" autocomplete="email" required autofocus>
 				</div>
 				<div class="inline-grid">
 					<label class="required" for="inputPassword">Mot de passe</label>
-					<input type="password" name="password" id="inputPassword" class="w-full h-10 px-4 mt-1 border rounded form-control required" autocomplete="current-password" required>
+					<input type="password" name="password" id="inputPassword" class="w-full h-10 px-4 mt-1 border rounded form-control required focus:border-amberYellow focus:ring-amberYellow" autocomplete="current-password" required>
 				</div>
 			</div>
 			
@@ -40,7 +40,7 @@
 			
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-			<div class="mb-4 text-center"><a class="border-b hover:text-orange-300 hover:border-solid border-b-orange-300" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
+			<div class="mb-4 text-center"><a class="border-b hover:text-amberYellow hover:border-solid border-b-amberYellow" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
 			
 			<div class="col-span-2 text-center">
 				<button class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow" type="submit">

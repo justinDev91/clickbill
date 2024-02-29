@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'public_base.html.twig' %}
 
 {% block title %}Inscription{% endblock %}
 
@@ -8,50 +8,29 @@
 	
 	{{ include('_components/public/_left_picture.html.twig', {'picture': 'images/left_base_register_picture.jpeg'}) }}
 	
-	<div class="container w-full mx-auto">
+	<div class="container w-3/4 mx-auto">
 
 		{{ include('_components/public/_logo_banner.html.twig') }}
 
 		<div class="flex w-3/4 mx-auto mb-4 text-gray-400 justify-evenly md:w-3/5 lg:w-2/4">
-			<a href="{{ path('app_login') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-b-orange-300 hover:border-b hover:border-solid hover:text-black">Se connecter</h1></a>
-			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-b-orange-300">S'enregistrer</h1></span>
+			<a href="{{ path('app_login') }}"><h1 class="mb-3 h3 font-weight-normal hover:border-amberYellow hover:border-b hover:border-solid hover:text-black">Se connecter</h1></a>
+			<span><h1 class="mb-3 text-black border-b border-solid h3 font-weight-normal border-amberYellow">S'enregistrer</h1></span>
 		</div>
-
-		{{ form_errors(registrationForm) }}
-		
-		{{ form_start(registrationForm, {'attr': {'class': 'w-3/4 mx-auto'}}) }}
 
 		<div class="grid gap-8 mx-auto mb-4 input-container md:w-3/5 lg:w-2/4">
 
-			{{ form_row(registrationForm.email, {
-				label: 'Email de contact',
-				row_attr: {"class": "inline-grid"},
-				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
-			}) }}
-
-			{{ form_row(registrationForm.phone, {
-				label: 'Numéro de téléphone',
-				row_attr: {"class": "inline-grid"},
-				attr: {"class": "w-full h-10 px-4 mt-1 border rounded form-control required"}
-			}) }}
-
-			{{ form_row(registrationForm.infos, {
-				label: "Plus d'informations",
-				row_attr: {"class": "inline-grid"},
-				attr: {"class": "w-full h-24 px-4 mt-1 border rounded form-control required"}
-			}) }}
+			{{ form_errors(registrationForm) }}
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.email, { label: 'Email de contact' }) }}
+			{{ form_row(registrationForm.phone, { label: 'Numéro de téléphone' }) }}
+			{{ form_row(registrationForm.infos, { label: "Plus d'informations" }) }}
 		
+			<div class="mb-4 text-center"><a class="border-b hover:text-amberYellow hover:border-solid border-amberYellow" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
+			<div class="text-center">
+				<button type="submit" class="primaryButton">Nous contacter</button>
+			</div>
+			{{ form_end(registrationForm) }}
 		</div>
-
-		<div class="mb-4 text-center"><a class="border-b hover:text-orange-300 hover:border-solid border-b-orange-300" href="{{ path('public_app_reset_password') }}">Mot de passe oublié ?</a></div>
-
-		<div class="col-span-2 text-center">
-			<button type="submit" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">Nous contacter</button>
-		</div>
-
-		{{ form_end(registrationForm) }}
 	</div>
-		
-	
 </div>
 {% endblock %}

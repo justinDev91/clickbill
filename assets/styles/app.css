@@ -5,13 +5,8 @@
 @layer base {
 
   :root {
-    /* TODO : Add or changes colors as the project progresses */
     --primary-color: #F6C31E;
-    --black: #000000;
-    --gray: #EFEAE4;
     --white: #F9F9F9;
-    --transparent: rgba(0, 0, 0, 0);
-    --red-button: #FF004D
   }
 
   html {
@@ -27,15 +22,36 @@
 
   .required:after {
     content: " *";
+    font-weight: 700;
     color: var(--primary-color);
+  }
+
+  /* Custom search cancel button */
+  input[type="search"]::-webkit-search-cancel-button {
+    position: relative;
+    left: -2rem;
+    /* -webkit-appearance: none; */
   }
 }
 
 @layer components {
-  .client-form-attr {
-    @apply w-full h-10 px-4 mt-1 border rounded focus:ring-yellow-400 dark:bg-gray-500 dark:placeholder-gray-400 dark:text-white;
+  .pageTitle {
+    @apply pb-4 mb-6 text-4xl font-bold text-center lg:text-left;
   }
-  .client-row-attr {
-    @apply inline-grid text-gray-700;
+
+  .backToPrevious {
+    @apply hover:underline block pb-3 text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white;
+  }
+
+  .primaryButton {
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-black rounded bg-amberYellow dark:bg-amberYellowDarker
+  }
+
+  .secondaryButton {
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-white rounded bg-neutral-950
+  }
+
+  .deleteButton {
+    @apply inline-block w-full md:w-48 px-6 py-3 font-bold text-center text-black rounded bg-red-600
   }
 }

@@ -1,21 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends 'public_base.html.twig' %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}
+    Accueil
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1 class="text-3xl font-bold underline">
+<main class="text-center p-5">
+    <h1 class="text-3xl font-bold">
         Page Vitrine/Homepage ClickBill
     </h1>
-</div>
-<div class="mt-6 text-center">
-    <a href="{{ path('app_login') }}" class="w-48 px-6 py-3 font-bold text-black rounded bg-amberYellow">
+    <a href="{{ path('app_login') }}" class="primaryButton mx-auto">
         Se connecter
     </a>
-</div>
+</main>
 {% endblock %}

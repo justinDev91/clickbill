@@ -312,7 +312,7 @@ class QuoteController extends AbstractController
             } else {
                 $entityManager->remove($quote);
                 $entityManager->flush();
-                $session->getFlashBag()->add('success', "Le devis a bien été supprimer.");
+                $session->getFlashBag()->add('success', "Le devis a bien été supprimé.");
             }
         }
 

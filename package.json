@@ -28,6 +28,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "color": "^4.2.3",
         "flowbite": "^2.2.0"
     }
 }

@@ -1,29 +1,29 @@
 {# tailwindcss Sliding pagination control implementation #}
 {% if pagination.getPaginationData().pageCount > 1 %}
 	<nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-		<span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+		<span class="text-sm font-normal text-neutral-500 dark:text-neutral-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
 			Showing
-			<span class="font-semibold text-gray-900 dark:text-white">{{ pagination.getPaginationData().firstItemNumber }}-{{ pagination.getPaginationData().lastItemNumber }}</span>
+			<span class="font-semibold text-neutral-900 dark:text-white">{{ pagination.getPaginationData().firstItemNumber }}-{{ pagination.getPaginationData().lastItemNumber }}</span>
 			of
-			<span class="font-semibold text-gray-900 dark:text-white">{{ pagination.getPaginationData().totalCount }}</span>
+			<span class="font-semibold text-neutral-900 dark:text-white">{{ pagination.getPaginationData().totalCount }}</span>
 		</span>
 		<ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
 
 			{% if pagination.getPaginationData().previous is defined %}
 				<li>
-					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): pagination.getPaginationData().previous})) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): pagination.getPaginationData().previous})) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-neutral-500 bg-white border border-neutral-300 rounded-s-lg hover:bg-neutral-100 hover:text-neutral-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-white">Previous</a>
 				</li>
 			{% endif %}
 
 			{% for page in pagination.getPaginationData().pagesInRange %}
 				<li>
-					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): page})) }}" class="flex items-center justify-center px-3 h-8 leading-tight {% if page == pagination.getPaginationData().current %}text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white{% endif %}">{{ page }}</a>
+					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): page})) }}" class="flex items-center justify-center px-3 h-8 leading-tight {% if page == pagination.getPaginationData().current %}text-neutral-600 border border-neutral-300 bg-neutral-50 font-bold hover:bg-neutral-100 hover:text-neutral-700 dark:border-neutral-700 dark:bg-neutral-700 dark:text-white{% else %}text-neutral-500 bg-white border border-neutral-300 hover:bg-neutral-100 hover:text-neutral-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-white{% endif %}">{{ page }}</a>
 				</li>
 			{% endfor %}
 
 			{% if pagination.getPaginationData().next is defined %}
 				<li>
-					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): pagination.getPaginationData().next})) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+					<a href="{{ path(pagination.getRoute(), pagination.getQuery()|merge({(pagination.getPaginatorOption('pageParameterName')): pagination.getPaginationData().next})) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-neutral-500 bg-white border border-neutral-300 hover:bg-neutral-100 hover:text-neutral-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-white">Next</a>
 				</li>
 			{% endif %}
 		</ul>

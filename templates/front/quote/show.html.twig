@@ -1,146 +1,138 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/front_office.html.twig' %}
 
-{% block title %}Mes Devis
+{% block title %}
+	Devis
 {% endblock %}
 
-{% block body %}
-	<main class="flex flex-col h-screen md:flex-row">
-		{{ include('_components/front/global/_side_bar.html.twig') }}
-		<section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto">
-			<div class="flex">
-				<h1 class="pb-4 mb-10 text-4xl">
-					Devis{{ quote.guid }}
-				</h1>
-				<div class="px-6 py-4">
-					<a href="{{ path('front_company_app_quote_pdf', {'guid': quote.guid}) }}">
-						<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
-							<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
-						</svg>
-					</a>
-				</div>
-			</div>
-			<table class="table w-9/12 md:w-3/12">
-				<tbody class="text-left">
+{% block content %}
+	<a href="{{ path('front_company_app_quote_index') }}" class="backToPrevious">
+		<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-128 128z"/></svg>
+	</a>    
+	
+	<h1 class="pageTitle">
+		Devis #{{ quote.guid }}
+	</h1>
+	
+	<table class="table w-9/12 table-auto md:w-3/12">
+		<tbody class="text-left">
+			<tr>
+				<th>Client</th>
+				<td>{{quote.client.displayName}}</td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td>{{ quote.status }}</td>
+			</tr>
+			{% if quote.downPayment %}
+				<tr>
+					<th>Acompte</th>
+					<td>{{quote.downPayment}} %</td>
+				</tr>
+			{% endif %}
+			<tr>
+				<th>Date</th>
+				<td>{{ quote.date ? quote.date|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Créée le</th>
+				<td>{{ quote.createdAt ? quote.createdAt|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Créée par</th>
+				<td>{{ created_by.name }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<h2 class="my-5 text-2xl font-bold">Produits</h2>
+	<div class="overflow-x-auto">
+		<div class="overflow-hidden border-b border-solid shadow border-neutral-400">
+			<table class="min-w-full divide-y table-auto divide-neutral-200">
+				<thead class="bg-neutral-200 dark:bg-neutral-500 dark:text-neutral-900">
 					<tr>
-						<th>Client</th>
-						<td>{{quote.client.displayName}}</td>
+						<th scope="col" class="px-6 py-3 text-sm font-bold tracking-wider text-left uppercase">Produit</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Quantité</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Prix unitaire</th>
+						<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left uppercase md:table-cell">Montant HT</th>
 					</tr>
-					<tr>
-						<th>Status</th>
-						<td>{{ quote.status }}</td>
-					</tr>
-					{% if quote.downPayment %}
+				</thead>
+				<tbody class="bg-white divide-y divide-neutral-200 dark:bg-neutral-700">
+					{% for product in quote.productsInfo %}
 						<tr>
-							<th>Acompte</th>
-							<td>{{quote.downPayment}}
-								%</td>
+							<td class="px-6 py-4 whitespace-nowrap text-neutral-700 dark:text-neutral-200">
+								<div class="text-sm">{{ product.description }}</div>
+								<div class="text-sm md:hidden">
+									Quantité : {{ product.quantity }}
+								</div>
+								<div class="text-sm md:hidden">
+									Prix unitaire: {{ product.unitPrice }} €
+								</div>
+								<div class="text-sm md:hidden">Montant HT :
+									{{ product.amount }} €
+								</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm">{{ product.quantity }}</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm">{{ product.unitPrice }} €</div>
+							</td>
+							<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
+								<div class="text-sm">{{ product.amount }} €</div>
+							</td>
 						</tr>
-					{% endif %}
-					<tr>
-						<th>Date</th>
-						<td>{{ quote.date ? quote.date|date('d/m/Y') : '' }}</td>
-					</tr>
-					<tr>
-						<th>Créée le</th>
-						<td>{{ quote.createdAt ? quote.createdAt|date('d/m/Y') : '' }}</td>
-					</tr>
-					<tr>
-						<th>Créée par</th>
-						<td>{{ created_by.name }}</td>
-					</tr>
+					{% endfor %}
 				</tbody>
 			</table>
-			<h2 class="my-5 text-2xl font-bold">Produits</h2>
-			<div class="overflow-x-auto">
-				<div class="overflow-hidden border-b border-black border-solid shadow">
-					<table class="min-w-full divide-y divide-gray-200">
-						<thead class="bg-gray-300">
-							<tr>
-								<th scope="col" class="px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase">Produit</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Quantité</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Prix unitaire</th>
-								<th scope="col" class="hidden px-6 py-3 text-sm font-bold tracking-wider text-left text-gray-700 uppercase md:table-cell">Montant HT</th>
-							</tr>
-						</thead>
-						<tbody class="bg-white divide-y divide-gray-200">
-							{% for product in quote.productsInfo %}
-								<tr>
-									<td class="px-6 py-4 whitespace-nowrap">
-										<div class="text-sm text-gray-900">{{ product.description }}</div>
-										<div class="text-sm text-gray-500 md:hidden">Quantité :
-											{{ product.quantity }}</div>
-										<div class="text-sm text-gray-500 md:hidden">Prix unitaire:
-											{{ product.unitPrice }}
-											€</div>
-										<div class="text-sm text-gray-500 md:hidden">Montant HT :
-											{{ product.amount }}
-											€</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.quantity }}</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.unitPrice }}
-											€</div>
-									</td>
-									<td class="hidden px-6 py-4 whitespace-nowrap md:table-cell">
-										<div class="text-sm text-gray-900">{{ product.amount }}
-											€</div>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="flex justify-end">
-				<table class="table w-9/12 mt-4 md:w-2/12">
-					<tbody class="text-left">
-						<tr>
-							<th>Montant HT</th>
-							<td class="text-right">
-								{{ht_amount}} €
-							</td>
-						</tr>
-						<tr>
-							<th>Montant TVA</th>
-							<td class="text-right">
-								{{ tva_amount }} € 
-							</td>
-						</tr>
-						<tr class="border-b-2 border-black border-solid">
-							<th>TVA</th>
-							<td class="text-right">
-								{{quote_tva}} %
-							</td>
-						</tr>
-						<tr>
-							<th>Montant TTC</th>
-							<td class="text-right">
-								{{ total_amount }} €
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		</div>
+	</div>
+	<div class="flex justify-end">
+		<table class="table w-9/12 mt-4 table-auto md:w-2/12">
+			<tbody class="text-left">
+				<tr>
+					<th>Montant HT</th>
+					<td class="text-right">
+						{{ht_amount}} €
+					</td>
+				</tr>
+				<tr>
+					<th>Montant TVA</th>
+					<td class="text-right">
+						{{ tva_amount }} € 
+					</td>
+				</tr>
+				<tr class="border-b-2 border-black border-solid">
+					<th>TVA</th>
+					<td class="text-right">
+						{{quote_tva}} %
+					</td>
+				</tr>
+				<tr>
+					<th>Montant TTC</th>
+					<td class="text-right">
+						{{ total_amount }} €
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-			<div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
-				<a href="{{ path('front_company_app_quote_index') }}">
-					<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Retour à la liste</button>
-				</a>
-				<a href="{{ path('front_company_app_quote_edit', {'guid': quote.guid}) }}">
-					<button type="button" class="w-48 px-6 py-3 mx-auto font-bold text-black rounded bg-amberYellow hover:bg-yellow-500 focus:bg-yellow-500">Modifier</button>
-				</a>
-				<form method="post" action="{{ path('front_company_app_quote_delete', {'guid': quote.guid}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce Devis ?');">
-					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ quote.guid) }}">
-					{{ include('_components/front/global/_button_id.html.twig',
-                    {'path': 'front_company_app_quote_delete',
-                    'params': { 'guid': quote.guid },
-                    'color': 'bg-red-700 hover:bg-red-800',
-                    'title': 'Supprimer',
-                }) }}
-				</form>
-			</div>
-		</section>
-	</main>
+	<div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
+		<div class="px-6 py-4">
+			<a href="{{ path('front_company_app_quote_pdf', {'guid': quote.guid}) }}">
+				<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512">
+					<path d="M192 272v-80a16 16 0 0 0-16-16h-32a16 16 0 0 0-16 16v80H24a24 24 0 0 0-24 24v128a24 24 0 0 0 24 24h336a24 24 0 0 0 24-24V296a24 24 0 0 0-24-24zM48 392a8 8 0 0 1-8-8v-96a8 8 0 0 1 8-8h72v112zm152-48a8 8 0 0 1 11.3 0l28.3 28.3V112a8 8 0 0 1 8-8h16a8 8 0 0 1 8 8v260.3l28.3-28.3a8 8 0 0 1 11.3 11.4l-48 48a8 8 0 0 1-11.3 0l-48-48a8 8 0 0 1 0-11.4z"/>
+				</svg>
+			</a>
+		</div>
+		{% if quote.status == 'brouillon' %}
+			<a href="{{ path('front_company_app_quote_edit', {'guid': quote.guid}) }}">
+				<button type="button" class="primaryButton">Modifier</button>
+			</a>
+		{% endif %}
+		{{ include('_components/front/global/_delete_form.html.twig',{
+			'path': 'front_company_app_quote_delete',
+			'type': 'guid',
+			'id': quote.guid,
+		})}}
+	</div>
 {% endblock %}
