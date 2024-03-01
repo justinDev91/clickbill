@@ -9,13 +9,6 @@ name: clickbill
 # to find the supported versions for the 'php' type.
 type: 'php:8.1'
 
-# Define environment settings
-environments:
-    dev:
-        parent: develop
-    prod:
-        parent: production
-
 # The following block defines writable directories for storing cache and logs.
 mounts:
   '/clickbill/cache': 'shared:files/cache'
