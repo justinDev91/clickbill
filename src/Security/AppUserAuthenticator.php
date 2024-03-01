@@ -48,14 +48,14 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('back_app_dashboard'));
+        }
         if (in_array('ROLE_COMPANY', $token->getUser()->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('front_company_app_dashboard'));
         }
         if (in_array('ROLE_ACCOUNTANT', $token->getUser()->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('front_accountant_app_dashboard'));
-        }
-        if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('back_app_dashboard'));
         }
         // throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }

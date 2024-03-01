@@ -1,0 +1,47 @@
+{% extends 'layout/back_office.html.twig' %}
+
+{% block title %}Company Admin Info{% endblock %}
+
+{% block content %}
+    <a href="{{ path('back_app_company_index') }}" class="backToPrevious">
+		<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-128 128z"/></svg>
+	</a>
+    <h1 class="pageTitle">
+        Company : {{ company.name }}
+    </h1>
+    <table class="table w-9/12 table-auto md:w-3/12">
+		<tbody class="text-left">
+			<tr>
+				<th>Adresse</th>
+				<td>{{ company.address }}</td>
+			</tr>
+            <tr>
+				<th>Email</th>
+				<td>{{ company.email }}</td>
+			</tr>
+            <tr>
+				<th>Téléphone</th>
+				<td>{{ company.phone }}</td>
+			</tr>
+			<tr>
+				<th>Créée le</th>
+				<td>{{ company.createdAt ? company.createdAt|date('d/m/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Créée par</th>
+				<td>{{ created_by.name }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+    <div class="inline-flex flex-wrap justify-center my-3 space-y-3 md:justify-end md:items-center md:space-y-0 md:space-x-3">
+		<a href="{{ path('back_app_company_edit', {'id': company.id}) }}">
+			<button type="button" class="primaryButton">Modifier</button>
+		</a>
+		{{ include('_components/front/global/_delete_form.html.twig',{
+			'path': 'back_app_company_delete',
+			'type': 'id',
+			'id': company.id,
+		})}}
+	</div>
+{% endblock %}

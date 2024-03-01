@@ -1,0 +1,26 @@
+{% extends 'layout/back_office.html.twig' %}
+
+{% block title %}
+    Admin Company
+{% endblock %}
+
+{% block content %}
+    <h1 class="pageTitle">Liste des companys</h1>
+    {% for error in errors %}
+        {{ include('_components/front/global/_toast.html.twig', {
+        'message' : error, 
+        'state' : 'error'} ) }}
+    {% endfor %}
+    {% for succes in success %}
+        {{ include('_components/front/global/_toast.html.twig', {
+            'message' : succes, 
+            'state' : 'sucess'} ) }}
+    {% endfor %}
+
+    {{ include('front/search/index.html.twig') }}
+    
+    <a href="{{ path('back_app_company_new')}}" class="primaryButton">
+		Créer company
+	</a>
+    {{ include('_components/back/company/_table.html.twig', companies) }}
+{% endblock %}

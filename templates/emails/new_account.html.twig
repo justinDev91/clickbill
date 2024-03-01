@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre nouveau compte Clickbill</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .inner-container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            background-color: rgb(255 255 255 / 1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-yellow {
+            background-color: #F6C31E;
+        }
+
+        .btn-yellow:hover {
+            background-color: rgb(234 179 8);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="inner-container">
+            <h2>Votre nouveau compte Clickbill</h2>
+            <p>Votre nouveau compte à bien été créer, vous pouvez maintenant commencer à gérer les devis et les factures de votre entreprise !</p>
+            <div>
+                <p>Email de connexion : <strong>{{ loginEmail }}</strong></p>
+                <p>Mot de passe : <strong>{{ loginPassword }}</strong></p>
+            </div>
+            <p>Vous pouvez vous connectez dès à présent en cliquant sur le bouton suivant : </p>
+            <div class="btn-container">
+                <a href="{{loginUrl}}" class="btn btn-yellow">Me connecter</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,7 +19,7 @@
 		</div>
 
 		{% if form_errors(searchForm.search) %}
-			<div class="text-red-500 text-xs mt-1">{{ form_errors(searchForm.search) }}</div>
+			<div class="mt-1 text-xs text-red-500">{{ form_errors(searchForm.search) }}</div>
 		{% endif %}
 		{{ form_end(searchForm) }}
 	</div>
@@ -28,11 +28,25 @@
 {# Get Selected option value #}
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
-		var elementName = document.getElementById('filter-select').name
+		let elementId;
+		const elementName = document.getElementById('filter-select').name;
 
-		var elementId = elementName == 'status_filter' ? 'status_filter_status' : elementName == 'category_filter' ? 'category_filter_category' : 'bill_filter_status'
+		// Add here more tuple in case we add another filters
+		const elements = [
+			['status_filter', 'status_filter_status'],
+			['category_filter', 'category_filter_category'],
+			['bill_filter', 'bill_filter_status'],
+			['quote_filter', 'quote_filter_status'],
+			['admin_filter', 'admin_filter_status']
+		];
 
-		console.log('test', elementName)
+		elements.forEach(tuple => {
+			if (tuple[0] === elementName) {
+				elementId = tuple[1];
+			}
+		});
+
+		console.log('test', elementName);
 
 		const selectStatus = document.getElementById(elementId);
 		selectStatus.addEventListener('change', function () {

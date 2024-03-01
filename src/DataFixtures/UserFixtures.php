@@ -39,8 +39,7 @@ class UserFixtures extends Fixture
             ->setPhone('0654326494')
             ->setEmail('company@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy($company_user->getId())
-            ->setCreatedAt(new \DateTime('now'));
+            ->setCreatedBy($company_user->getId());
         $manager->persist($company);
         $manager->flush();
 

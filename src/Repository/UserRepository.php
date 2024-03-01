@@ -21,6 +21,58 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+    * @return User[] Returns an array of User objects
+    */
+    public function findAllUsersWithoutLoggedAdmin($loggedAdminId): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.id != :loggedAdminId')
+            ->setParameter('loggedAdminId', $loggedAdminId)
+            ->orderBy('user.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+    * @return User[] Returns an array of User objects
+    */
+    public function searchUserByNameOrEmailOrCompanyName($loggedAdminId, $searchValue): array
+    {
+        return $this->createQueryBuilder('user')
+            ->leftJoin('user.company', 'company')
+            ->andWhere('LOWER(user.displayName) LIKE LOWER(:searchValue) 
+                OR LOWER(user.email) LIKE LOWER(:searchValue) 
+                OR LOWER(company.name) LIKE LOWER(:searchValue) ')
+            ->andWhere('user.id != :loggedAdminId')
+            ->setParameter('searchValue', '%' . strtolower($searchValue) . '%')
+            ->setParameter('loggedAdminId', $loggedAdminId)
+            ->orderBy('user.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+    * @return User[] Returns an array of User objects
+    */
+    public function filterUsersByStatus($loggedAdminId, $status): array
+    {
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->andWhere('user.id != :loggedAdminId')
+            ->setParameter('loggedAdminId', $loggedAdminId)
+            ->orderBy('user.id', 'ASC');
+
+        if ($status === 'true') {
+            $queryBuilder->andWhere('user.isDeleted = :isDeleted')
+                ->setParameter('isDeleted', false);
+        } elseif ($status === 'false') {
+            $queryBuilder->andWhere('user.isDeleted = :isDeleted')
+                ->setParameter('isDeleted', true);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
