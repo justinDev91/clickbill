@@ -20,8 +20,15 @@ class RegistrationController extends AbstractController
     public function register(Request $request, MailService $mailService): Response
     {
         if ($this->getUser()) {
-            # TODO : Redirect to another route according the role.
-            return $this->redirectToRoute('front_company_app_dashboard');
+            if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('back_app_dashboard');
+            }
+            if (in_array('ROLE_COMPANY', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_company_app_dashboard');
+            }
+            if (in_array('ROLE_ACCOUNTANT', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_accountant_app_dashboard');
+            }
         }
 
         $form = $this->createForm(RegistrationFormType::class);
@@ -61,8 +68,15 @@ class RegistrationController extends AbstractController
     public function resetPassword(Request $request, MailService $mailService, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         if ($this->getUser()) {
-            # TODO : Redirect to another route according the role.
-            return $this->redirectToRoute('front_app_company_dashboard');
+            if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('back_app_dashboard');
+            }
+            if (in_array('ROLE_COMPANY', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_company_app_dashboard');
+            }
+            if (in_array('ROLE_ACCOUNTANT', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_accountant_app_dashboard');
+            }
         }
 
         $form = $this->createForm(ResetPasswordFormType::class);

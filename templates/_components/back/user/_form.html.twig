@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+
+{{ form_row(form.firstName, { label: 'Nom',                 attr: { placeholder: 'Marius' } }) }}
+{{ form_row(form.lastName,  { label: 'Prénom',              attr: { placeholder: 'Kellogs' } }) }}
+{{ form_row(form.email,     { label: 'Email',               attr: { placeholder: 'marius.kellogs@gmail.com' } }) }}
+{{ form_row(form.company,   { label: 'Company' }) }}
+{{ form_row(form.role,      { label: 'Role' }) }}
+
+<button type="submit" class="primaryButton">{{ button_label }}</button>
+
+{{ form_end(form) }}

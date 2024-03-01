@@ -40,6 +40,40 @@ class CompanyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+    * @return Company[]
+    */
+    public function searchCompanyByNameOrEmailOrPhone($search): array
+    {
+        return $this->createQueryBuilder('company')
+            ->andWhere('LOWER(company.name) LIKE LOWER(:searchValue) 
+                OR LOWER(company.email) LIKE LOWER(:searchValue) 
+                OR LOWER(company.phone) LIKE LOWER(:searchValue)')
+            ->setParameter('searchValue', '%' . strtolower($search) . '%')
+            ->orderBy('company.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+    * @return Company[]
+    */
+    public function filterCompaniesByStatus($status): array
+    {
+        $queryBuilder = $this->createQueryBuilder('company')
+            ->orderBy('company.id', 'ASC');
+
+        if ($status === 'true') {
+            $queryBuilder->andWhere('company.isDeleted = :isDeleted')
+                ->setParameter('isDeleted', false);
+        } elseif ($status === 'false') {
+            $queryBuilder->andWhere('company.isDeleted = :isDeleted')
+                ->setParameter('isDeleted', true);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Company[] Returns an array of Company objects
     //     */

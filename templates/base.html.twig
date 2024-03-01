@@ -20,10 +20,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
         
         <script>
+            let checkboxes = document.querySelectorAll('.darkmode-checkbox');
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = true;
+                })
             } else {
-                document.documentElement.classList.remove('dark')
+                document.documentElement.classList.remove('dark');
             }
 
             function toggleDarkMode() {

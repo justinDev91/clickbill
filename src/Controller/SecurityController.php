@@ -15,8 +15,15 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
-            # TODO : Redirect to another page according the role.
-            return $this->redirectToRoute('front_company_app_dashboard');
+            if (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('back_app_dashboard');
+            }
+            if (in_array('ROLE_COMPANY', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_company_app_dashboard');
+            }
+            if (in_array('ROLE_ACCOUNTANT', $this->getUser()->getRoles())) {
+                return $this->redirectToRoute('front_accountant_app_dashboard');
+            }
         }
 
         // get the login error if there is one

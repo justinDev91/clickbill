@@ -1,0 +1,24 @@
+{% extends 'layout/back_office.html.twig' %}
+
+{% block title %}Admin User{% endblock %}
+
+{% block content %}
+    <h1 class="pageTitle">Liste des utilisateurs</h1>
+    {% for error in errors %}
+        {{ include('_components/front/global/_toast.html.twig', {
+        'message' : error, 
+        'state' : 'error'} ) }}
+    {% endfor %}
+    {% for succes in success %}
+        {{ include('_components/front/global/_toast.html.twig', {
+            'message' : succes, 
+            'state' : 'sucess'} ) }}
+    {% endfor %}
+
+    {{ include('front/search/index.html.twig') }}
+    
+    <a href="{{ path('back_app_user_new')}}" class="primaryButton">
+		Créer utilisateur
+	</a>
+    {{ include('_components/back/user/_table.html.twig', users) }}
+{% endblock %}
