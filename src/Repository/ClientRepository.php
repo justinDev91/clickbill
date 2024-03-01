@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Bill;
 use App\Entity\Client;
 use App\Entity\Company;
+use App\Entity\Quote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -97,6 +99,81 @@ class ClientRepository extends ServiceEntityRepository
                 ->andWhere('client.company = :company')
                 ->andWhere(self::IS_NOT_DELETED)
                 ->setParameter('company', $company)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Get the total number of clients associated with a company with a quote status of "en cours".
+     *
+     * @param Company $company The company for which to count clients.
+     * @return int The total number of clients associated with the company having a quote in progress.
+     * @throws \Doctrine\ORM\NoResultException|\Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTotalClientCountWithQuoteOnProcess(Company $company): int
+    {
+        try {
+            return $this->createQueryBuilder('client')
+                ->select('COUNT(DISTINCT client.id)')
+                ->join('client.quotes', 'quote')
+                ->andWhere('client.company = :company')
+                ->andWhere('quote.status = :status')
+                ->andWhere(self::IS_NOT_DELETED)
+                ->setParameter('company', $company)
+                ->setParameter('status', Quote::IN_PROGRESS)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Get the total number of clients associated with a company with a quote status of "validé".
+     *
+     * @param Company $company The company for which to count clients.
+     * @return int The total number of clients associated with the company having a quote valided.
+     * @throws \Doctrine\ORM\NoResultException|\Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTotalClientCountWithQuoteValided(Company $company): int
+    {
+        try {
+            return $this->createQueryBuilder('client')
+                ->select('COUNT(DISTINCT client.id)')
+                ->join('client.quotes', 'quote')
+                ->andWhere('client.company = :company')
+                ->andWhere('quote.status = :status')
+                ->andWhere(self::IS_NOT_DELETED)
+                ->setParameter('company', $company)
+                ->setParameter('status', Quote::VALIDATED)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Get the total number of clients associated with a company with a bill status of "PAID".
+     *
+     * @param Company $company The company for which to count clients.
+     * @return int The total number of clients associated with the company having a bill PAID.
+     * @throws \Doctrine\ORM\NoResultException|\Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTotalClientCountWithBillPaid(Company $company): int
+    {
+        try {
+            return $this->createQueryBuilder('client')
+                ->select('COUNT(DISTINCT client.id)')
+                ->join('client.bills', 'bill')
+                ->andWhere('client.company = :company')
+                ->andWhere('bill.status = :status')
+                ->andWhere(self::IS_NOT_DELETED)
+                ->setParameter('company', $company)
+                ->setParameter('status', Bill::PAID)
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {

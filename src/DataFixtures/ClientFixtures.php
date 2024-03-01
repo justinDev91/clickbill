@@ -43,6 +43,16 @@ class ClientFixtures extends Fixture
     $user->setPassword($this->passwordHasher->hashPassword($user, 'test'));
     $manager->persist($user);
 
+
+    $user = (new User())
+      ->setFirstName('Accountant')
+      ->setLastName('Test')
+      ->setEmail('company-accountant@user.fr')
+      ->setRoles(['ROLE_ACCOUNTANT'])
+      ->setCompany($company);
+    $user->setPassword($this->passwordHasher->hashPassword($user, 'test'));
+    $manager->persist($user);
+
     //Product category
     $evenCategory = (new Category())
       ->setName('Even')

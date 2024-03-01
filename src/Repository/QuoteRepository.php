@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Bill;
 use App\Entity\Company;
 use App\Entity\Quote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -100,6 +101,31 @@ class QuoteRepository extends ServiceEntityRepository
         }
     }
 
+
+    /**
+     * Get the total number of quotes by status associated with a company.
+     *
+     * @param Company $company The company for which to count quotes.
+     * @param string $status The status of quotes to count.
+     * @return int The total number of quotes with the specified status.
+     */
+    public function getTotalQuoteByStatus(Company $company, string $status): int
+    {
+        try {
+            return $this->createQueryBuilder('quote')
+                ->select('COUNT(quote.id)')
+                ->andWhere('quote.company = :company')
+                ->andWhere('quote.status = :status')
+                ->andWhere(self::IS_NOT_DELETED)
+                ->setParameter('company', $company)
+                ->setParameter('status', $status)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException | \Doctrine\ORM\NonUniqueResultException $e) {
+            return 0;
+        }
+    }
+
     //    /**
     //     * @return Quote[] Returns an array of Quote objects
     //     */
@@ -110,7 +136,7 @@ class QuoteRepository extends ServiceEntityRepository
     //            ->setParameter('val', $value)
     //            ->orderBy('q.id', 'ASC')
     //            ->setMaxResults(10)
-    //            ->getQuery()
+    //            ->getQuery()  
     //            ->getResult()
     //        ;
     //    }
