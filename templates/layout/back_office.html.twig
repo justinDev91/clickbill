@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<main class="flex flex-col h-screen md:flex-row">
+    {{ include('_components/back/_side_bar.html.twig') }}            
+    <section class="flex-grow px-5 pt-8 pl-8 overflow-x-hidden overflow-y-auto bg-neutral-900 text-neutral-300">
+        {% block content %}{% endblock %}
+    </section>
+</main>
+{% endblock %}

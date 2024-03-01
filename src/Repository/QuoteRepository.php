@@ -89,7 +89,7 @@ class QuoteRepository extends ServiceEntityRepository
     {
         try {
             return $this->createQueryBuilder('quote')
-                ->select('COUNT(quote.id)')
+                ->select('COUNT(quote.guid)')
                 ->andWhere('quote.company = :company')
                 ->andWhere(self::IS_NOT_DELETED)
                 ->setParameter('company', $company)

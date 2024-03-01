@@ -1,3 +1,6 @@
+const Color = require('color');
+const darken = (clr, val) => Color(clr).darken(val).rgb().string();
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
@@ -5,6 +8,7 @@ module.exports = {
   content: [
     "./assets/**/*.js",
     "./templates/**/*.html.twig",
+    "./src/Form/*.php",
   ],
   theme: {
     screens: {
@@ -15,18 +19,9 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
-      colors: {
-        /* Leave as an example in case we want color variations */
-        // darkBlue: {
-        //   50: "#f5f7fa",
-        //   100: "#e9eef5",
-        // },
-        amberYellow: "var(--primary-color)",
-        transparent: "var(--transparent)",
-        redButton: "var(--red-button)"
-        // gray: "var(--gray)",
-        // black: "var(--black)",c
-        // white: "var(--white)",
+      colors: {    
+        amberYellow: "#F6C31E",
+        amberYellowDarker: darken('#F6C31E', 0.2),
       },
     },
   },

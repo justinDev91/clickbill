@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+
+{{ form_row(form.firstName, { label: 'Prénom',              attr: { placeholder: 'Sarah' }}) }}
+{{ form_row(form.lastName,  { label: 'Nom',                 attr: { placeholder: 'TARTUF' } }) }}
+{{ form_row(form.email,     { label: 'Email',               attr: { placeholder: 'sarah.tartuf@gmail.com' } }) }}
+{{ form_row(form.imageFile, { label: 'Photo de profil' }) }}
+
+<button type="submit" class="primaryButton">Sauvegarder</button>
+
+{{ form_end(form) }}

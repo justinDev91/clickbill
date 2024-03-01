@@ -61,10 +61,16 @@ class PdfGeneratorService
       $quoteTotalAmount += $product["amount"];
     }
 
+    $quoteDetails = $quote->getQuoteDetails();
+
     $html = $this->twig->render('front/quote/pdf_template.html.twig', [
       'quote' => $quote,
       'creatorDisplayName' => $creatorDisplayName,
       'quoteTotalAmount' => $quoteTotalAmount,
+      'ht_amount' => $quoteDetails['htAmount'],
+      'tva_amount' => $quoteDetails['tvaAmount'],
+      'quote_tva' => $quoteDetails['quoteTva'],
+      'total_amount' => $quoteDetails['totalAmount']
     ]);
 
     $dompdf->loadHtml($html);

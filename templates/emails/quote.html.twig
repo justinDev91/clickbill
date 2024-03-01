@@ -1,11 +1,87 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <h1>Vous avez reçu un devis : </h1>
-        <p>{{ content }}</p>
-        <p>{{ infos }}</p>
-    </body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre devis Clickbill</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .inner-container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            background-color: rgb(255 255 255 / 1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-red {
+            background-color: rgb(185 28 28);
+        }
+
+        .btn-red:hover {
+            background-color: rgb(153 27 27);
+        }
+
+        .btn-yellow {
+            background-color: #F6C31E;
+        }
+
+        .btn-yellow:hover {
+            background-color: rgb(234 179 8);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="inner-container">
+            <h2>Votre devis Clickbill</h2>
+            <p>Si vous voulez envoyer le devis signer, n'oubliez pas de l'envoyer à {{ quote.company.email|default("l'entreprise qui vous fournis le service")}}</p>
+            <p>Vous pouvez accepter ou refuser ce devis en cliquant sur les boutons suivant : </p>
+            <div class="btn-container">
+                <a href="{{link_to_refuse}}" class="btn btn-red">Rejeter le devis</a>
+                <a href="{{link_to_accept}}" class="btn btn-yellow">Accepter le devis</a>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

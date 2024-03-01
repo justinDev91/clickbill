@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/product')]
-#[Security('is_granted("ROLE_USER")')]
+#[Security('is_granted("ROLE_COMPANY")')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET', 'POST'])]
@@ -91,7 +91,7 @@ class ProductController extends AbstractController
             $this->addFlash('success', "Le produit {$product->getName()} a bien été créé");
 
             return $this->redirectToRoute(
-                'front_company_app_product_details',
+                'front_company_app_product_show',
                 ['slug' => $product->getSlug()]
             );
         }
@@ -105,11 +105,11 @@ class ProductController extends AbstractController
         );
     }
 
-    #[Route('/{slug}', name: 'app_product_details', methods: ['GET'])]
-    public function details(Product $product): Response
+    #[Route('/{slug}', name: 'app_product_show', methods: ['GET'])]
+    public function show(Product $product): Response
     {
         return $this->render(
-            'front/product/details.html.twig',
+            'front/product/show.html.twig',
             [
                 'product' => $product
             ]
@@ -136,7 +136,7 @@ class ProductController extends AbstractController
             $this->addFlash('success', "Le produit {$product->getName()} a bien été modifié");
 
             return $this->redirectToRoute(
-                'front_company_app_product_details',
+                'front_company_app_product_show',
                 ['slug' => $product->getSlug()]
             );
         }
