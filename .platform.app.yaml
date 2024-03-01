@@ -9,19 +9,18 @@ name: clickbill
 # to find the supported versions for the 'php' type.
 type: 'php:8.1'
 
-# The following block defines a single writable directory, 'web/uploads'
-# The 'source' specifies where the writable mount is. The 'local' source
-# indicates that the mount point will point to a local directory on the
-# application container. The 'source_path' specifies the subdirectory
-# from within the source that the mount should point at. 
+# Define environment settings
+environments:
+    development:
+        parent: develop
+    production:
+        parent: production
+
+# The following block defines writable directories for storing cache and logs.
 mounts:
-  'web/uploads':
-    source: local
-    source_path: uploads
   '/clickbill/cache': 'shared:files/cache'
   '/clickbill/logs': 'shared:files/logs'
-    
-  
+
 # The size of the persistent disk of the application (in MB).
 disk: 2048
 
@@ -45,15 +44,16 @@ build:
 hooks:
     build: |
       set -e
-      composer install --no-interaction --no-dev
-      app/console --env=prod assetic:dump --no-debug
+      composer install --no-dev --optimize-autoloader
+      npm run build
+      php bin/console --env=prod cache:clear
     deploy: |
       set -e
-      app/console --env=prod cache:clear
+      php bin/console --env=prod cache:warmup
 
-#File location to handle requests
+# File location to handle requests
 web:
-  locations: 
-    '/': 
+  locations:
+    '/':
       root: "public"
       passthru: "/index.php"
