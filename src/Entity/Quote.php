@@ -57,7 +57,7 @@ class Quote
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    #[ORM\OneToMany(mappedBy: 'quoteId', targetEntity: Notification::class)]
+    #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Notification::class)]
     private Collection $notifications;
 
     #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Bill::class)]

@@ -5,17 +5,13 @@ namespace App\Entity;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[UniqueEntity(fields: ['name'], message: 'Une company avec ce nom est déjà existante.')]
 class Company
 {
-    use Traits\Timestampable;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -39,8 +35,14 @@ class Company
     #[ORM\Column]
     private ?int $createdBy = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -60,8 +62,11 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quote::class)]
     private Collection $quotes;
 
-    #[ORM\OneToMany(mappedBy: 'Company', targetEntity: Client::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Client::class)]
     private Collection $clients;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: ClientInteraction::class)]
+    private Collection $clientInteractions;
 
     public function __construct()
     {
@@ -71,6 +76,7 @@ class Company
         $this->bills = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->clientInteractions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +149,18 @@ class Company
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getUpdatedBy(): ?int
     {
         return $this->updatedBy;
@@ -151,6 +169,18 @@ class Company
     public function setUpdatedBy(int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -353,6 +383,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($client->getCompany() === $this) {
                 $client->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientInteraction>
+     */
+    public function getClientInteractions(): Collection
+    {
+        return $this->clientInteractions;
+    }
+
+    public function addClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if (!$this->clientInteractions->contains($clientInteraction)) {
+            $this->clientInteractions->add($clientInteraction);
+            $clientInteraction->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientInteraction(ClientInteraction $clientInteraction): static
+    {
+        if ($this->clientInteractions->removeElement($clientInteraction)) {
+            // set the owning side to null (unless already changed)
+            if ($clientInteraction->getCompany() === $this) {
+                $clientInteraction->setCompany(null);
             }
         }
 

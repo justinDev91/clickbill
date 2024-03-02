@@ -27,10 +27,9 @@ class ClientInteraction
     #[ORM\JoinColumn(nullable: false)]
     private ?client $client = null;
 
-    #[ORM\ManyToOne(inversedBy: 'clients', cascade: ["persist"])]
+    #[ORM\ManyToOne(inversedBy: 'clientInteractions', cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
-
 
     public function getId(): ?int
     {

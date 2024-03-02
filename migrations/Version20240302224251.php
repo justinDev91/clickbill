@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240302002217 extends AbstractMigration
+final class Version20240302224251 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -43,7 +43,7 @@ final class Version20240302002217 extends AbstractMigration
         $this->addSql('CREATE TABLE client_interaction (id INT NOT NULL, client_id INT NOT NULL, company_id INT NOT NULL, description VARCHAR(255) DEFAULT NULL, action VARCHAR(20) DEFAULT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_36C6D89C19EB6921 ON client_interaction (client_id)');
         $this->addSql('CREATE INDEX IDX_36C6D89C979B1AD6 ON client_interaction (company_id)');
-        $this->addSql('CREATE TABLE company (id INT NOT NULL, name VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, phone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, logo VARCHAR(255) DEFAULT NULL, created_by INT NOT NULL, updated_by INT DEFAULT NULL, is_deleted BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE company (id INT NOT NULL, name VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, phone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, logo VARCHAR(255) DEFAULT NULL, created_by INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_by INT DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, is_deleted BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_4FBF094F5E237E06 ON company (name)');
         $this->addSql('CREATE TABLE notification (id INT NOT NULL, quote_id INT DEFAULT NULL, user_id INT DEFAULT NULL, client_id INT NOT NULL, bill_id INT DEFAULT NULL, content TEXT NOT NULL, notification_type VARCHAR(255) NOT NULL, is_sent BOOLEAN NOT NULL, is_read BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_BF5476CADB805178 ON notification (quote_id)');

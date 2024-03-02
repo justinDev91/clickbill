@@ -2,6 +2,11 @@ name: app
 
 type: php:8.1
 
+variables:
+    env:
+        MAILER_DSN: "smtp://6ae1c2954dc116:c8db8cd2480924@sandbox.smtp.mailtrap.io:2525"
+        CLICKBILL_MAIL: "mailer.clickbill@gmail.com"
+
 dependencies:
     php:
         composer/composer: "^2"
@@ -16,7 +21,7 @@ runtime:
 
 relationships:
     database: "database:postgresql"
-
+    
 build:
     flavor: none
 disk: 512
