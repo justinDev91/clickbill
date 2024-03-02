@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block content %}
-	<h1 class="pageTitle">Mes factures</h1>
 	{% if is_granted('ROLE_COMPANY') %}	
+		<h1 class="pageTitle">Mes factures</h1>
+
 		{{ include('front/search/index.html.twig') }}
 		{{ include('_components/front/bill/_add_bill_popup.html.twig') }}
 
@@ -17,6 +18,9 @@
 		{% endfor %}
 	{% endif %}
 
+	{% if is_granted('ROLE_ACCOUNTANT') %}	
+		<h1 class="pageTitle">Factures</h1>
+	{% endif %}
 
 	{{ include('_components/front/bill/_table.html.twig', bills) }}
 {% endblock %}
