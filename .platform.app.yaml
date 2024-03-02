@@ -1,52 +1,40 @@
-# The name of this app. Must be unique within a project.
-name: clickbill
+name: app
 
-# The runtime the application uses. The 'type' key defines the base container
-# image that will be used to run the application. There is a separate base
-# container image for each primary language for the application,
-# in multiple versions. Check the PHP documentation
-# (https://docs.platform.sh/languages/php.html#supported-versions)
-# to find the supported versions for the 'php' type.
-type: 'php:8.1'
+type: php:8.1
 
-# The following block defines writable directories for storing cache and logs.
-mounts:
-  '/clickbill/cache': 'shared:files/cache'
-  '/clickbill/logs': 'shared:files/logs'
-
-# The size of the persistent disk of the application (in MB).
-disk: 2048
-
-# The relationships of the application with services or other applications.
-#
-# The left-hand side is the name of the relationship as it will be exposed
-# to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
-# side is in the form '<service name>:<endpoint name>'.
-relationships:
-    postgresdatabase: 'dbpostgres:postgresql'
-
-# Use Composer 2 to handle dependencies.
 dependencies:
     php:
-        composer/composer: '^2'
+        composer/composer: "^2"
+runtime:
+    extensions:
+        - apcu
+        - mbstring
+        - sodium
+        - iconv
+        - ctype
+        - pdo_pgsql
 
-# The type of the application to build.
+relationships:
+    database: "database:postgresql"
+
 build:
-  flavor: composer
-
+    flavor: none
+disk: 512
+web:
+    locations:
+        "/":
+            root: "public"
+            expires: 1h
+            passthru: "/index.php"
+mounts:
+    "/var": { source: local, source_path: var }
+    
 hooks:
     build: |
-      set -e
-      composer install --no-dev --optimize-autoloader
-      npm run build
-      php bin/console --env=prod cache:clear
+        set -x -e
+        curl -fs https://get.symfony.com/cloud/configurator | bash
+        
+        NODE_VERSION=18 symfony-build
     deploy: |
-      set -e
-      php bin/console --env=prod cache:warmup
-
-# File location to handle requests
-web:
-  locations:
-    '/':
-      root: "public"
-      passthru: "/index.php"
+        set -x -e
+        symfony-deploy
