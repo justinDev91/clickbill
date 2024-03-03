@@ -28,10 +28,13 @@ class BillController extends AbstractController
         SessionInterface $session
     ): Response {
         $bill = new Bill();
-        $form = $this->createForm(BillType::class, $bill);
+        $user = $this->getUser();
+        $company = $user->getCompany();
+
+        // dd($company);
+        $form = $this->createForm(BillType::class, $bill, ['company' => $company]);
         $form->handleRequest($request);
 
-        $company = $this->getUser()->getCompany();
         $bills = $billRepository->findAllActiveBillsByCompany($company);
 
         //Status filter
@@ -51,7 +54,6 @@ class BillController extends AbstractController
             $searchTerm = strtolower($searchForm->get('search')->getData());
             $bills = $billRepository->searchBillsByClientNameOrEmail($searchTerm,  $company);
         }
-
 
         return $this->render('front/bill/index.html.twig', [
             'bills' => $bills,
@@ -73,11 +75,11 @@ class BillController extends AbstractController
         // add new bill
         $bill = new Bill();
         $downPaymentBill = new Bill();
-        $form = $this->createForm(BillType::class, $bill);
+        $company = $this->getUser()->getCompany();
+
+        $form = $this->createForm(BillType::class, $bill, ['company' => $company]);
         $form->handleRequest($request);
         $errorBillAlreadyExist = null;
-
-        $company = $this->getUser()->getCompany();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $existantBills = $billRepository->findByQuoteId($form->get('quote')->getData());
@@ -158,9 +160,16 @@ class BillController extends AbstractController
     public function show(Bill $bill, UserRepository $userRepository): Response
     {
         $user = $userRepository->findOneBy(['id' => $bill->getCreatedBy()]);
+        $quote = $bill->getQuote();
+        $quoteDetails = $quote->getQuoteDetails();
+
         return $this->render('front/bill/show.html.twig', [
             'bill' => $bill,
             'createdBy' => ['firstname' => $user->getFirstName(), 'lastname' => $user->getLastName()],
+            'bill_tva' => $quoteDetails['quoteTva'],
+            'ht_amount' => number_format($quoteDetails['htAmount'], 2, ',', ' '),
+            'tva_amount' => number_format($quoteDetails['tvaAmount'], 2, ',', ' '),
+            'total_amount' => number_format($quoteDetails['totalAmount'], 2, ',', ' '),
         ]);
     }
 

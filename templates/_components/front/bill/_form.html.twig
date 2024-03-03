@@ -1,3 +1,4 @@
+{% if form.quote.vars.choices is not empty %}
 {{ form_start(form,{ action:path('front_company_app_bill_new') }) }}
 {{ form_rest(form)}}
 <div>
@@ -8,3 +9,13 @@
 </div>
 	
 {{ form_end(form) }}
+
+{% else %}
+<div class="text-center">
+	<div class="text-neutral-500">Auncun devis</div>
+	<a href="{{ path('front_company_app_quote_new')}}" class="primaryButton mt-6 w-full">
+		Créer un devis
+	</a>
+</div>
+{% endif %}
+

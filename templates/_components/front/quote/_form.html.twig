@@ -9,7 +9,7 @@
 	{% if customError is defined %}
 		<div class="text-red-500">{{ customError }}</div>
 	{% endif %}
-	<table id="product-table" class="{% if not quote.productsInfo %}hidden{% endif %} my-3 w-full text-black border-collapse border-spacing-x-4 dark:text-neutral-200">
+	<table id="product-table" class="{% if not quote.productsInfo %}hidden{% endif %} table-auto my-3 w-full text-black border-collapse border-spacing-x-4 dark:text-neutral-200">
 		<thead>
 			<tr>
 				<th>Produit</th>

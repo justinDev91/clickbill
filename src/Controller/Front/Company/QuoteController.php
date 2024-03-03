@@ -24,8 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Service\InteractionService;
-
-
+use NumberFormatter as GlobalNumberFormatter;
+use Symfony\Polyfill\Intl\Icu\NumberFormatter as IcuNumberFormatter;
 
 #[Route('/quote')]
 #[Security('is_granted("ROLE_COMPANY")')]
@@ -159,13 +159,20 @@ class QuoteController extends AbstractController
 
             $entityManager->persist($quote);
 
+            $currencyFormatter = new GlobalNumberFormatter('fr', IcuNumberFormatter::CURRENCY);
+            $formattedAmount = $currencyFormatter->formatCurrency($quote->getAmount(), 'EUR');
+            $formattedDownPayment = '';
+            if ($quote->getDownPayment() != 0) {
+                $formattedDownPayment = 'avec un acompte de ' . $quote->getDownPayment() . '% ';
+            }
+
             $interactionService->createClientInteraction(
                 $client,
                 sprintf(
-                    "Un devis : %s, avec un acompte de : %s, et montant total de : %s, a été crée pour %s.",
+                    "Le devis #%s de %s %s a été créé pour %s.",
                     $quote->getId(),
-                    $quote->getDownPayment(),
-                    $quote->getAmount(),
+                    $formattedAmount,
+                    $formattedDownPayment,
                     $client->getDisplayName()
                 ),
                 $company,
@@ -204,9 +211,9 @@ class QuoteController extends AbstractController
             'quote' => $quote,
             'created_by' => $createdBy,
             'quote_tva' => $quoteDetails['quoteTva'],
-            'ht_amount' => number_format($quoteDetails['htAmount'], 2, '.', ''),
-            'tva_amount' => number_format($quoteDetails['tvaAmount'], 2, '.', ''),
-            'total_amount' => number_format($quoteDetails['totalAmount'], 2, '.', ''),
+            'ht_amount' => number_format($quoteDetails['htAmount'], 2, ',', ' '),
+            'tva_amount' => number_format($quoteDetails['tvaAmount'], 2, ',', ' '),
+            'total_amount' => number_format($quoteDetails['totalAmount'], 2, ',', ' '),
         ]);
     }
 
@@ -350,11 +357,11 @@ class QuoteController extends AbstractController
                 $session->getFlashBag()->add('error', "Vous ne pouvez pas supprimer un devis qui n'est plus en brouillon.");
             } else {
                 if ($quote->isIsDeleted()) {
-                    $session->getFlashBag()->add('error', "Le devis a déjà été supprimer.");
+                    $session->getFlashBag()->add('error', "Le devis a déjà été supprimé.");
                 } else {
                     $quote->setIsDeleted(true);
                     $entityManager->flush();
-                    $session->getFlashBag()->add('success', "Le devis a bien été supprimer.");
+                    $session->getFlashBag()->add('success', "Le devis a bien été supprimé.");
                 }
             }
         }
@@ -402,9 +409,9 @@ class QuoteController extends AbstractController
                     $quote->setStatus(Quote::IN_PROGRESS);
                     $entityManager->persist($quote);
                     $entityManager->flush();
-                    $session->getFlashBag()->add('success', "Le mail contenant le devis à bien été envoyé.");
+                    $session->getFlashBag()->add('success', "Le mail contenant le devis a bien été envoyé.");
                 } catch (\Exception $exception) {
-                    $session->getFlashBag()->add('error', "Une erreur est survenu lors de l'envoi de l'email, veuillez réessayer plus tard.");
+                    $session->getFlashBag()->add('error', "Une erreur est survenue lors de l'envoi de l'email, veuillez réessayer plus tard.");
                 }
             }
         } else {
@@ -435,7 +442,7 @@ class QuoteController extends AbstractController
                 $entityManager->flush();
             } else {
                 // Throw error message in case answer variable is not supported
-                $session->getFlashBag()->add('error', 'Une erreur est survenu pour lors de la modification du devis.');
+                $session->getFlashBag()->add('error', 'Une erreur est survenue pour lors de la modification du devis.');
             }
         } else {
             // Send error according to the quote status.
