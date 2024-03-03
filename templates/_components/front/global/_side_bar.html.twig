@@ -4,6 +4,8 @@
     {% set currentPath = null %}
 {% endif %}
 
+{% set currentUrl = app.request.uri %}
+
 {% set logoutPath    				= path('app_logout') 								%}
 
 {# admin link #}
@@ -44,7 +46,7 @@
 ]%}
 
 {# set current #}
-{% if is_granted('ROLE_ACCOUNTANT') and 'accountant' in currentPath|lower %}
+{% if is_granted('ROLE_ACCOUNTANT') and 'accountant' in currentUrl|lower %}
 	{% set navItems = accountantNavItems %}	
 	{% set settingsPath = accountantSettingsPath %}
 	{% if is_granted('ROLE_ADMIN') %}
@@ -53,7 +55,7 @@
 		{% set changeViewIcon = 'fa-briefcase' %}
 	{% endif %}
 	
-{% elseif is_granted('ROLE_COMPANY') and 'company' in currentPath|lower %}
+{% elseif is_granted('ROLE_COMPANY') and 'company' in currentUrl|lower %}
 	{% set navItems = companyNavItems %}
 	{% set settingsPath = companySettingsPath %}
 	{% if is_granted('ROLE_ADMIN') %}

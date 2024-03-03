@@ -28,7 +28,7 @@
 							<input type="number" class="w-16 md:w-20 product-quantity" value="{{ product.quantity }}" min="1">
 						</td>
 						<td>
-							<button type="button" class="font-bold text-red-600 product-delete-btn btn">Supprimer</button>
+							<button type="button" class="product-delete-btn deleteButton">Supprimer</button>
 						</td>
 					</tr>
 				{% endfor %}
@@ -149,7 +149,7 @@
 		const productDeleteBtn = document.createElement('button');
 		productDeleteBtn.type = 'button';
 		productDeleteBtn.textContent = 'Supprimer';
-		productDeleteBtn.className = 'product-delete-btn';
+		productDeleteBtn.className = 'product-delete-btn deleteButton';
 		productDeleteBtnTd.appendChild(productDeleteBtn);
 
 
