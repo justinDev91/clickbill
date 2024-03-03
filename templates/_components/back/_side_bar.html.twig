@@ -6,15 +6,19 @@
 {% set logoutPath     	= path('app_logout') 								%}
 
 {# company related links #}
-{% set dashbordPath   	= path('back_app_dashboard') 			%}
-{% set companyPath    	= path('back_app_company_index') 		%}
-{% set userPath   	  	= path('back_app_user_index') 			%}
-{% set settingsPath   	= '#'		 							%}
+{% set dashbordPath   		= path('back_app_dashboard') 				%}
+{% set companyPath    		= path('back_app_company_index') 			%}
+{% set userPath   	  		= path('back_app_user_index') 				%}
+{% set companyViewPath    	= path('front_company_app_dashboard') 		%}
+{% set accountantViewPath 	= path('front_accountant_app_dashboard')	%}
+{% set settingsPath   	    = path('back_app_profile_index')		 	%}
 
 {% set adminNavItems   	= [
 	{ title: 'Tableau de bord', 	icon: 'fa-solid fa-house', 			path: dashbordPath },
 	{ title: 'Entreprises', 		icon: 'fa-solid fa-briefcase', 		path: companyPath },
 	{ title: 'Profils', 			icon: 'fa-solid fa-user', 			path: userPath },
+	{ title: 'Vue Comptable', 		icon: 'fa-solid fa-chart-column', 	path: accountantViewPath },
+	{ title: 'Vue Entreprise', 		icon: 'fa-solid fa-briefcase', 		path: companyViewPath },
 ]%}
 
 {% block body %}
@@ -28,15 +32,15 @@
 				</div>
 				<div class="inline-flex w-full px-4 mb-6 space-x-4">
 					<a href="{{ settingsPath }}" class="flex items-center w-1/2 px-3 py-2 text-neutral-300 hover:text-neutral-700 bg-neutral-700 rounded-xl hover:bg-neutral-200 group">
-						<i class="fa-solid fa-gear text-sm"></i>
+						<i class="text-sm fa-solid fa-gear"></i>
 						<p class="ml-2 whitespace-nowrap">Paramètres</p>
 					</a>
 					<a href="{{ logoutPath }}" class="flex items-center w-1/2 px-3 py-2 text-neutral-700 outline outline-neutral-700 hover:outline-none -outline-offset-2 rounded-xl hover:bg-neutral-200 group">
-						<i class="fa-solid fa-right-from-bracket text-sm"></i>
+						<i class="text-sm fa-solid fa-right-from-bracket"></i>
 						<p class="ml-2 whitespace-nowrap">Déconnexion</p>
 					</a>
 				</div>
-				<ul class="overflow-auto space-y-2">
+				<ul class="space-y-2 overflow-auto">
 				{% for navItem in adminNavItems %}
 					<li>
 						<a 	href="{{ navItem.path }}" 
@@ -53,7 +57,7 @@
 		<!-- burger nav mobile -->
 		<aside class="relative flex justify-center flex-shrink-0 h-12 text-neutral-300 md:hidden bg-neutral-950">
 			<button id="drawer-navigation-button" class="absolute right-0" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
-				<i class="fa-solid fa-bars text-2xl mt-2 mr-4"></i>
+				<i class="mt-2 mr-4 text-2xl fa-solid fa-bars"></i>
 			</button>
 		</aside>
 
@@ -62,7 +66,7 @@
 			<div class="inline-flex justify-end w-full h-12 p-3 lg:h-auto lg:justify-between">
 				<p id="drawer-navigation-label" class="hidden text-xl font-bold lg:block">ClickBill Admin</p>
 				<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-flex items-center text-sm bg-transparent">
-					<i class="fa-solid fa-xmark text-2xl block lg:hidden mr-1"></i>
+					<i class="block mr-1 text-2xl fa-solid fa-xmark lg:hidden"></i>
 				</button>
 			</div>
 
@@ -74,19 +78,19 @@
 				
 				<div class="inline-flex w-full px-4 my-3 space-x-4">
 					<a href="{{ settingsPath }}" class="flex items-center w-1/2 px-3 py-2 text-neutral-300 hover:text-neutral-700 bg-neutral-700 rounded-xl hover:bg-neutral-200 group">
-						<i class="fa-solid fa-gear text-sm"></i>
+						<i class="text-sm fa-solid fa-gear"></i>
 						<p class="ml-2 text-sm whitespace-nowrap">Paramètres</p>
 					</a>
 					<a href="{{ logoutPath }}" class="flex items-center w-1/2 px-3 py-2 outline outline-neutral-700 hover:outline-none -outline-offset-2 rounded-xl hover:bg-neutral-200 group">
-						<i class="fa-solid fa-right-from-bracket text-sm"></i>
+						<i class="text-sm fa-solid fa-right-from-bracket"></i>
 						<p class="ml-2 text-sm whitespace-nowrap text-neutral-700">Déconnexion</p>
 					</a>
 				</div>
 			</div>
 
 			<!-- navItems -->
-			<div class="flex-grow overflow-auto pb-4">
-				<ul class="overflow-auto space-y-2">
+			<div class="flex-grow pb-4 overflow-auto">
+				<ul class="space-y-2 overflow-auto">
 					{% for navItem in adminNavItems %}
 						<li>
 							<a 	href="{{ navItem.path }}" 
