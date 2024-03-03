@@ -12,7 +12,11 @@
         {{ product.name }}
     </h1>
     <div>
-        {{ product.imageFile}}
+        {% if product.imageName %}
+            <img src="{{ asset('uploads/images/product/picture/' ~ product.imageName) }}" alt="{{ product.name }}">
+        {% else %}
+            <p>Aucune image disponible</p>
+        {% endif %}
         {{ product.description}}
     </div>
 {% endblock %}

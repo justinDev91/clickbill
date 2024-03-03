@@ -7,7 +7,6 @@ use App\Entity\Product;
 use App\Form\CategoryFilterType;
 use App\Form\CustomSearchFormType;
 use App\Form\ProductType;
-use App\Form\StatusFilterType;
 use App\Service\InteractionService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -75,16 +74,19 @@ class ProductController extends AbstractController
         $currentUserId = $this->getUser()->getId();
         $company = $this->getUser()->getCompany();
 
-        $product
-            ->setIsDeleted(false)
-            ->setCreatedBy($currentUserId)
-            ->setCreatedAt(new \DateTime())
-            ->setCompany($company);
-
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, ['company' => $company]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+            $category = $formData->getCategory();
+            $product
+                ->setIsDeleted(false)
+                ->setCreatedBy($currentUserId)
+                ->setCreatedAt(new \DateTime())
+                ->setCategory($category)
+                ->setCompany($company);
+
             $entityManagerInterface->persist($product);
             $entityManagerInterface->flush();
 
@@ -123,7 +125,9 @@ class ProductController extends AbstractController
         EntityManagerInterface $entityManagerInterface,
         Request $request,
     ): Response {
-        $form = $this->createForm(ProductType::class, $product);
+        $company = $this->getUser()->getCompany();
+
+        $form = $this->createForm(ProductType::class, $product, ['company' => $company]);
         $form->handleRequest($request);
 
         $currentUserId = $this->getUser()->getId();
