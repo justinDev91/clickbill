@@ -19,9 +19,12 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
-      colors: {    
+      colors: {
         amberYellow: "#F6C31E",
         amberYellowDarker: darken('#F6C31E', 0.2),
+      },
+      fontFamily: {
+        'sans': ['Roboto', 'sans-serif'],
       },
     },
   },

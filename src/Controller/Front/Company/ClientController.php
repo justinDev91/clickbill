@@ -86,7 +86,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is created", $client->getDisplayName()),
+                sprintf("Nouveau profil client pour %s", $client->getDisplayName()),
                 $company,
                 "created"
             );
@@ -126,7 +126,7 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is edited", $client->getDisplayName()),
+                sprintf("Le profil client de %s a été modifié", $client->getDisplayName()),
                 $company,
                 "edited"
             );
@@ -156,7 +156,10 @@ class ClientController extends AbstractController
 
             $interactionService->createClientInteraction(
                 $client,
-                sprintf("Client %s is ", $client->getFirstName(), $client->getLastName()),
+                sprintf(
+                    "Le profil client %s a été supprimé",
+                    $client->getFirstName() . ' ' . $client->getLastName()
+                ),
                 $this->getUser()->getCompany(),
                 "deleted"
             );

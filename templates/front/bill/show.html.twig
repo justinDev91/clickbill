@@ -17,7 +17,7 @@
 		</div>
 	</div>
 
-	<table class="table w-full">
+	<table class="table table-auto w-full">
 		<tbody class="text-left">
 			<tr>
 				<th>Montant</th>
@@ -75,7 +75,7 @@
 					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.unit }}</td>
 					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.unitPrice }}
 						€</td>
-					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.tva ?? 0 }}
+					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ bill.quote.tva ?? 0 }}
 						%</td>
 					<td class="px-6 py-3 text-sm text-left md:table-cell">{{ product.amount }}
 						€</td>
@@ -83,6 +83,36 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<div class="flex justify-end">
+		<table class="table w-9/12 mt-4 table-auto md:w-2/12">
+			<tbody class="text-left">
+				<tr>
+					<th>Montant HT</th>
+					<td class="text-right">
+						{{ ht_amount }} €
+					</td>
+				</tr>
+				<tr>
+					<th>Montant TVA</th>
+					<td class="text-right">
+						{{ tva_amount }} € 
+					</td>
+				</tr>
+				<tr class="border-b-2 border-black border-solid dark:border-neutral-200">
+					<th>TVA</th>
+					<td class="text-right">
+						{{ bill_tva }} %
+					</td>
+				</tr>
+				<tr>
+					<th>Montant TTC</th>
+					<td class="text-right">
+						{{ total_amount }} €
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 	<div class="flex my-3 space-x-3 ">
 		{{ include('_components/front/global/_delete_form.html.twig',{

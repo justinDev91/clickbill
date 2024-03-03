@@ -66,19 +66,19 @@ class UserFixtures extends Fixture
             $fakeEmail = strtolower($fakeFirstName) . '.' . strtolower($fakeLastName) . '@demo.fr';
             $fakeEmail = iconv('UTF-8', 'ASCII//TRANSLIT', $fakeEmail);
             $fakeEmail = preg_replace('/[^a-zA-Z0-9.@]/', '', $fakeEmail);
-    
-    
+
+
             $client = new Client();
             $client->setFirstName($fakeFirstName)
-            ->setLastName($fakeLastName)
-            ->setEmail($fakeEmail)
-            ->setPhone($faker->e164PhoneNumber())
-            ->setAddress($faker->address)
-            ->setCreatedBy(1)
-            ->setCompany($company)
-            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
-            ->setIsDeleted(false);
-    
+                ->setLastName($fakeLastName)
+                ->setEmail($fakeEmail)
+                ->setPhone($faker->e164PhoneNumber())
+                ->setAddress($faker->address)
+                ->setCreatedBy(1)
+                ->setCompany($company)
+                ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+                ->setIsDeleted(false);
+
             $manager->persist($client);
         }
 

@@ -1,5 +1,5 @@
 <div class="relative my-6 overflow-x-auto ">
-	<table class="w-full text-sm text-left text-neutral-500 rtl:text-right dark:text-neutral-400">
+	<table class="table-auto w-full text-sm text-left text-neutral-500 rtl:text-right dark:text-neutral-400">
 		<thead class="text-xs uppercase border-t border-b text-neutral-700 border-neutral-200 dark:border-neutral-400 bg-neutral-100 dark:bg-neutral-700 dark:text-neutral-400">
 			<tr>
 				<th scope="col" class="px-6 py-3">
@@ -26,10 +26,10 @@
 				{% set quote_amount_ttc = quote.amount + (quote.amount * (quote.tva /100)) %}
 				<tr class="bg-white border-b hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:bg-neutral-800 dark:border-neutral-700">
 					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-						<a href="{{ path('front_company_app_client_show', {'slug': quote.client.slug}) }}">{{ quote.client.displayName }}</a>
+						<a href="{{ path('front_company_app_quote_show', {'guid': quote.guid}) }}">{{ quote.client.displayName }}</a>
 					</th>
 					<td class="px-6 py-4">
-						{{ quote_amount_ttc|number_format(2) }} €
+						{{ quote_amount_ttc|number_format(2, ',', ' ') }} €
 					</td>
 					<td class="px-6 py-4">
 						{% if quote.downPayment %}

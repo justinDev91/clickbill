@@ -67,7 +67,7 @@
 {% block body %}
 	<!-- nav burger menu mobile -->
 	<nav class="relative flex justify-center flex-shrink-0 h-12 md:hidden bg-amberYellow dark:bg-amberYellowDarker">
-		<p id="drawer-navigation-label" class="my-auto text-xl font-bold">ClickBill</p>
+		<img id="drawer-navigation-label" class="h-full p-1.5 object-cover" src={{ asset('images/logo_sur_fond_jaune.svg') }} alt="logo_clickbill"/>
 		<button id="drawer-navigation-button" class="absolute right-0" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
 			<i class="mt-2 mr-4 text-2xl fa-solid fa-bars"></i>
 		</button>
@@ -156,8 +156,10 @@
 		<div class="flex flex-col h-screen font-medium">
 			<!-- top nav -->
 			<div>
-				<div class="inline-flex justify-end w-full h-12 p-3 bg-amberYellow lg:h-auto lg:justify-between dark:bg-amberYellowDarker">
-					<p id="drawer-navigation-label" class="hidden text-xl font-bold lg:block dark:text-black">ClickBill</p>
+				<div class="inline-flex justify-end w-full h-12 py-1.5 px-3 bg-amberYellow lg:h-auto lg:justify-between dark:bg-amberYellowDarker">
+					<img id="drawer-navigation-label" class="h-10 hidden object-cover lg:block" src={{ asset('images/logo_sur_fond_jaune.svg') }} alt="logo_clickbill"/>
+
+					{# <p id="drawer-navigation-label" class="hidden text-xl font-bold lg:block dark:text-black">ClickBill</p> #}
 					<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-flex items-center text-black">
 						<i class="hidden text-2xl fa-solid fa-angles-left lg:block"></i>
 						<i class="block mr-1 text-2xl fa-solid fa-xmark lg:hidden"></i>

@@ -36,6 +36,7 @@ class ClientInteractionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('clientInteraction')
             ->andWhere('clientInteraction.company = :company')
             ->setParameter('company', $company)
+            ->orderBy('clientInteraction.date', 'DESC')
             ->getQuery()
             ->getResult();
     }

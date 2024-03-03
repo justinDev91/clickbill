@@ -9,8 +9,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class ProductFixtures extends Fixture {
-    public function load(ObjectManager $manager) {
+class ProductFixtures extends Fixture
+{
+    public function load(ObjectManager $manager)
+    {
         $faker = Factory::create();
 
         $company1 = (new Company())
@@ -36,7 +38,7 @@ class ProductFixtures extends Fixture {
         $category1 = new Category();
         $category1
             ->setName('Événementielle')
-            ->setDescription('Mariages, Anniversaires etc.') 
+            ->setDescription('Mariages, Anniversaires etc.')
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
             ->setCompany($company1)
@@ -44,9 +46,9 @@ class ProductFixtures extends Fixture {
         $manager->persist($category1);
 
         $category2 = new Category();
-        $category2 
+        $category2
             ->setName('Portraits')
-            ->setDescription('Portraits individuels, famille etc.') 
+            ->setDescription('Portraits individuels, famille etc.')
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
             ->setCompany($company2)
@@ -54,9 +56,9 @@ class ProductFixtures extends Fixture {
         $manager->persist($category2);
 
         $category3 = new Category();
-        $category3 
+        $category3
             ->setName('Mode')
-            ->setDescription('Shooting pour marques etc.') 
+            ->setDescription('Shooting pour marques etc.')
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
             ->setCompany($company2)
@@ -87,7 +89,7 @@ class ProductFixtures extends Fixture {
             ->setCompany($company1);
         $manager->persist($product2Category1);
 
-        $product1Category2 = New Product();
+        $product1Category2 = new Product();
         $product1Category2
             ->setName('Portrait individuel')
             ->setPrice(99.99)
@@ -99,7 +101,7 @@ class ProductFixtures extends Fixture {
             ->setCompany($company2);
         $manager->persist($product1Category2);
 
-        $product2Category2 = New Product();
+        $product2Category2 = new Product();
         $product2Category2
             ->setName('Portrait de famille')
             ->setPrice(99.99)

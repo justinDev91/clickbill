@@ -59,22 +59,22 @@
 		</div>
 		<div class="text-xl font-medium">Les factures</div>
 		{# Les factures  #}
-		<div class="grid grid-cols-4 gap-3 mb-7">
-			<dl class="bg-purple-50 dark:bg-neutral-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full dark:bg-neutral-500 dark:text-purple-300">{{data.totalBills ?? 0}}</dt>
-				<dd class="text-sm font-medium text-purple-600 dark:text-purple-">Total factures</dd>
+		<div class="grid grid-cols-4 gap-3 mb-2">
+			<dl class="bg-orange-100 dark:bg-orange-600/30 rounded-lg flex flex-col items-center justify-center h-[78px]">
+				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-orange-600 bg-orange-200 rounded-full dark:bg-orange-700/50 dark:text-orange-300">{{data.totalBills ?? 0}}</dt>
+				<dd class="text-lg font-medium text-orange-600 dark:text-orange-400">Clients</dd>
 			</dl>
-			<dl class="bg-purple-50 dark:bg-neutral-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full dark:bg-neutral-500 dark:text-purple-300">{{data.totalPaidBills ?? 0}}</dt>
-				<dd class="text-sm font-medium text-purple-600 dark:text-purple-">Total factures validées</dd>
+			<dl class="bg-teal-100 dark:bg-teal-600/30 rounded-lg flex flex-col items-center justify-center h-[78px]">
+				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-teal-600 bg-teal-200 rounded-full dark:bg-teal-700/50 dark:text-teal-300">{{data.totalPaidBills ?? 0}}</dt>
+				<dd class="text-lg font-medium text-teal-600 dark:text-teal-400">Devis</dd>
 			</dl>
-			<dl class="bg-purple-50 dark:bg-neutral-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full dark:bg-neutral-500 dark:text-purple-300">{{data.totalUnpaidBills ?? 0}}</dt>
-				<dd class="text-sm font-medium text-purple-600 dark:text-purple-">Total factures non-validées</dd>
+			<dl class="bg-blue-100 dark:bg-blue-600/30 rounded-lg flex flex-col items-center justify-center h-[78px]">
+				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-700/50 dark:text-blue-300">{{data.totalUnpaidBills ?? 0}}</dt>
+				<dd class="text-lg font-medium text-blue-600 dark:text-blue-400">Factures</dd>
 			</dl>
-			<dl class="bg-purple-50 dark:bg-neutral-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
-				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-100 rounded-full dark:bg-neutral-500 dark:text-purple-300">{{data.totalUnpaidBills ?? 0}}</dt>
-				<dd class="text-sm font-medium text-purple-600 dark:text-purple-">Total factures avec acompte</dd>
+			<dl class="bg-purple-100 dark:bg-purple-600/30 rounded-lg flex flex-col items-center justify-center h-[78px]">
+				<dt class="flex items-center justify-center w-8 h-8 mb-1 text-sm font-medium text-purple-600 bg-purple-200 rounded-full dark:bg-purple-700/50 dark:text-purple-300">{{data.totalUnpaidBills ?? 0}}</dt>
+				<dd class="text-lg font-medium text-purple-600 dark:text-purple-400">Factures avec acompte</dd>
 			</dl>
 		</div>
 	</div>
