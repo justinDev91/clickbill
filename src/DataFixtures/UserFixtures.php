@@ -23,6 +23,17 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create();
         $pwd = 'test';
+        $faker = Factory::create();
+
+        // First User for all
+        $admin_user = (new User())
+            ->setFirstName('Admin')
+            ->setLastName('Test')
+            ->setEmail('admin@user.fr')
+            ->setRoles(['ROLE_ADMIN']);
+        $admin_user->setPassword($this->passwordHasher->hashPassword($admin_user, $pwd));
+        $manager->persist($admin_user);
+        $manager->flush();
 
         // First User for company
 
@@ -30,6 +41,7 @@ class UserFixtures extends Fixture
             ->setFirstName('Company')
             ->setLastName('Test')
             ->setEmail('company@user.fr')
+            ->setCreatedBy($admin_user->getId())
             ->setRoles(['ROLE_COMPANY']);
         $company_user->setPassword($this->passwordHasher->hashPassword($company_user, $pwd));
         $manager->persist($company_user);
@@ -81,6 +93,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('user@user.fr')
             ->setRoles(['ROLE_USER'])
+            ->setCreatedBy($admin_user->getId())
             ->setCompany($company);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
@@ -90,15 +103,8 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('accountant@user.fr')
             ->setRoles(['ROLE_ACCOUNTANT'])
+            ->setCreatedBy($admin_user->getId())
             ->setCompany($company);
-        $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
-        $manager->persist($user);
-
-        $user = (new User())
-            ->setFirstName('Admin')
-            ->setLastName('Test')
-            ->setEmail('admin@user.fr')
-            ->setRoles(['ROLE_ADMIN']);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
         $manager->flush();

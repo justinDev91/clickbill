@@ -1,0 +1,16 @@
+{% extends 'layout/back_office.html.twig' %}
+
+{% block title %}
+	Modifier le profil admin
+{% endblock %}
+
+{% block content %}
+	<a href="{{ path('back_app_dashboard') }}" class="backToPrevious">
+        <i class="text-2xl fa-solid fa-arrow-left"></i>
+	</a>
+    <h1 class="pageTitle">Modifier mon profil admin</h1>
+
+	<div class="mx-auto md:w-1/2 lg:mx-0">
+		{{ include('_components/back/profile/_form.html.twig', {'button_label': 'Modifier'}) }}
+	</div>
+{% endblock %}
