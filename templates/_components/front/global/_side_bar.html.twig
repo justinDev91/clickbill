@@ -6,6 +6,11 @@
 
 {% set logoutPath    				= path('app_logout') 								%}
 
+{# admin link #}
+{% if is_granted('ROLE_ADMIN') %}
+	{% set adminDashboardPath   		    = path('back_app_dashboard') 						%}
+{% endif %}
+
 {# company links #}
 {% set companyDashbordPath   		= path('front_company_app_dashboard') 				%}
 {% set companyClientPath     		= path('front_company_app_client_index')			%}
@@ -37,35 +42,45 @@
 ]%}
 
 {# set current #}
-{% if is_granted('ROLE_COMPANY') %}
-	{% set navItems = companyNavItems %}
-	{% set settingsPath = companySettingsPath %}
-
-{% elseif is_granted('ROLE_ACCOUNTANT') %}
+{% if is_granted('ROLE_ACCOUNTANT') and 'accountant' in currentPath|lower %}
 	{% set navItems = accountantNavItems %}	
 	{% set settingsPath = accountantSettingsPath %}
+	{% if is_granted('ROLE_ADMIN') %}
+		{% set changeViewPath = companyDashbordPath %}
+		{% set changeViewText = "Vue Entreprise" %}
+		{% set changeViewIcon = 'fa-briefcase' %}
+	{% endif %}
+	
+{% elseif is_granted('ROLE_COMPANY') and 'company' in currentPath|lower %}
+	{% set navItems = companyNavItems %}
+	{% set settingsPath = companySettingsPath %}
+	{% if is_granted('ROLE_ADMIN') %}
+		{% set changeViewPath = accountantDashboardPath %}
+		{% set changeViewText = 'Vue Comptable' %}
+		{% set changeViewIcon = 'fa-chart-column' %}
+	{% endif %}
 
-{% endif %} 
+{% endif %}
 
 {% block body %}
 	<!-- nav burger menu mobile -->
 	<nav class="relative flex justify-center flex-shrink-0 h-12 md:hidden bg-amberYellow dark:bg-amberYellowDarker">
 		<p id="drawer-navigation-label" class="my-auto text-xl font-bold">ClickBill</p>
 		<button id="drawer-navigation-button" class="absolute right-0" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
-			<i class="fa-solid fa-bars text-2xl mt-2 mr-4"></i>
+			<i class="mt-2 mr-4 text-2xl fa-solid fa-bars"></i>
 		</button>
 	</nav>
 
 	<!-- sidebar desktop-->
 	<aside class="relative flex-shrink-0 hidden w-16 text-center md:block bg-amberYellow dark:bg-amberYellowDarker">
-		<button class="h-14 w-full" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation" data-tooltip-target="tooltip-navbar" data-tooltip-placement="right">
-			<i class="fa-solid fa-angles-right text-2xl"></i>
+		<button class="w-full h-14" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation" data-tooltip-target="tooltip-navbar" data-tooltip-placement="right">
+			<i class="text-2xl fa-solid fa-angles-right"></i>
 		</button>
 		<div id="tooltip-navbar" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
 			Menu
 		</div>
 		
-		<ul class="space-y-2 mx-2">
+		<ul class="mx-2 space-y-2">
 		{% for navItem in navItems %}
 			<li>
 				<a 	href="{{ navItem.path }}" 
@@ -86,40 +101,64 @@
 			<li>
 				<hr class="border-0 h-0.5 mb-3 bg-black">
 			</li>
-			<li>
-				<a 	href="{{ settingsPath }}"
-					data-tooltip-target="tooltip-settings" data-tooltip-placement="right"
-					class="mx-2 h-12 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300
-					{{ currentPath == settingsPath ? 'bg-white dark:bg-neutral-800 dark:text-neutral-300' : '' }}">
-					<i class="fa-solid fa-gear text-2xl"></i>
-				</a>
-				<div id="tooltip-settings" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
-					Paramètres
-				</div>
-			</li>
-			<li>
-				<a 	href="{{ logoutPath }}" 
-					data-tooltip-target="tooltip-logout" data-tooltip-placement="right"
-					class="mx-2 h-12 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300">
-					<i class="fa-solid fa-right-from-bracket text-2xl"></i>
-				</a>
-				<div id="tooltip-logout" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
-					Déconnexion
-				</div>
-			</li>
+			{% if is_granted('ROLE_ADMIN') %}
+				<li>
+					<a 	href="{{ changeViewPath }}"
+						data-tooltip-target="tooltip-settings" data-tooltip-placement="right"
+						class="mx-2 h-12 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300
+						{{ currentPath == settingsPath ? 'bg-white dark:bg-neutral-800 dark:text-neutral-300' : '' }}">
+						<i class="text-2xl fa-solid {{ changeViewIcon }}"></i>
+					</a>
+					<div id="tooltip-settings" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
+						{{ changeViewText }}
+					</div>
+				</li>
+				<li>
+					<a 	href="{{ adminDashboardPath }}" 
+						data-tooltip-target="tooltip-logout" data-tooltip-placement="right"
+						class="flex items-center justify-center h-12 mx-2 cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300">
+						<i class="text-2xl fa-solid fa-right-from-bracket"></i>
+					</a>
+					<div id="tooltip-logout" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
+						Retour Admin
+					</div>
+				</li>
+			{% else %}
+				<li>
+					<a 	href="{{ settingsPath }}"
+						data-tooltip-target="tooltip-settings" data-tooltip-placement="right"
+						class="mx-2 h-12 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300
+						{{ currentPath == settingsPath ? 'bg-white dark:bg-neutral-800 dark:text-neutral-300' : '' }}">
+						<i class="text-2xl fa-solid fa-gear"></i>
+					</a>
+					<div id="tooltip-settings" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
+						Paramètres
+					</div>
+				</li>
+				<li>
+					<a 	href="{{ logoutPath }}" 
+						data-tooltip-target="tooltip-logout" data-tooltip-placement="right"
+						class="flex items-center justify-center h-12 mx-2 cursor-pointer rounded-xl hover:bg-white dark:hover:bg-neutral-800 dark:hover:text-neutral-300">
+						<i class="text-2xl fa-solid fa-right-from-bracket"></i>
+					</a>
+					<div id="tooltip-logout" role="tooltip" class="absolute z-10 invisible inline-block px-4 py-2 mx-4 text-sm font-medium text-white translate-x-5 bg-black rounded-lg opacity-0 whitespace-nowrap dark:bg-neutral-300 dark:text-neutral-800">
+						Déconnexion
+					</div>
+				</li>
+			{% endif %}
 		</ul>
 	</aside>
 
 	<!-- sidebar drawer (opened) -->
 	<div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-full h-screen transition-transform -translate-x-full bg-white lg:w-80 dark:bg-neutral-900 dark:text-neutral-400" tabindex="-1" aria-labelledby="drawer-navigation-label">			
-		<div class="flex h-screen flex-col font-medium">
+		<div class="flex flex-col h-screen font-medium">
 			<!-- top nav -->
 			<div>
 				<div class="inline-flex justify-end w-full h-12 p-3 bg-amberYellow lg:h-auto lg:justify-between dark:bg-amberYellowDarker">
 					<p id="drawer-navigation-label" class="hidden text-xl font-bold lg:block dark:text-black">ClickBill</p>
 					<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-flex items-center text-black">
-						<i class="fa-solid fa-angles-left text-2xl hidden lg:block"></i>
-						<i class="fa-solid fa-xmark text-2xl block lg:hidden mr-1"></i>
+						<i class="hidden text-2xl fa-solid fa-angles-left lg:block"></i>
+						<i class="block mr-1 text-2xl fa-solid fa-xmark lg:hidden"></i>
 					</button>
 				</div>
 			</div>
@@ -131,15 +170,15 @@
 				<div>
 					<p class="text-lg font-bold ms-5 whitespace-nowrap text-ellipsis">{{ app.user.company }}</p>
 					<div class="inline-flex items-center opacity-50 ms-5">
-						<i class="fa-solid fa-user text-sm"></i>
+						<i class="text-sm fa-solid fa-user"></i>
 						<p class="ml-2 mt-0.5 whitespace-nowrap text-sm">{{ app.user.displayName }}</p>
 					</div>
 				</div>
 			</div>
 
 			<!-- navItems -->
-			<div class="flex-grow overflow-auto pb-4">
-				<ul class="overflow-auto space-y-2">
+			<div class="flex-grow pb-4 overflow-auto">
+				<ul class="space-y-2 overflow-auto">
 					{% for navItem in navItems %}
 						<li>
 							<a 	href="{{ navItem.path }}" 
@@ -159,7 +198,7 @@
 					<hr class="border-0 h-0.5 mb-2 bg-gray-200 dark:bg-neutral-400">
 				</li>
 				<li>
-					<div class="flex items-center py-4 px-3 mx-3 rounded-xl group">
+					<div class="flex items-center px-3 py-4 mx-3 rounded-xl group">
 						<label class="relative inline-flex items-center cursor-pointer">
 							<input type="checkbox" onclick="toggleDarkMode()" value="true" class="sr-only peer darkmode-checkbox">
 							<div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-amberYellow dark:peer-checked:bg-amberYellowDarker"></div>
@@ -167,21 +206,39 @@
 						<p class="ms-3 whitespace-nowrap">Thème sombre</p>
 					</div>
 				</li>
-				<li>
-					<a 	href="{{ settingsPath }}" 
-						class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker
-						{{ currentPath == settingsPath ? 'bg-amberYellow hover:bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900 dark:hover:bg-amberYellowDarker dark:hover:text-neutral-900' : '' }}">
-						<i class="fa-solid fa-gear w-10 text-center text-2xl"></i>
-						<p class="ms-4 whitespace-nowrap">Paramètres</p>
-					</a>
-				</li>
-				<li>
-					<a 	href="{{ logoutPath }}" 
-						class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker">
-						<i class="fa-solid fa-right-from-bracket w-10 text-center text-2xl"></i>
-						<p class="ms-4 whitespace-nowrap">Déconnexion</p>
-					</a>
-				</li>
+				{% if is_granted('ROLE_ADMIN') %}
+					<li>
+						<a 	href="{{ changeViewPath }}" 
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker
+							{{ currentPath == settingsPath ? 'bg-amberYellow hover:bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900 dark:hover:bg-amberYellowDarker dark:hover:text-neutral-900' : '' }}">
+							<i class="w-10 text-2xl text-center fa-solid {{ changeViewIcon }}"></i>
+							<p class="ms-4 whitespace-nowrap">{{ changeViewText }}</p>
+						</a>
+					</li>
+					<li>
+						<a 	href="{{ adminDashboardPath }}" 
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker">
+							<i class="w-10 text-2xl text-center fa-solid fa-right-from-bracket"></i>
+							<p class="ms-4 whitespace-nowrap">Retour Admin</p>
+						</a>
+					</li>
+				{% else %}
+					<li>
+						<a 	href="{{ settingsPath }}" 
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker
+							{{ currentPath == settingsPath ? 'bg-amberYellow hover:bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900 dark:hover:bg-amberYellowDarker dark:hover:text-neutral-900' : '' }}">
+							<i class="w-10 text-2xl text-center fa-solid fa-gear"></i>
+							<p class="ms-4 whitespace-nowrap">Paramètres</p>
+						</a>
+					</li>
+					<li>
+						<a 	href="{{ logoutPath }}" 
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker">
+							<i class="w-10 text-2xl text-center fa-solid fa-right-from-bracket"></i>
+							<p class="ms-4 whitespace-nowrap">Déconnexion</p>
+						</a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>

@@ -19,7 +19,8 @@ class ProductFixtures extends Fixture {
             ->setPhone('0645872332')
             ->setEmail('testforproducts@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy(1);
+            ->setCreatedBy(1)
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company1);
 
         $company2 = (new Company())
@@ -28,7 +29,8 @@ class ProductFixtures extends Fixture {
             ->setPhone('0645872333')
             ->setEmail('testforproducts2@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy(1);
+            ->setCreatedBy(1)
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company2);
 
         $category1 = new Category();

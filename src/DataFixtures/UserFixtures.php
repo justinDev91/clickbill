@@ -9,6 +9,7 @@ use App\Entity\Quote;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
@@ -20,6 +21,17 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $pwd = 'test';
+        $faker = Factory::create();
+
+        // First User for all
+        $admin_user = (new User())
+            ->setFirstName('Admin')
+            ->setLastName('Test')
+            ->setEmail('admin@user.fr')
+            ->setRoles(['ROLE_ADMIN']);
+        $admin_user->setPassword($this->passwordHasher->hashPassword($admin_user, $pwd));
+        $manager->persist($admin_user);
+        $manager->flush();
 
         // First User for company
 
@@ -27,7 +39,8 @@ class UserFixtures extends Fixture
             ->setFirstName('Company')
             ->setLastName('Test')
             ->setEmail('company@user.fr')
-            ->setRoles(['ROLE_COMPANY']);;
+            ->setCreatedBy($admin_user->getId())
+            ->setRoles(['ROLE_COMPANY']);
         $company_user->setPassword($this->passwordHasher->hashPassword($company_user, $pwd));
         $manager->persist($company_user);
 
@@ -39,7 +52,8 @@ class UserFixtures extends Fixture
             ->setPhone('0654326494')
             ->setEmail('company@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy($company_user->getId());
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company);
         $manager->flush();
 
@@ -54,6 +68,7 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('user@user.fr')
             ->setRoles(['ROLE_USER'])
+            ->setCreatedBy($admin_user->getId())
             ->setCompany($company);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
@@ -63,15 +78,8 @@ class UserFixtures extends Fixture
             ->setLastName('Test')
             ->setEmail('accountant@user.fr')
             ->setRoles(['ROLE_ACCOUNTANT'])
+            ->setCreatedBy($admin_user->getId())
             ->setCompany($company);
-        $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
-        $manager->persist($user);
-
-        $user = (new User())
-            ->setFirstName('Admin')
-            ->setLastName('Test')
-            ->setEmail('admin@user.fr')
-            ->setRoles(['ROLE_ADMIN']);
         $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
         $manager->persist($user);
         $manager->flush();
