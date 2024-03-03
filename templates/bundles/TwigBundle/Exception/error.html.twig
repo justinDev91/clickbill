@@ -1,0 +1,12 @@
+{% extends 'public_base.html.twig' %}
+
+{% block body %}
+<div class="w-3/4 py-32 mx-auto h-full ">
+    <h2 class="text-3xl font-bold text-red-700">{{ status_code }} {{ status_text }}</h2>
+    <p>
+        Oups nous n'avons pas trouvé la page demandé  
+    </p>
+    <a href="{{ path('public_index') }}" class="secondaryButton w-auto mt-6">Retour à la page d'accueil</a>.
+
+</div>
+{% endblock %}
