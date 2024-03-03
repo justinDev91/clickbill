@@ -1,0 +1,17 @@
+{% extends 'layout/front_office.html.twig' %}
+
+{% block title %}
+	Catégories
+{% endblock %}
+
+{% block content %}
+	<h1 class="pageTitle">
+		Catégories
+	</h1>
+	{{ include('front/search/index.html.twig', {'filter': 'Status'}) }}
+
+	<a href="{{ path('front_company_app_category_new')}}" class="primaryButton">
+		Ajouter une catégorie
+	</a>
+	{{ include('_components/front/category/_table.html.twig') }}
+{% endblock %}

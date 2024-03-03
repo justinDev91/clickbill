@@ -16,9 +16,42 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
+    private const IS_NOT_DELETED = 'category.isDeleted = false';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
+    }
+
+    /**
+     * Get all active categories
+     * 
+     * @return Category[] Array of all categories not deleted
+     */
+    public function getAllActiveCategories($company): array
+    {
+        return $this->createQueryBuilder('category')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('category.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get categories by name or description
+     */
+    public function searchCategoriesByNameOrDescription($term, $company): ?array
+    {
+        return $this->createQueryBuilder('category')
+            ->andWhere(self::IS_NOT_DELETED)
+            ->andWhere('category.name LIKE :searchTerm
+            OR category.description LIKE :searchTerm')
+            ->andWhere('category.company = :company')
+            ->setParameter('searchTerm', '%' . $term . '%')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

@@ -19,7 +19,8 @@ class ProductFixtures extends Fixture {
             ->setPhone('0645872332')
             ->setEmail('testforproducts@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy(1);
+            ->setCreatedBy(1)
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company1);
 
         $company2 = (new Company())
@@ -28,7 +29,8 @@ class ProductFixtures extends Fixture {
             ->setPhone('0645872333')
             ->setEmail('testforproducts2@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy(1);
+            ->setCreatedBy(1)
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company2);
 
         $category1 = new Category();
@@ -37,6 +39,7 @@ class ProductFixtures extends Fixture {
             ->setDescription('Mariages, Anniversaires etc.') 
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+            ->setCompany($company1)
             ->setIsDeleted(false);
         $manager->persist($category1);
 
@@ -46,6 +49,7 @@ class ProductFixtures extends Fixture {
             ->setDescription('Portraits individuels, famille etc.') 
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+            ->setCompany($company2)
             ->setIsDeleted(false);
         $manager->persist($category2);
 
@@ -55,6 +59,7 @@ class ProductFixtures extends Fixture {
             ->setDescription('Shooting pour marques etc.') 
             ->setCreatedBy(1)
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+            ->setCompany($company2)
             ->setIsDeleted(false);
         $manager->persist($category3);
 
@@ -79,7 +84,7 @@ class ProductFixtures extends Fixture {
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
             ->setIsDeleted(false)
             ->setCategory($category1)
-            ->setCompany($company2);
+            ->setCompany($company1);
         $manager->persist($product2Category1);
 
         $product1Category2 = New Product();
@@ -103,7 +108,7 @@ class ProductFixtures extends Fixture {
             ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
             ->setIsDeleted(false)
             ->setCategory($category2)
-            ->setCompany($company1);
+            ->setCompany($company2);
         $manager->persist($product2Category2);
 
         $manager->flush();
