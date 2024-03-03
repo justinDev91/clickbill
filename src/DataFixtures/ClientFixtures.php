@@ -30,7 +30,8 @@ class ClientFixtures extends Fixture
       ->setAddress('Test adresse')
       ->setPhone('1234567')
       ->setEmail('test@gmail.com')
-      ->setCreatedBy(1);
+      ->setCreatedBy(1)
+      ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
 
     //Create a company user
     $user = (new User())
@@ -58,7 +59,9 @@ class ClientFixtures extends Fixture
       ->setDescription('Mariages, Anniversaires etc.')
       ->setCreatedBy(1)
       ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+      ->setCompany($company)
       ->setIsDeleted(false);
+
     $manager->persist($evenCategory);
 
     for ($i = 0; $i < 20; $i++) {

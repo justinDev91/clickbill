@@ -9,6 +9,7 @@
 {# company links #}
 {% set companyDashbordPath   		= path('front_company_app_dashboard') 				%}
 {% set companyClientPath     		= path('front_company_app_client_index')			%}
+{% set companyCategoryPath    		= path('front_company_app_category_index') 			%}
 {% set companyProductPath    		= path('front_company_app_product_index') 			%}
 {% set companyQuotePath      		= path('front_company_app_quote_index') 			%}
 {% set companyBillPath       		= path('front_company_app_bill_index') 				%}
@@ -17,6 +18,7 @@
 {% set companyNavItems   	= [
 	{ title: 'Tableau de bord', 	name: 'dashboard', 		icon: 'fa-solid fa-house', 			path: companyDashbordPath },
 	{ title: 'Mes clients', 		name: 'clients', 		icon: 'fa-solid fa-address-card', 	path: companyClientPath },
+	{ title: 'Catégories',          name: 'categories', 	icon: 'fa-solid fa-list', 			path: companyCategoryPath },
 	{ title: 'Produits & services', name: 'products', 		icon: 'fa-solid fa-cart-shopping', 	path: companyProductPath },
 	{ title: 'Mes devis', 			name: 'quotes', 		icon: 'fa-solid fa-file-pen', 		path: companyQuotePath },
 	{ title: 'Mes factures', 		name: 'bills', 			icon: 'fa-solid fa-file-invoice', 	path: companyBillPath },

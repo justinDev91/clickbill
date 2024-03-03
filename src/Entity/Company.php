@@ -68,6 +68,9 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: ClientInteraction::class)]
     private Collection $clientInteractions;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class)]
+    private Collection $categories;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -77,6 +80,7 @@ class Company
         $this->quotes = new ArrayCollection();
         $this->clients = new ArrayCollection();
         $this->clientInteractions = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -413,6 +417,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($clientInteraction->getCompany() === $this) {
                 $clientInteraction->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getCompany() === $this) {
+                $category->setCompany(null);
             }
         }
 

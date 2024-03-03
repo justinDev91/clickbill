@@ -2,13 +2,15 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
+use Faker\Factory;
+use App\Entity\User;
+use App\Entity\Quote;
+use App\Entity\Client;
 use App\Entity\Company;
 use App\Entity\Product;
-use App\Entity\Quote;
-use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
@@ -19,6 +21,7 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $faker = Factory::create();
         $pwd = 'test';
 
         // First User for company
@@ -27,7 +30,7 @@ class UserFixtures extends Fixture
             ->setFirstName('Company')
             ->setLastName('Test')
             ->setEmail('company@user.fr')
-            ->setRoles(['ROLE_COMPANY']);;
+            ->setRoles(['ROLE_COMPANY']);
         $company_user->setPassword($this->passwordHasher->hashPassword($company_user, $pwd));
         $manager->persist($company_user);
 
@@ -39,9 +42,33 @@ class UserFixtures extends Fixture
             ->setPhone('0654326494')
             ->setEmail('company@user.fr')
             ->setLogo('logo.png')
-            ->setCreatedBy($company_user->getId());
+            ->setCreatedBy($company_user->getId())
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
         $manager->persist($company);
         $manager->flush();
+
+        //Create company's clients
+        for ($i = 0; $i < 5; $i++) {
+            $fakeFirstName = $faker->firstName;
+            $fakeLastName = $faker->lastName;
+            $fakeEmail = strtolower($fakeFirstName) . '.' . strtolower($fakeLastName) . '@demo.fr';
+            $fakeEmail = iconv('UTF-8', 'ASCII//TRANSLIT', $fakeEmail);
+            $fakeEmail = preg_replace('/[^a-zA-Z0-9.@]/', '', $fakeEmail);
+    
+    
+            $client = new Client();
+            $client->setFirstName($fakeFirstName)
+            ->setLastName($fakeLastName)
+            ->setEmail($fakeEmail)
+            ->setPhone($faker->e164PhoneNumber())
+            ->setAddress($faker->address)
+            ->setCreatedBy(1)
+            ->setCompany($company)
+            ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
+            ->setIsDeleted(false);
+    
+            $manager->persist($client);
+        }
 
         $company_user->setCompany($company);
         $manager->persist($company_user);
@@ -80,6 +107,7 @@ class UserFixtures extends Fixture
         $category_one = (new Category())
             ->setName('Evenement')
             ->setDescription('Les photos durant les évenements')
+            ->setCompany($company)
             ->setCreatedBy($company_user->getId())
             ->setCreatedAt(new \DateTime('now'));
         $manager->persist($category_one);
@@ -87,6 +115,7 @@ class UserFixtures extends Fixture
         $category_two = (new Category())
             ->setName('Entreprise')
             ->setDescription('Les photos pour les entreprises')
+            ->setCompany($company)
             ->setCreatedBy($company_user->getId())
             ->setCreatedAt(new \DateTime('now'));
         $manager->persist($category_two);
