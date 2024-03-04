@@ -183,8 +183,8 @@
 			</div>
 
 			<!-- navItems -->
-			<div class="flex-grow pb-4 overflow-auto">
-				<ul class="space-y-2 overflow-auto">
+			<div class="flex-grow overflow-hidden">
+				<ul class="space-y-2 h-full pb-4 overflow-y-auto no-scrollbar">
 					{% for navItem in navItems %}
 						<li>
 							<a 	href="{{ navItem.path }}" 
@@ -215,15 +215,15 @@
 				{% if is_granted('ROLE_ADMIN') %}
 					<li>
 						<a 	href="{{ changeViewPath }}" 
-							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker
-							{{ currentPath == settingsPath ? 'bg-amberYellow hover:bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900 dark:hover:bg-amberYellowDarker dark:hover:text-neutral-900' : '' }}">
+							class="flex items-center p-2.5 mx-4 rounded-xl 
+							{{ currentPath == settingsPath ? 'bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900' : 'hover:bg-gray-200 group dark:hover:bg-neutral-800 dark:hover:text-neutral-300' }}">
 							<i class="w-10 text-2xl text-center fa-solid {{ changeViewIcon }}"></i>
 							<p class="ms-4 whitespace-nowrap">{{ changeViewText }}</p>
 						</a>
 					</li>
 					<li>
 						<a 	href="{{ adminDashboardPath }}" 
-							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker">
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 group dark:hover:bg-neutral-800 dark:hover:text-neutral-300">
 							<i class="w-10 text-2xl text-center fa-solid fa-right-from-bracket"></i>
 							<p class="ms-4 whitespace-nowrap">Retour Admin</p>
 						</a>
@@ -232,14 +232,14 @@
 					<li>
 						<a 	href="{{ settingsPath }}" 
 							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker
-							{{ currentPath == settingsPath ? 'bg-amberYellow hover:bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900 dark:hover:bg-amberYellowDarker dark:hover:text-neutral-900' : '' }}">
+							{{ currentPath == settingsPath ? 'bg-amberYellow dark:bg-amberYellowDarker dark:text-neutral-900' : 'hover:bg-gray-200 group dark:hover:bg-neutral-800 dark:hover:text-neutral-300' }}">
 							<i class="w-10 text-2xl text-center fa-solid fa-gear"></i>
 							<p class="ms-4 whitespace-nowrap">Paramètres</p>
 						</a>
 					</li>
 					<li>
 						<a 	href="{{ logoutPath }}" 
-							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 active:bg-amberYellow group dark:hover:bg-neutral-800 dark:hover:text-neutral-300 dark:active:bg-amberYellowDarker">
+							class="flex items-center p-2.5 mx-4 rounded-xl hover:bg-gray-200 group dark:hover:bg-neutral-800 dark:hover:text-neutral-300">
 							<i class="w-10 text-2xl text-center fa-solid fa-right-from-bracket"></i>
 							<p class="ms-4 whitespace-nowrap">Déconnexion</p>
 						</a>
