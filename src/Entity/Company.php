@@ -12,6 +12,9 @@ use Symfony\Component\Validator\Constraints\Unique;
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
+
+    use Traits\Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,14 +38,9 @@ class Company
     #[ORM\Column]
     private ?int $createdBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $updatedBy = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -153,17 +151,6 @@ class Company
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
 
     public function getUpdatedBy(): ?int
     {
@@ -173,18 +160,6 @@ class Company
     public function setUpdatedBy(int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
