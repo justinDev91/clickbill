@@ -22,7 +22,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
-        $pwd = 'test';
+        $pwd = $_ENV['SECRET_KEY'];
         $faker = Factory::create();
 
         // First User for all
