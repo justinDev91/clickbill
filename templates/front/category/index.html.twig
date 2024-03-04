@@ -10,7 +10,18 @@
 	</h1>
 	{{ include('front/search/index.html.twig', {'filter': 'Status'}) }}
 
-	<a href="{{ path('front_company_app_category_new')}}" class="primaryButton">
+	{% for error in errors %}
+        {{ include('_components/front/global/_toast.html.twig', {
+        'message' : error, 
+        'state' : 'error'} ) }}
+    {% endfor %}
+    {% for succes in success %}
+        {{ include('_components/front/global/_toast.html.twig', {
+            'message' : succes, 
+            'state' : 'sucess'} ) }}
+    {% endfor %}
+
+	<a href="{{ path('front_company_app_category_new')}}" class="primaryButton w-auto" >
 		Ajouter une catégorie
 	</a>
 	{{ include('_components/front/category/_table.html.twig') }}
