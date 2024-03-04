@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Bill;
+use App\Entity\Client;
 use App\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -52,6 +53,20 @@ class BillRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
         return new ArrayCollection($results);
+    }
+
+    /**
+     * Get all bills for Client
+     *
+     * @return Bill[]
+     */
+    public function findAllBillsForClient(Client $client)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.client = :client')
+            ->setParameter('client', $client)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

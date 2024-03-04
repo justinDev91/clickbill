@@ -4,8 +4,9 @@
 	Mes Factures 
 {% endblock %}
 
+{% set currentUrl = app.request.uri %}
 {% block content %}
-	{% if is_granted('ROLE_COMPANY') %}	
+	{% if is_granted('ROLE_COMPANY') and 'company' in currentUrl|lower %}	
 		<h1 class="pageTitle">Mes factures</h1>
 
 		{{ include('front/search/index.html.twig') }}
@@ -18,7 +19,7 @@
 		{% endfor %}
 	{% endif %}
 
-	{% if is_granted('ROLE_ACCOUNTANT') %}	
+	{% if is_granted('ROLE_ACCOUNTANT') and 'accountant' in currentUrl|lower %}	
 		<h1 class="pageTitle">Factures</h1>
 	{% endif %}
 

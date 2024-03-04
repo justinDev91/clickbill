@@ -6,9 +6,11 @@
 
 {% block content %}
 	<a href="{{ path('front_company_app_client_index') }}" class="backToPrevious">
-        <i class="fa-solid fa-arrow-left text-2xl"></i>
+        <i class="text-2xl fa-solid fa-arrow-left"></i>
 	</a>
 	<h1 class="pageTitle"> {{ client.firstName }} {{ client.lastName}}</h1>
-	{# TODO: Afficher la liste des devis et factures liés à l'utilisateur #}
+
 	<div>La liste des factures et devis liés à l'utilisateur</div>
+	
+	{{ include('_components/front/client/_table_extra.html.twig', documents) }}
 {% endblock %}
