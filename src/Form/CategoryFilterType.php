@@ -3,25 +3,20 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryFilterType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {
     $builder
-      ->add('category', ChoiceType::class, [
-        'choices' => [
-          'Mode' => 'mode',
-          'Portrait' => 'portrait',
-          'Événement' => 'événement',
-          'Commercial' => 'commercial',
-          'Voyage' => 'voyage',
-        ],
+      ->add('Category', ChoiceType::class, [
+        'choices' => ($options['choices']),
         'label' => false,
+        'choice_label' => 'name',
         'placeholder' => 'Category',
         'attr' => [
           'id' => 'category-select',
@@ -44,6 +39,7 @@ class CategoryFilterType extends AbstractType
   {
     $resolver->setDefaults([
       // Configure your form options here
+      'choices' => [],
     ]);
   }
 }

@@ -62,7 +62,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('product')
             ->join('product.category', 'category')
-            ->andWhere('category.name = :category')
+            ->andWhere('category.id = :category')
             ->andWhere('product.company = :company')
             ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('category', $category)
