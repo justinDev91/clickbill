@@ -35,6 +35,10 @@
     left: -2rem;
     /* -webkit-appearance: none; */
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer components {

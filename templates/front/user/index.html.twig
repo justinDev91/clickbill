@@ -7,15 +7,53 @@
 {% block content %}
     <h1 class="pageTitle">Mon Profil</h1>
 
-    <div class="flex mb-4">
-        <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" onclick="toggleDarkMode()" value="true" class="sr-only peer darkmode-checkbox">
-            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-amberYellow dark:peer-checked:bg-amberYellowDarker"></div>
-        </label>
-        <p class="ms-4 whitespace-nowrap">Thème sombre</p>
+    
+    
+    <div class="flex flex-col md:flex-row md:h-36 space-y-4 md:space-y-0 md:mb-6">
+        <img class="object-cover rounded-2xl md:mr-6" src="{{ vich_uploader_asset(app.user, 'imageFile') ? vich_uploader_asset(app.user, 'imageFile') : '/images/default_pp.png'}}" alt="{{ app.user.firstname }}picture">
+        <div class="border-neutral-200 border-2 rounded-2xl p-6 w-full flex items-center dark:border-neutral-700">
+            <table class="table table-auto w-full">
+                <tr>
+                    <td class="w-1/4">Prénom</td>
+                    <td class="font-semibold">{{ app.user.lastname }}</td>
+                </tr>
+                <tr>
+                    <td class="w-1/4">Nom</td>
+                    <td class="font-semibold">{{ app.user.firstname }}</td>
+                </tr>
+                <tr>
+                    <td class="w-1/4">Email</td>
+                    <td class="font-semibold">{{ app.user.email }}</td>
+                </tr>
+                <tr>
+                    <td class="w-1/4">Entreprise</td>
+                    <td class="font-semibold">{{ app.user.company.name }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>	
+
+    <div class="w-full flex flex-col md:flex-row justify-between items-center mb-4">
+        <div class="flex justify-left my-6">
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" onclick="toggleDarkMode()" value="true" class="sr-only peer darkmode-checkbox">
+                <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-amberYellow dark:peer-checked:bg-amberYellowDarker"></div>
+            </label>
+            <p class="ms-4 whitespace-nowrap">Thème sombre</p>
+        </div>
+
+        {% set currentUrl = app.request.uri %}
+
+		{% if is_granted('ROLE_COMPANY') and 'company' in currentUrl|lower  %}
+            <a href="{{ path( 'front_company_app_user_edit', {'slug': app.user.slug}) }}" class="primaryButton h-fit">
+                Modifier le profil
+            </a>
+        {% elseif is_granted('ROLE_ACCOUNTANT') and 'accountant' in currentUrl|lower  %}
+            <a href="#" class="primaryButton h-fit">
+                Modifier le profil
+            </a>
+        {% endif %}
+        
     </div>
 
-    <a href="{{ path( 'front_company_app_user_edit', {'slug': app.user.slug}) }}" class="primaryButton">
-        Modifier le profil
-    </a>	
 {% endblock %}
