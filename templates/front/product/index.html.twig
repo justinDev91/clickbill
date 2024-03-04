@@ -10,6 +10,17 @@
 	</h1>
 	{{ include('front/search/index.html.twig', {'filter': 'Catégorie'}) }}
 
+	{% for error in errors %}
+        {{ include('_components/front/global/_toast.html.twig', {
+        'message' : error, 
+        'state' : 'error'} ) }}
+    {% endfor %}
+    {% for succes in success %}
+        {{ include('_components/front/global/_toast.html.twig', {
+            'message' : succes, 
+            'state' : 'sucess'} ) }}
+    {% endfor %}
+
 	<a href="{{ path('front_company_app_product_new')}}" class="primaryButton">
 		Ajouter un produit
 	</a>

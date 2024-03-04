@@ -9,11 +9,13 @@ use App\Form\CustomSearchFormType;
 use App\Service\PaginationService;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[Route('/category')]
 #[Security('is_granted("ROLE_COMPANY")')]
@@ -23,7 +25,8 @@ class CategoryController extends AbstractController
     public function index(
         CategoryRepository $categoryRepository,
         Request $request,
-        PaginationService $paginationService
+        PaginationService $paginationService,
+        SessionInterface $session
     ): Response {
         $company = $this->getUser()->getCompany();
 
@@ -52,7 +55,9 @@ class CategoryController extends AbstractController
             'filterForm' => $filterForm,
             'pagination' => $pagination,
             'buttonPath' => 'front_company_app_categorie_new',
-            'buttonLabel' => 'Ajouter une catégorie'
+            'buttonLabel' => 'Ajouter une catégorie',
+            'errors' => $session->getFlashBag()->get('error', []),
+            'success' => $session->getFlashBag()->get('success', []),
             ]
         );
     }
@@ -61,40 +66,49 @@ class CategoryController extends AbstractController
     // #[Security('is_granted("ROLE_COMPANY")')]
     public function new(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
     ): Response {
-        $category = new Category();
-        $currentUserId = $this->getUser()->getId();
-        $company = $this->getUser()->getCompany();
+        try {
+            $category = new Category();
+            $currentUserId = $this->getUser()->getId();
+            $company = $this->getUser()->getCompany();
 
-        $category
-            ->setIsDeleted(false)
-            ->setCreatedBy($currentUserId)
-            ->setCreatedAt(new \DateTime())
-            ->setCompany($company);
+            $category
+                ->setIsDeleted(false)
+                ->setCreatedBy($currentUserId)
+                ->setCreatedAt(new \DateTime())
+                ->setCompany($company);
 
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
+            $form = $this->createForm(CategoryType::class, $category);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($category);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($category);
+                $entityManager->flush();
 
-            $this->addFlash('success', "La catégorie {$category->getName()} a bien été créée");
+                $session->getFlashBag()->add('success', "La catégorie {$category->getName()} a bien été créée");
+
+                return $this->redirectToRoute(
+                    'front_company_app_category_index', 
+                    ['id' => $category->getId()]
+                );
+            }
+
+            return $this->render(
+                'front/category/new.html.twig', 
+                [
+                    'category' => $category,
+                    'form' => $form,
+                ]
+            );
+        } catch (Exception $e) {
+            $session->getFlashBag()->add('error', "Il y a eu une erreur lors de la création de la catégorie");
 
             return $this->redirectToRoute(
-                'front_company_app_category_index', 
-                ['id' => $category->getId()]
+                'front_company_app_category_index'
             );
         }
-
-        return $this->render(
-            'front/category/new.html.twig', 
-            [
-                'category' => $category,
-                'form' => $form,
-            ]
-        );
     }
 
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
@@ -113,30 +127,39 @@ class CategoryController extends AbstractController
     public function edit(
         Request $request,
         Category $category,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
     ): Response {
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
+        try {
+            $form = $this->createForm(CategoryType::class, $category);
+            $form->handleRequest($request);
 
-        $currentUserId = $this->getUser()->getId();
-        $category->setUpdatedBy($currentUserId);
+            $currentUserId = $this->getUser()->getId();
+            $category->setUpdatedBy($currentUserId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($category);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($category);
+                $entityManager->flush();
 
-            $this->addFlash('success', "La catégorie {$category->getName()} a bien été modifiée");
+                $session->getFlashBag()->add('success', "La catégorie {$category->getName()} a bien été modifiée");
+
+                return $this->redirectToRoute(
+                    'front_company_app_category_index',
+                    ['id' => $category->getId()]
+                );
+            }
+
+            return $this->render('front/category/edit.html.twig', [
+                'category' => $category,
+                'form' => $form,
+            ]);
+        } catch (Exception $e) {
+            $session->getFlashBag()->add('error', "Il y a eu une erreur lors de la modification de la catégorie");
 
             return $this->redirectToRoute(
-                'front_company_app_category_index',
-                ['id' => $category->getId()]
+                'front_company_app_category_index'
             );
         }
-
-        return $this->render('front/category/edit.html.twig', [
-            'category' => $category,
-            'form' => $form,
-        ]);
     }
 
     #[Route('/{id}/delete', name: 'app_category_delete', methods: ['POST'])]
