@@ -34,6 +34,17 @@ GODARD Lucie (lucie1704)
 ### JOUVET Erwann
 
 ### GODARD Lucie
+- Intégration sidebar
+- Création du CRUD factures
+- intégration toast message pour les erreurs/succes
+- Refacto template avec layouts 
+- Refacto sideBar pour entreprise + comptable + backoffice
+- custom form
+- custom error page
+- link fontawesome pour les icones
+- link chaque rôle à leur environnement
+- dark mode et switch
+- page modification de profil
 
 ### KATASI Justin
 
