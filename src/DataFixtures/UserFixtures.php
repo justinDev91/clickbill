@@ -22,7 +22,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
-        $pwd = 'test';
+        $pwd = $_ENV['SECRET_KEY'];
         $faker = Factory::create();
 
         // First User for all
@@ -34,18 +34,18 @@ class UserFixtures extends Fixture
         $admin_user->setPassword($this->passwordHasher->hashPassword($admin_user, $pwd));
         $manager->persist($admin_user);
         $manager->flush();
-
+        
         // First User for company
-
+        
         $company_user = (new User())
-            ->setFirstName('Company')
-            ->setLastName('Test')
-            ->setEmail('company@user.fr')
-            ->setCreatedBy($admin_user->getId())
-            ->setRoles(['ROLE_COMPANY']);
+        ->setFirstName('Company')
+        ->setLastName('Test')
+        ->setEmail('company@user.fr')
+        ->setCreatedBy($admin_user->getId())
+        ->setRoles(['ROLE_COMPANY']);
         $company_user->setPassword($this->passwordHasher->hashPassword($company_user, $pwd));
         $manager->persist($company_user);
-
+        
         // Company
 
         $company = (new Company())
@@ -81,6 +81,10 @@ class UserFixtures extends Fixture
 
             $manager->persist($client);
         }
+
+        // Set Default Company
+        $admin_user->setCompany($company);
+        $manager->persist($admin_user);
 
         $company_user->setCompany($company);
         $manager->persist($company_user);

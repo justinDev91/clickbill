@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Bill;
+use App\Entity\Client;
 use App\Entity\Company;
 use App\Entity\Quote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -57,6 +58,20 @@ class QuoteRepository extends ServiceEntityRepository
             ->andWhere(self::IS_NOT_DELETED)
             ->setParameter('searchTerm', '%' . $term . '%')
             ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get quotes for client
+     *
+     * @return Quote[]
+     */
+    public function findAllQuotesForClient(Client $client)
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.client = :client')
+            ->setParameter('client', $client)
             ->getQuery()
             ->getResult();
     }

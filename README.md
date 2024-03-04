@@ -29,6 +29,7 @@ GODARD Lucie (lucie1704)
 - Création du CRUD back-office pour la création d'utilisateurs.
 - Page de paramètres pour l'administration afin de choisir l'entreprise afin de se balader sur toutes les pages et fonctionnalitées.
 - Ajout d'un listener pour empêcher les utilisateurs de se connecter si leur compte ou leur entreprise est désactiver (soft delete).
+- Création d'une extension Twig afin de vérifier le type d'entité.
 - Correction de features.
 
 ### JOUVET Erwann

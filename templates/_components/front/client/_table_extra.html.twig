@@ -1,0 +1,103 @@
+<div class="relative my-6 overflow-x-auto ">
+	<table class="w-full text-sm text-left table-auto text-neutral-500 rtl:text-right dark:text-neutral-400">
+		<thead class="text-xs uppercase border-t border-b text-neutral-700 border-neutral-200 dark:border-neutral-400 bg-neutral-100 dark:bg-neutral-700 dark:text-neutral-400">
+			<tr>
+				<th scope="col" class="px-6 py-3">
+					Nom
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Montant
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Statut
+				</th>
+				<th scope="col" class="px-6 py-3">
+					Date
+				</th>
+				<th scope="col" class="px-6 py-3">PDF</th>
+				<th scope="col" class="px-6 py-3"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for document in documents %}
+                {% if document is instanceof('App\\Entity\\Quote') %}
+                    {% set documentShowPath    = path('front_company_app_quote_show',   {'guid': document.guid}) %}
+                    {% set documentPDFPath     = path('front_company_app_quote_pdf',    {'guid': document.guid}) %}
+                    {% set documentAmount      = document.amount + (document.amount * (document.tva /100))       %}
+                    {% set documentName        = 'Devis #' ~ document.id                                         %}
+                {% elseif document is instanceof('App\\Entity\\Bill') %}
+                    {% set documentShowPath    = path('front_company_app_bill_show',    {'guid': document.guid}) %}
+                    {% set documentPDFPath     = path('front_company_app_bill_pdf',    {'guid': document.guid})  %}
+                    {% set documentAmount      = document.amount + (document.amount * (document.quote.tva /100)) %}
+                    {% set documentName        = 'Facture #' ~ document.id                                       %}
+                {% endif %}
+				<tr class="bg-white border-b hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:bg-neutral-800 dark:border-neutral-700">
+					<th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+						<a href="{{ documentShowPath  }}">{{ documentName }}</a>
+					</th>
+					<td class="px-6 py-4">
+						{{ documentAmount|number_format(2, ',', ' ') }} €
+					</td>
+					<td class="px-6 py-4">
+						{{ document.status }}
+					</td>
+					<td class="px-6 py-4">
+						{{ document.date ? document.date|date('d/m/Y H:i') : '' }}
+					</td>
+					<td class="px-6 py-4">
+						<a href="{{ documentPDFPath }}" target="_blank">
+							<i class="text-xl fa-solid fa-download"></i>
+						</a>
+					</td>
+					<td class="text-lg font-medium text-center dark:text-white">
+						<button id="dropdownHoverDocument" data-dropdown-toggle="dropdownHoverDocument{{document.guid}}" data-dropdown-trigger="click" class="p-3" type="button">
+							<i class="text-2xl fa-solid fa-ellipsis-vertical"></i>
+						</button>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="11">Aucun document trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<!-- Client Dropdown menu -->
+{% for document in documents %}
+    {% if document is instanceof('App\\Entity\\Quote') %}
+        {% set documentShowPath    = path('front_company_app_quote_show',   {'guid': document.guid}) %}
+        {% set documentEditPath    = path('front_company_app_quote_edit',   {'guid': document.guid}) %}
+        {% set documentDeletePath  = path('front_company_app_quote_delete', {'guid': document.guid}) %}
+        {% set documentDeleteText  = 'Vous êtes sûr de vouloir supprimer ce Devis ?'                 %}
+        {% if document.status == 'brouillon' %}
+            {% set documentIsEditable = true %}
+        {% else %}
+            {% set documentIsEditable = false %}
+        {% endif %}
+    {% elseif document is instanceof('App\\Entity\\Bill') %}
+        {% set documentShowPath    = path('front_company_app_bill_show',    {'guid': document.guid}) %}
+        {% set documentDeletePath  = path('front_company_app_bill_delete',  {'guid': document.guid}) %}
+        {% set documentDeleteText  = 'Vous êtes sûr de vouloir supprimer cette Facture ?'            %}
+        {% set documentIsEditable  = false %}
+    {% endif %}
+	<div id="dropdownHoverDocument{{document.guid}}" class="z-10 hidden bg-white divide-y rounded-lg shadow divide-neutral-100 w-44 dark:bg-neutral-700">
+		<ul class="py-2 text-sm text-neutral-700 dark:text-neutral-200" aria-labelledby="dropdownHoverButton">
+			<li>
+				<a href="{{ documentShowPath }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Détails</a>
+			</li>
+			{% if documentIsEditable %}
+				<li>
+					<a href="{{ documentEditPath }}" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">Modifier</a>
+				</li>
+			{% endif %}
+            <li>
+                <form method="post" class="block px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white" action="{{ documentDeletePath }}" onsubmit="return confirm('{{ documentDeleteText }}');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ document.guid) }}">
+                    <button class="font-bold text-red-600 btn">Supprimer</button>
+                </form>	
+            </li>
+		</ul>
+	</div>
+{% endfor %}

@@ -2,11 +2,15 @@
 
 namespace App\Controller\Front\Company;
 
+use App\Entity\Bill;
+use App\Entity\Quote;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Form\CustomSearchFormType;
 use App\Form\StatusFilterType;
 use App\Repository\ClientRepository;
+use App\Repository\QuoteRepository;
+use App\Repository\BillRepository;
 use App\Service\InteractionService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -103,10 +107,26 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'app_client_show', methods: ['GET'])]
-    public function show(Client $client): Response
+    public function show(Client $client, BillRepository $billRepository, QuoteRepository $quoteRepository): Response
     {
+        $bills = $billRepository->findAllBillsForClient($client);
+        $quotes = $quoteRepository->findAllQuotesForClient($client);
+
+        $documents = array_merge($quotes, $bills);
+
+        // Sort the combined array by Date field
+        usort($documents, function($a, $b) {
+            $dateA = $a->getDate();
+            $dateB = $b->getDate();
+            if ($dateA == $dateB) {
+                return 0;
+            }
+            return ($dateA < $dateB) ? -1 : 1;
+        });
+
         return $this->render('front/client/show.html.twig', [
             'client' => $client,
+            'documents' => $documents
         ]);
     }
 
