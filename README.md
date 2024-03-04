@@ -47,6 +47,21 @@ GODARD Lucie (lucie1704)
 - page modification de profil
 
 ### KATASI Justin
+- Initialisation du projet symfony/docker
+- Installation des bundles néccessaires
+- Implémentation de l'authentification
+- Création du CRUD client backend et frontend
+- Mise en place des slugs sur l'entit
+- Datavisualisation pour company
+- Datavisualisation pour comptable
+- Génération des PDF sur devis/factures
+- La pagination sur les tables clients/factures/devis/product
+- La mise en place des slugs sur l'entité User et Client
+- Implémentation de Vish pour le upload des images
+- Dévéloppement du système pour conserver un registre organsé et accessible de toutes les interactions avec les clients
+- Mise en place de la searchbar
+- Mise en place des filtres des données
+- Mise en prod de l'application sur platform.sh
 
 # Symfony Docker (PHP8 / Caddy / Postgresql)
 
