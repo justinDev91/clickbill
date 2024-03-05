@@ -62,6 +62,7 @@ GODARD Lucie (lucie1704)
 - page modification de profil
 
 ### KATASI Justin
+
 - Initialisation du projet symfony/docker
 - Installation des bundles néccessaires
 - Implémentation de l'authentification
@@ -90,3 +91,7 @@ A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony
 4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
 5. Run `docker compose down --remove-orphans` to stop the Docker containers.
 6. Run `docker compose logs -f` to display current logs, `docker compose logs -f [CONTAINER_NAME]` to display specific container's current logs
+
+## UML 
+
+[https://lucid.app/lucidchart/4bbc2a8c-8024-487d-b213-7d5541b50c8f/edit?viewport_loc=165%2C278%2C4237%2C2189%2CHWEp-vi-RSFO&amp;invitationId=inv_87bf5468-af2b-40c4-a6f8-d31e77ee40e0](https://lucid.app/lucidchart/4bbc2a8c-8024-487d-b213-7d5541b50c8f/edit?viewport_loc=165%2C278%2C4237%2C2189%2CHWEp-vi-RSFO&invitationId=inv_87bf5468-af2b-40c4-a6f8-d31e77ee40e0 "https://lucid.app/lucidchart/4bbc2a8c-8024-487d-b213-7d5541b50c8f/edit?viewport_loc=165%2C278%2C4237%2C2189%2CHWEp-vi-RSFO&amp;invitationId=inv_87bf5468-af2b-40c4-a6f8-d31e77ee40e0")
